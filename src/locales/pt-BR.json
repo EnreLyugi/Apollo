@@ -1,0 +1,289 @@
+{
+    "misc": {
+        "error_ocurred": "Ocorreu um erro",
+        "duration": "Duração",
+        "songs": "Músicas"
+    },
+    "client": {
+        "error_on_command": "Ocorreu um erro ao executar esse comando."
+    },
+    "player": {
+        "events": {
+            "song_added": "Música Adicionada",
+            "playlist_added": "Playlist Adicionada",
+            "queue_ended": {
+                "title": "Fila finalizada",
+                "description": "A fila acabou"
+            },
+            "client_disconnect": {
+                "title": "Desconectado",
+                "description": "Fui desconectado, fila finalizada"
+            }
+        },
+        "states": {
+            "playing_now": "Tocando Agora",
+            "song_paused": "Música Pausada",
+            "song_finished": "Música Finalizada"
+        },
+        "misc": {
+            "requested_by": "Solicitado por",
+            "invite_me": "Me convide"
+        },
+        "errors": {
+            "not_conected": "Não estou conectado em nenhuma chamada"
+        }
+    },
+    "logs": {
+        "voice_activity": {
+            "joined_channel_title": "Entrou no canal",
+            "left_channel_title": "Saiu do canal",
+            "changed_channel_title": "Trocou de canal",
+            "joined_channel": "{username} Entrou em {channel}",
+            "left_channel": "{username} Saiu de {channel}",
+            "changed_channel": "{username} Mudou de {channel1} para {channel2}"
+        }
+    },
+    "modals": {
+        "welcomeSettings": {
+            "title": "Mensagem de Boas-Vindas",
+            "inputs": {
+                "channelid": {
+                    "title": "ID do Canal",
+                    "placeholder": "ID do canal de boas-vindas"
+                },
+                "title": {
+                    "title": "Título",
+                    "placeholder": "O Título da mensagem. (use {username} para o nome do usuário e {servername} para o nome do servidor)"
+                },
+                "description": {
+                    "title": "Descrição",
+                    "placeholder": "Mensagem de boas-vindas. (use {username} para o nome do usuário e {servername} para o servidor)"
+                },
+                "image": {
+                    "title": "URL de Imagem",
+                    "placeholder": "URL da imagem que aparecerá na mensagem."
+                }
+            }
+        }
+    },
+    "commands": {
+        "help": {
+            "name": "ajuda",
+            "description": "Responde com ajuda de comandos!",
+            "usage": "/ajuda",
+            "template": "Descrição do comando: {commandDescription}\nUso: {commandUsage}"
+        },
+        "ping": {
+            "name": "ping",
+            "description": "Responde com Pong!",
+            "usage": "/ping"
+        },
+        "xp": {
+            "name": "xp",
+            "description": "Responde com seu XP atual!",
+            "current_xp": "Seu XP Atual: {serverXp}",
+            "usage": "/xp"
+        },
+        "xpadmin": {
+            "name": "xp",
+            "description": "Responde com seu XP atual!",
+            "usage": "/xp [ação]",
+            "subcommands": {
+                "add": {
+                    "name": "adicionar",
+                    "description": "Adiciona XP para um usuário",
+                    "options": {
+                        "user": {
+                            "name": "usuario",
+                            "description": "Usuário que receberá o XP"
+                        },
+                        "amount": {
+                            "name": "quantidade",
+                            "description": "Quantidade de XP que será adicionado"
+                        }
+                    },
+                    "response": {
+                        "title": "Adicionar XP",
+                        "added": "{amount}xp Adicionado para {user}",
+                        "error": "Ocorreu um erro!"
+                    }
+                },
+                "remove": {
+                    "name": "remover",
+                    "description": "Remove XP para um usuário",
+                    "options": {
+                        "user": {
+                            "name": "usuario",
+                            "description": "Usuário que perderá o XP"
+                        },
+                        "amount": {
+                            "name": "quantidade",
+                            "description": "Quantidade de XP que será removido"
+                        }
+                    },
+                    "response": {
+                        "title": "Remover XP",
+                        "removed": "{amount}xp Removido para {user}",
+                        "error": "Ocorreu um erro!"
+                    }
+                }
+            }
+        },
+        "disablexp": {
+            "name": "desativarxp",
+            "description": "Desabilita o recebimento de XP em um canal",
+            "response_title": "Desativar XP",
+            "channel_already_disabled": "Este canal já está com o XP desativado!",
+            "xp_disabled": "XP desabilitado no canal <#{channel_id}>",
+            "usage": "/desativarxp <canal>",
+            "options": {
+                "channel": {
+                    "name": "canal",
+                    "description": "Canal que terá o XP desabilitado"
+                }
+            }
+        },
+        "setchannel": {
+            "name": "setarcanal",
+            "description": "Configura um canal para mensagens automáticas",
+            "response_title": "Setar Canal",
+            "response_body": "{channelType} foi alterado com sucesso!",
+            "usage": "/setarcanal <tipo do canal> <canal>",
+            "options": {
+                "channeltype": {
+                    "name": "tipocanal",
+                    "description": "O tipo de canal que será configurado",
+                    "choices": {
+                        "welcome_channel": {
+                            "name": "Canal de Boas-Vindas"
+                        },
+                        "voice_activity_log_channel": {
+                            "name": "Canal de Logs de Call"
+                        }
+                    }
+                },
+                "channel": {
+                    "name": "canal",
+                    "description": "Canal que será configurado"
+                }
+            }
+        },
+        "addxprole": {
+            "name": "adicionarcargodexp",
+            "description": "Configura os cargos dados ao alcançar certas quantidades de XP.",
+            "options": {
+                "role": {
+                    "name": "cargo",
+                    "description": "Cargo que será dado."
+                },
+                "level": {
+                    "name": "level",
+                    "description": "Level que o cargo representa."
+                },
+                "xp": {
+                    "name": "xp",
+                    "description": "Quantidade de xp necessário."
+                }
+            },
+            "response": {
+                "title": "Cargo de XP",
+                "role_already_exists": "Esse cargo já está configurado como cargo de XP.",
+                "role_setup": "Cargo **{role}** Adicionado para o level **{level}** (**{xp}xp**)."
+            }
+        },
+        "set": {
+            "name": "setar",
+            "description": "Ajusta algumas configurações",
+            "usage": "/set",
+            "subcommands": {
+                "role": {
+                    "name": "cargo",
+                    "description": "Configura um cargo",
+                    "usage": "/set cargo",
+                    "response_body": "{roleType} foi alterado com sucesso!",
+                    "options": {
+                        "roletype": {
+                            "name": "tipocargo",
+                            "description": "Tipo do cargo que será configurado",
+                            "choices": {
+                                "welcome_role": {
+                                    "name": "Cargo de Boas-Vindas"
+                                }
+                            }
+                        },
+                        "role": {
+                            "name": "cargo",
+                            "description": "Cargo que será dado"
+                        }
+                    }
+                },
+                "channel": {
+                    "name": "canal",
+                    "description": "Configura um canal para mensagens automáticas",
+                    "response_title": "Setar Canal",
+                    "response_body": "{channelType} foi alterado com sucesso!",
+                    "usage": "/set canal <tipo do canal> <canal>",
+                    "options": {
+                        "channeltype": {
+                            "name": "tipocanal",
+                            "description": "O tipo de canal que será configurado",
+                            "choices": {
+                                "welcome_channel": {
+                                    "name": "Canal de Boas-Vindas"
+                                },
+                                "voice_activity_log_channel": {
+                                    "name": "Canal de Logs de Call"
+                                }
+                            }
+                        },
+                        "channel": {
+                            "name": "canal",
+                            "description": "Canal que será configurado"
+                        }
+                    }
+                }
+            }
+        },
+        "music": {
+            "name": "musica",
+            "description": "Player de Música",
+            "usage": "/musica",
+            "subcommands": {
+                "play": {
+                    "name": "tocar",
+                    "description": "Toca Música",
+                    "usage": "/musica tocar <musica>",
+                    "options": {
+                        "music": {
+                            "name": "musica",
+                            "description": "Nome ou URL da música"
+                        }
+                    }
+                },
+                "stop": {
+                    "name": "parar",
+                    "description": "Para de tocar e sai da chamada",
+                    "usage": "/musica parar",
+                    "response": {
+                        "title": "Parar Música",
+                        "stopped": "Parando Música"
+                    }
+                },
+                "skip": {
+                    "name": "pular",
+                    "description": "Passa para a proxima musica",
+                    "usage": "/musica pular",
+                    "response": {
+                        "title": "Pular Música",
+                        "stopped": "Pulando Música"
+                    }
+                }
+            }
+        }
+    },
+    "application_commands": {
+        "addxp": {
+            "name": "Adicionar XP"
+        }
+    }
+}

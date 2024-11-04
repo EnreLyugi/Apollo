@@ -1,0 +1,290 @@
+{
+    "misc": {
+        "error_ocurred": "Error Ocurred",
+        "duration": "Duration",
+        "songs": "Musics"
+    },
+    "client": {
+        "error_on_command": "There was an error executing this command."
+    },
+    "player": {
+        "events": {
+            "song_added": "Song Added",
+            "playlist_added": "Playlist Added",
+            "queue_ended": {
+                "title": "Queue Ended",
+                "description": "The queue Ended"
+            },
+            "client_disconnect": {
+                "title": "Desconnected",
+                "description": "I got disconnected, queue ended"
+            }
+        },
+        "states": {
+            "playing_now": "Tocando Agora",
+            "song_paused": "Music Paused",
+            "song_finished": "Music Finished"
+        },
+        "misc": {
+            "requested_by": "Requested by",
+            "invite_me": "Me convide"
+        },
+        "errors": {
+            "not_conected": "I'm not connect in any call"
+        }
+    },
+    "logs": {
+        "voice_activity": {
+            "joined_channel_title": "Joined Channel",
+            "left_channel_title": "Left Channel",
+            "changed_channel_title": "Switched Channel",
+            "joined_channel": "{username} Joined {channel}",
+            "left_channel": "{username} Left {channel}",
+            "changed_channel": "{username} Switched from {channel1} to {channel2}"
+        }
+    },
+    "modals": {
+        "welcomeSettings": {
+            "title": "Welcome Message",
+            "inputs": {
+                "channelid": {
+                    "title": "Channel ID",
+                    "placeholder": "Welcome channel's ID"
+                },
+                "title": {
+                    "title": "Title",
+                    "placeholder": "Message's title.  (use {username} for username and {servername} for server name)"
+                },
+                "description": {
+                    "title": "Description",
+                    "placeholder": "Welcome Message. (use {username} for username and {servername} for server name)"
+                },
+                "image": {
+                    "title": "Image URL",
+                    "placeholder": "Image URL."
+                }
+            }
+        }
+    },
+    "commands": {
+        "help": {
+            "name": "help",
+            "description": "Replies with Command Help!",
+            "usage": "/help",
+            "template": "Command Description: {commandDescription}\nUsage: {commandUsage}"
+        },
+        "ping": {
+            "name": "ping",
+            "description": "Replies with Pong!",
+            "usage": "/ping"
+        },
+        "xp": {
+            "name": "xp",
+            "description": "Replies with your current XP!",
+            "current_xp": "Your current XP: {serverXp}",
+            "usage": "/xp"
+        },
+        "xpadmin": {
+            "name": "xp",
+            "description": "administrate users XP!",
+            "usage": "/xp [action]",
+            "subcommands": {
+                "add": {
+                    "name": "add",
+                    "description": "Add XP to a user",
+                    "options": {
+                        "user": {
+                            "name": "user",
+                            "description": "User that will receive XP"
+                        },
+                        "amount": {
+                            "name": "amount",
+                            "description": "Given XP Amount"
+                        }
+                    },
+                    "response": {
+                        "title": "Add XP",
+                        "added": "{amount}xp Added to {user}",
+                        "error": "An error ocurred!"
+                    }
+                },
+                "remove": {
+                    "name": "remove",
+                    "description": "Remove XP to a user",
+                    "options": {
+                        "user": {
+                            "name": "user",
+                            "description": "User that will loose XP"
+                        },
+                        "amount": {
+                            "name": "amount",
+                            "description": "Removed XP Amount"
+                        }
+                    },
+                    "response": {
+                        "title": "Remove XP",
+                        "removed": "{amount}xp Removed to {user}",
+                        "error": "An error ocurred!"
+                    }
+                }
+            }
+        },
+        "disablexp": {
+            "name": "disablexp",
+            "description": "Disable a channel from receiving XP",
+            "response_title": "Disable XP",
+            "channel_already_disabled": "This channel already has XP disabled!",
+            "xp_disabled": "XP disabled on channel <#{channel_id}>",
+            "usage": "/disablexp <channel>",
+            "options": {
+                "channel": {
+                    "name": "channel",
+                    "description": "Channel that will disable XP"
+                }
+            }
+        },
+        "setchannel": {
+            "name": "setchannel",
+            "description": "Setup a channel for automatic messages",
+            "response_title": "Set Channel",
+            "response_body": "{channelType} changed successfully!",
+            "usage": "/setchannel <channel type> <channel>",
+            "options": {
+                "channeltype": {
+                    "name": "channeltype",
+                    "description": "Type of the channel to be set",
+                    "choices": {
+                        "welcome_channel": {
+                            "name": "Welcome Channel"
+                        },
+                        "voice_activity_log_channel": {
+                            "name": "Call logs Channel"
+                        }
+                    }
+                },
+                "channel": {
+                    "name": "channel",
+                    "description": "Channel to be set"
+                }
+            }
+        },
+        "addxprole": {
+            "name": "addxprole",
+            "description": "Set the roles given on reaching certain amount of XP.",
+            "options": {
+                "role": {
+                    "name": "role",
+                    "description": "Role that will be given."
+                },
+                "level": {
+                    "name": "level",
+                    "description": "Level that the role represents."
+                },
+                "xp": {
+                    "name": "xp",
+                    "description": "Necessary amount of XP."
+                }
+            },
+            "response": {
+                "title": "XP Role",
+                "role_already_exists": "This role is already set as a XP role.",
+                "role_setup": "Role **{role}** Added for level **{level}** (**{xp}xp**)."
+            }
+        },
+        "set": {
+            "name": "set",
+            "description": "Sets some settings",
+            "usage": "/set",
+            "subcommands": {
+                "role": {
+                    "name": "role",
+                    "description": "Set a role",
+                    "usage": "/set role",
+                    "response_body": "{roleType} updated sucessfully!",
+                    "options": {
+                        "roletype": {
+                            "name": "roletype",
+                            "description": "Role type to be set",
+                            "choices": {
+                                "welcome_role": {
+                                    "name": "Welcome role"
+                                }
+                            }
+                        },
+                        "role": {
+                            "name": "role",
+                            "description": "Role that will be given"
+                        }
+                    }
+                },
+                "channel": {
+                    "name": "channel",
+                    "description": "Setup a channel for automatic messages",
+                    "response_title": "Set Channel",
+                    "response_body": "{channelType} changed successfully!",
+                    "usage": "/set channel <channel type> <channel>",
+                    "options": {
+                        "channeltype": {
+                            "name": "channeltype",
+                            "description": "Type of the channel to be set",
+                            "choices": {
+                                "welcome_channel": {
+                                    "name": "Welcome Channel"
+                                },
+                                "voice_activity_log_channel": {
+                                    "name": "Call logs Channel"
+                                }
+                            }
+                        },
+                        "channel": {
+                            "name": "channel",
+                            "description": "Channel to be set"
+                        }
+                    }
+                }
+            }
+        },
+        "music": {
+            "name": "music",
+            "description": "Music Player",
+            "usage": "/music",
+            "subcommands": {
+                "play": {
+                    "name": "play",
+                    "description": "Plays Music",
+                    "usage": "/music play <song>",
+                    "options": {
+                        "music": {
+                            "name": "music",
+                            "description": "Song's Name or URL"
+                        }
+                    }
+                },
+                "stop": {
+                    "name": "stop",
+                    "description": "Stop playing the song and leave the call",
+                    "usage": "/music stop",
+                    "response": {
+                        "title": "Stop Music",
+                        "stopped": "Stopping Playing"
+                    }
+                },
+                "skip": {
+                    "name": "skip",
+                    "description": "Skips to the next song",
+                    "usage": "/musica skip",
+                    "response": {
+                        "title": "Skip Music",
+                        "stopped": "Skipping Music"
+                    }
+                }
+            }
+        }
+    },
+    "application_commands": {
+        "addxp": {
+            "name": "Add XP"
+        }
+    }
+}
+  
