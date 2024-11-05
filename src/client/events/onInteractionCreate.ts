@@ -2,8 +2,6 @@ import { Interaction } from "discord.js";
 import { commands } from '../commands';
 import { modals } from '../modals';
 import { t, mapLocale } from '../../utils/localization';
-import { QueueData } from "../../player/events/types";
-import { pausedButtons, unpausedButtons } from "../../player/components";
 
 export const onInteractionCreate = async (interaction: Interaction) => {
     const commandMap = new Map();
