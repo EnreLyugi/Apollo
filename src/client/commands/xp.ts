@@ -1,5 +1,6 @@
 import {
     ChatInputCommandInteraction,
+    EmbedAssertions,
     PermissionFlagsBits,
     SlashCommandBuilder,
     SlashCommandIntegerOption,
@@ -12,7 +13,7 @@ import { t, format, mapLocale } from '../../utils/localization';
 
 export const xp = {
     data: new SlashCommandBuilder()
-        .setName('xp'),
+        .setName('xp'),        
     usage: '/xp',
     execute: async (interaction: ChatInputCommandInteraction) => {
         const guild = interaction.guild;
@@ -30,14 +31,76 @@ export const xp = {
 
         const embed = new Embed()
             .setAuthor({ name: guild.name, iconURL: guild.iconURL() || undefined })
+            .setTimestamp(new Date())
+
+        embed
             .setTitle('XP')
             .setDescription(description)
-            .setTimestamp(new Date())
-            .build();
 
-        await interaction.reply({ embeds: [ embed ] });
+        embed.setTimestamp(new Date());
+
+        await interaction.reply({ embeds: [ embed.build() ], ephemeral: true });
     },
 };
+
+export const xpUser = {
+    data: new SlashCommandBuilder()
+        .setName('xpuser')
+        .setNameLocalizations({
+            'en-US': t('commands.xpuser.name', 'en-US'),
+            'pt-BR': t('commands.xpuser.name', 'pt-BR')
+        })
+        .addSubcommand(new SlashCommandSubcommandBuilder()
+            .setName('rank')
+            .setNameLocalizations({
+                'en-US': t('commands.xpuser.subcommands.rank.name', 'en-US'),
+                'pt-BR': t('commands.xpuser.subcommands.rank.name', 'pt-BR')
+            })
+            .setDescription(t('commands.xpuser.subcommands.rank.description', 'en-US'))
+            .setDescriptionLocalizations({
+                'en-US': t('commands.xpuser.subcommands.rank.description', 'en-US'),
+                'pt-BR': t('commands.xpuser.subcommands.rank.description', 'pt-BR')
+            })
+        ),
+    usage: '/xp',
+    execute: async (interaction: ChatInputCommandInteraction) => {
+        const subcommand = interaction.options.getSubcommand();
+        const guild = interaction.guild;
+        if(!guild) return;
+
+        const locale = mapLocale(interaction.locale);
+
+        const embed = new Embed()
+            .setAuthor({ name: guild.name, iconURL: guild.iconURL() || undefined })
+            .setTimestamp(new Date())
+
+        if (subcommand === 'rank') {
+            embed.setTitle(t('commands.xpuser.subcommands.rank.response.title', locale))
+
+            const topMembers = await xpService.getTop5(guild);
+
+            if(!topMembers) {
+                embed.setDescription(t('commands.xpuser.subcommands.rank.response.not_found', locale));
+                await interaction.reply({ embeds: [ embed.build(), ], ephemeral: true });
+                return;
+            }
+
+            let description = '';
+            let index = 1;
+            topMembers.map(member => {
+                console.log(member);
+                description += `${index} - <@${member.member_id}> (${member.xp}xp)\n`;
+                index++;
+            });
+
+            embed.setDescription(description);
+        }
+
+        embed.setTimestamp(new Date());
+
+        await interaction.reply({ embeds: [ embed.build() ], ephemeral: true });
+    },
+}
 
 export const xpAdmin = {
     data: new SlashCommandBuilder()
@@ -168,7 +231,7 @@ export const xpAdmin = {
             }
         }
 
-        await interaction.reply({ embeds: [ embed.build() ] });
+        await interaction.reply({ embeds: [ embed.build(), ], ephemeral: true });
         return;
     },
 }

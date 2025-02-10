@@ -84,6 +84,60 @@
             "current_xp": "Your current XP: {serverXp}",
             "usage": "/xp"
         },
+        "xpuser": {
+            "name": "xp",
+            "description": "Replies with your current XP!",
+            "usage": "/xp [action]",
+            "subcommands": {
+                "rank": {
+                    "name": "rank",
+                    "description": "Shows the TOP 5 XP on the server",
+                    "response": {
+                        "title": "Top 5",
+                        "not_found": "XP data were not found on this server."
+                    }
+                }
+            }
+        },
+        "shop": {
+            "name": "shop",
+            "description": "Some shops to spend your coins",
+            "options": {
+                "type": {
+                    "name": "type",
+                    "description": "Shop type that will be shown.",
+                    "choices": {
+                        "roles": {
+                            "name": "role",
+                            "response": {
+                                "title": "Color Roles",
+                                "footer": "type /buy color <number> to buy"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "buy": {
+            "name": "buy",
+            "description": "Buy stuff",
+            "subcommands": {
+                "color": {
+                    "name": "color",
+                    "description": "Buy a color",
+                    "options": {
+                        "colorid": {
+                            "name": "color",
+                            "description": "Number of the color you wish"
+                        }
+                    },
+                    "response": {
+                        "title": "Color buying",
+                        "insuficient": "You don't have enought coins!\n{coins} / {price}"
+                    }
+                }
+            }
+        },
         "xpadmin": {
             "name": "xp",
             "description": "administrate users XP!",
@@ -143,6 +197,20 @@
                 }
             }
         },
+        "enablexp": {
+            "name": "enablexp",
+            "description": "Enable a channel from receiving XP",
+            "response_title": "Enable XP",
+            "channel_already_enabled": "This channel already has XP enabled!",
+            "xp_enabled": "XP enabled on channel <#{channel_id}>",
+            "usage": "/enablexp <channel>",
+            "options": {
+                "channel": {
+                    "name": "channel",
+                    "description": "Channel that will enable XP"
+                }
+            }
+        },
         "setchannel": {
             "name": "setchannel",
             "description": "Setup a channel for automatic messages",
@@ -191,6 +259,40 @@
                 "role_setup": "Role **{role}** Added for level **{level}** (**{xp}xp**)."
             }
         },
+        "addcolorrole": {
+            "name": "addcolorrole",
+            "description": "Set the roles that will be listed on colors shop.",
+            "options": {
+                "role": {
+                    "name": "role",
+                    "description": "Role to be added."
+                },
+                "name": {
+                    "name": "name",
+                    "description": "Color Name."
+                }
+            },
+            "response": {
+                "title": "Color Role",
+                "role_already_exists": "This role is already set as a Color role.",
+                "role_setup": "Role **{role}** Added for color **{name}**."
+            }
+        },
+        "removecolorrole": {
+            "name": "removecolorrole",
+            "description": "Remove color roles from the shop.",
+            "options": {
+                "role": {
+                    "name": "role",
+                    "description": "Role that will be removed."
+                }
+            },
+            "response": {
+                "title": "Color Role",
+                "role_dont_exists": "This role isn't set on the shop.",
+                "role_removed": "Role **{role}** (**{name}**) removed from the shop."
+            }
+        },
         "set": {
             "name": "set",
             "description": "Sets some settings",
@@ -208,6 +310,9 @@
                             "choices": {
                                 "welcome_role": {
                                     "name": "Welcome role"
+                                },
+                                "color": {
+                                    "name": "Color role"
                                 }
                             }
                         },

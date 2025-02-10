@@ -1,9 +1,9 @@
-import { VoiceState, GuildMember, GuildBasedChannel } from "discord.js";
+import { VoiceState, GuildMember, GuildBasedChannel, Guild, VoiceBasedChannel } from "discord.js";
 import { xpChannelService, guildService, xpService } from "../../services";
 import { t, format, mapLocale } from '../../utils/localization';
 import { Embed } from "../../models";
 
-const xpMembers: GuildMember[] = [];
+const xpMembers: { member: GuildMember, guild: Guild, channel: VoiceBasedChannel }[] = [];
 
 var xpInterval: any;
 
@@ -23,35 +23,52 @@ export const onVoiceStateUpdate = async (oldState: VoiceState, newState: VoiceSt
     }
 
     const channel = newState.channel;
-    if(!channel) return;
+    if(!channel) {
+        removeMember(member, guild);
+        return;
+    };
 
     let unmutedMembers = 0;
 
     channel.members.map(member => {
         const voice = member.voice
-        if (voice.selfDeaf || voice.selfMute || voice.serverDeaf || voice.serverMute) return;
+        if (voice.selfDeaf || voice.selfMute || voice.serverDeaf || voice.serverMute || member.user.bot) return;
         unmutedMembers++;
     });
 
     const isXpDisabled = await xpChannelService.getChannel(channel.id, member.guild.id);
 
     if(unmutedMembers < 2  || isXpDisabled || newState.selfDeaf || newState.selfMute || newState.serverDeaf || newState.serverMute) {
-        xpMembers.splice(xpMembers.indexOf(member), 1);
-        if(xpMembers.length == 0) {
-            clearInterval(xpInterval);
-            xpInterval = null;
-        }
+        removeMember(member, guild);
         return;
     }
 
-    xpMembers.push(member);
+    if(!xpMembers.some(x => x.member.id === member.id && x.guild.id === guild.id)) {
+        xpMembers.push({ member, guild, channel });
+    }
+
     if(!xpInterval) {
         xpInterval = setInterval(() => {
-            xpMembers.map(async member => {
+            xpMembers.forEach(async ({ member, guild, channel }) => {
                 await xpService.handleXP(channel, guild, member);
             });
         }, 10000);
     }
+    return;
+}
+
+function removeMember(member: GuildMember, guild: Guild) {
+    const index = xpMembers.findIndex(x => x.member.id === member.id && guild.id === guild.id);
+
+    if(index !== -1) {
+        xpMembers.splice(index, 1);
+    }
+
+    if(xpMembers.length === 0) {
+        clearInterval(xpInterval);
+        xpInterval = null;
+    }
+
     return;
 }
 

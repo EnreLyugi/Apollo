@@ -2,6 +2,7 @@ import xpChannelService from './xpChannelService';
 import { Channel, Guild, GuildMember } from 'discord.js';
 import { userService, memberService, guildService, xpRoleService } from './';
 import Member from '../models/member';
+import { Server } from 'http';
 
 
 class xpService {
@@ -52,18 +53,30 @@ class xpService {
     const memberData = await memberService.createMemberIfNotExists(user.id, guild.id);
     const guildData = await guildService.createGuildIfNotExists(guild.id);
 
+    //console.log(`${member.displayName} tem dados?`);
     if(!userData || !guildData || !memberData) return;
+    //console.log(`${member.displayName} tem`);
 
     const isXpDisabled = await xpChannelService.getChannel(channel.id, guild.id);
-    if(isXpDisabled) return;
+    if(isXpDisabled) {
+      //console.log(`${member.displayName} xp desativado`);
+      return;
+    };
 
-    if(this.hasCooldown(user.id, guild.id)) return;
+    if(this.hasCooldown(user.id, guild.id)) {
+      //console.log(`${member.displayName} está em cooldown`);
+      return;
+    };
 
     const xp = Math.round(Math.random() * 9) + 1;
+    console.log(`${xp}xp adicionado para ${member.displayName} em ${guild.name}`);
     [userData, memberData].forEach(async data => {
       data.xp += xp;
       await data.save();
     });
+
+    memberData.coin++;
+    await memberData.save();
 
     this.handleRoles(guild, member, memberData.xp)
 
@@ -79,7 +92,9 @@ class xpService {
     memberData.xp += amount;
     await memberData.save();
 
-    this.handleRoles(guild, member, memberData.xp)
+    this.handleRoles(guild, member, memberData.xp);
+
+    //console.log(`${amount}xp adicionado para ${member.displayName} em ${guild.name}`);
 
     return memberData
   }
@@ -95,6 +110,16 @@ class xpService {
     this.handleRoles(guild, member, memberData.xp)
 
     return memberData
+  }
+
+  public async getTop5(guild: Guild): Promise<Member[] | null> {
+    return await Member.findAll({
+      where: {
+        guild_id: guild.id
+      },
+      order: [['xp', 'DESC']],
+      limit: 5
+    });
   }
 }
 

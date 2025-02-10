@@ -5,8 +5,8 @@ class xpChannelService {
     return await XpChannel.create({ channel_id, guild_id });
   }
 
-  public async removeChannel(channel_id: string): Promise<number> {
-    return await XpChannel.destroy({ where: { channel_id } })
+  public async removeChannel(channel_id: string, guild_id: string): Promise<number> {
+    return await XpChannel.destroy({ where: { channel_id, guild_id } })
   }
 
   public async getChannel(channel_id: string, guild_id: string): Promise<XpChannel | null> {

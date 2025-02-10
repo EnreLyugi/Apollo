@@ -5,6 +5,7 @@ interface GuildAttributes {
   id: string;
   prefix: string;
   language: string;
+  color_roles_price: number;
   welcome_role: string | null;
   welcome_channel: string | null;
   leave_channel: string | null;
@@ -16,7 +17,8 @@ interface GuildAttributes {
 interface GuildCreationAttributes extends 
   Optional<GuildAttributes, 
     'prefix' | 
-    'language' | 
+    'language' |
+    'color_roles_price' |
     'welcome_role' |
     'welcome_channel' | 
     'leave_channel' | 
@@ -28,6 +30,7 @@ class Guild extends Model<GuildAttributes, GuildCreationAttributes> implements G
   public id!: string;
   public prefix!: string;
   public language!: string;
+  public color_roles_price!: number;
   public welcome_role!: string | null;
   public welcome_channel!: string | null;
   public leave_channel!: string | null;
@@ -51,6 +54,11 @@ Guild.init(
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: 'en-US'
+    },
+    color_roles_price: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1200
     },
     welcome_role: {
       type: DataTypes.STRING,

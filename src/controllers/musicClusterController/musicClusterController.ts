@@ -73,7 +73,7 @@ class MusicClusterController {
             console.log(`Tentativa de uso do socket: ${port}`);
 
             if(!port) {
-                console.log(`Todos os clusters já estão em uso para a guild ${guild.id}.`);
+                console.log(`Todos os clusters já estão em uso para o Servidor ${guild.id}.`);
                 return null;
             }
 

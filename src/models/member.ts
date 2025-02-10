@@ -6,15 +6,17 @@ interface MemberAttributes {
   member_id: string;
   guild_id: string;
   xp: number;
+  coin: number;
 }
 
-interface MemberCreationAttributes extends Optional<Omit<MemberAttributes, 'id'>, 'xp'> {}
+interface MemberCreationAttributes extends Optional<Optional<Omit<MemberAttributes, 'id'>, 'xp'>, 'coin'> {}
 
 class Member extends Model<MemberAttributes, MemberCreationAttributes> implements MemberAttributes {
   public id!: number;
   public member_id!: string;
   public guild_id!: string;
   public xp!: number;
+  public coin!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -36,6 +38,11 @@ Member.init(
       allowNull: false,
     },
     xp: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
+    coin: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0

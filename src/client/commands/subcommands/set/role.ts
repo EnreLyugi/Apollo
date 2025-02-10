@@ -55,6 +55,7 @@ export const role = {
             "en-US": t('commands.set.subcommands.role.options.role.description', 'en-US'),
             "pt-BR": t('commands.set.subcommands.role.options.role.description', 'pt-BR')
         })
+        .setRequired(true)
     ),
     usage: '/set role',
     execute: async (interaction: ChatInputCommandInteraction) => {

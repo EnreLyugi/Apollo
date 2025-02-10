@@ -84,6 +84,21 @@
             "current_xp": "Seu XP Atual: {serverXp}",
             "usage": "/xp"
         },
+        "xpuser": {
+            "name": "xp",
+            "description": "Responde com seu XP atual!",
+            "usage": "/xp [ação]",
+            "subcommands": {
+                "rank": {
+                    "name": "rank",
+                    "description": "Mostra o top 5 de XP do servidor",
+                    "response": {
+                        "title": "Top 5",
+                        "not_found": "Não foram encontrados dados de XP nesse servidor."
+                    }
+                }
+            }
+        },
         "xpadmin": {
             "name": "xp",
             "description": "Responde com seu XP atual!",
@@ -143,6 +158,20 @@
                 }
             }
         },
+        "enablexp": {
+            "name": "ativarxp",
+            "description": "Habilita o recebimento de XP em um canal",
+            "response_title": "ativar XP",
+            "channel_already_enabled": "Este canal já está com o XP ativado!",
+            "xp_enabled": "XP habilitado no canal <#{channel_id}>",
+            "usage": "/enablexp <canal>",
+            "options": {
+                "channel": {
+                    "name": "canal",
+                    "description": "Canal que terá o XP habilitado"
+                }
+            }
+        },
         "setchannel": {
             "name": "setarcanal",
             "description": "Configura um canal para mensagens automáticas",
@@ -191,6 +220,40 @@
                 "role_setup": "Cargo **{role}** Adicionado para o level **{level}** (**{xp}xp**)."
             }
         },
+        "addcolorrole": {
+            "name": "adicionarcargodecor",
+            "description": "Configura os cargos disponíveis na loja de cores.",
+            "options": {
+                "role": {
+                    "name": "cargo",
+                    "description": "Cargo que será adicionado."
+                },
+                "name": {
+                    "name": "nome",
+                    "description": "Nome da cor."
+                }
+            },
+            "response": {
+                "title": "Cargo de Cor",
+                "role_already_exists": "Esse cargo já está configurado como cargo de Cor.",
+                "role_setup": "Cargo **{role}** Adicionado para a cor **{name}**."
+            }
+        },
+        "removecolorrole": {
+            "name": "removercargodecor",
+            "description": "Remove os cargos de cor da Loja.",
+            "options": {
+                "role": {
+                    "name": "cargo",
+                    "description": "Cargo que será removido."
+                }
+            },
+            "response": {
+                "title": "Cargo de Cor",
+                "role_dont_exists": "Esse cargo não está configurado na loja.",
+                "role_removed": "Cargo **{role}** (**{name}**) removido da loja."
+            }
+        },
         "set": {
             "name": "setar",
             "description": "Ajusta algumas configurações",
@@ -208,6 +271,9 @@
                             "choices": {
                                 "welcome_role": {
                                     "name": "Cargo de Boas-Vindas"
+                                },
+                                "color": {
+                                    "name": "Cargo de Cor"
                                 }
                             }
                         },
@@ -276,6 +342,45 @@
                     "response": {
                         "title": "Pular Música",
                         "stopped": "Pulando Música"
+                    }
+                }
+            }
+        },
+        "shop": {
+            "name": "loja",
+            "description": "Algumas lojas para gastar suas moedas",
+            "options": {
+                "type": {
+                    "name": "tipo",
+                    "description": "Qual tipo de loja será mostrado",
+                    "choices": {
+                        "roles": {
+                            "name": "cargo",
+                            "response": {
+                                "title": "Loja de Cores",
+                                "footer": "digite /comprar cor <número> para comprar"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "buy": {
+            "name": "comprar",
+            "description": "Compre itens",
+            "subcommands": {
+                "color": {
+                    "name": "cor",
+                    "description": "Compre uma cor",
+                    "options": {
+                        "colorid": {
+                            "name": "cor",
+                            "description": "Número da cor que deseja comprar"
+                        }
+                    },
+                    "response": {
+                        "title": "Compra de cor",
+                        "insuficient": "Você não possui moedas o suficiente para efetuar essa compra!\n{coins} / {price}"
                     }
                 }
             }

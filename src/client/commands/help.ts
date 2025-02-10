@@ -27,6 +27,6 @@ export const help = {
             );
         })
 
-        await interaction.reply({ embeds });
+        await interaction.reply({ embeds, ephemeral: true });
     },
 };
