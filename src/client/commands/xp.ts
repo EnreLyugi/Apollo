@@ -77,7 +77,7 @@ export const xpUser = {
         if (subcommand === 'rank') {
             embed.setTitle(t('commands.xpuser.subcommands.rank.response.title', locale))
 
-            const topMembers = await xpService.getTop5(guild);
+            const topMembers = await xpService.getTop10(guild);
 
             if(!topMembers) {
                 embed.setDescription(t('commands.xpuser.subcommands.rank.response.not_found', locale));

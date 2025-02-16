@@ -91,9 +91,9 @@
             "subcommands": {
                 "rank": {
                     "name": "rank",
-                    "description": "Shows the TOP 5 XP on the server",
+                    "description": "Shows the TOP 10 XP on the server",
                     "response": {
-                        "title": "Top 5",
+                        "title": "Top 10",
                         "not_found": "XP data were not found on this server."
                     }
                 }

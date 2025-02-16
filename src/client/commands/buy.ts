@@ -9,7 +9,6 @@ import { subcommands } from './subcommands/buy';
 const commandData =
     new SlashCommandBuilder()
         .setName('buy')
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .setNameLocalizations({
             "en-US": t('commands.buy.name', 'en-US'),
             "pt-BR": t('commands.buy.name', 'pt-BR')

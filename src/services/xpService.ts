@@ -121,6 +121,16 @@ class xpService {
       limit: 5
     });
   }
+
+  public async getTop10(guild: Guild): Promise<Member[] | null> {
+    return await Member.findAll({
+      where: {
+        guild_id: guild.id
+      },
+      order: [['xp', 'DESC']],
+      limit: 10
+    });
+  }
 }
 
 export default new xpService();

@@ -28,24 +28,44 @@ export const onVoiceStateUpdate = async (oldState: VoiceState, newState: VoiceSt
         return;
     };
 
-    let unmutedMembers = 0;
+    let unmutedMembers: any[] = [];
 
     channel.members.map(member => {
         const voice = member.voice
         if (voice.selfDeaf || voice.selfMute || voice.serverDeaf || voice.serverMute || member.user.bot) return;
-        unmutedMembers++;
+        unmutedMembers.push(member);
     });
 
     const isXpDisabled = await xpChannelService.getChannel(channel.id, member.guild.id);
 
-    if(unmutedMembers < 2  || isXpDisabled || newState.selfDeaf || newState.selfMute || newState.serverDeaf || newState.serverMute) {
-        removeMember(member, guild);
+    if(unmutedMembers.length < 2  || isXpDisabled) {
+        unmutedMembers.forEach(member => {
+            if(xpMembers.some(x => x.member.id === member.id && x.guild.id === guild.id)) {
+                console.log(`${member.displayName} removido da fila`);
+                removeMember(member, channel.guild);
+            }
+        });
+        if(xpMembers.some(x => x.member.id === member.id && x.guild.id === guild.id)) {
+            console.log(`${member.displayName} removido da fila`);
+            removeMember(member, channel.guild);
+        }
         return;
     }
 
-    if(!xpMembers.some(x => x.member.id === member.id && x.guild.id === guild.id)) {
-        xpMembers.push({ member, guild, channel });
+    if(newState.selfDeaf || newState.selfMute || newState.serverDeaf || newState.serverMute) {
+        if(xpMembers.some(x => x.member.id === member.id && x.guild.id === guild.id)) {
+            console.log(`${member.displayName} removido da fila`);
+            removeMember(member, channel.guild);
+        }
+        return;
     }
+
+    unmutedMembers.map(member => {
+        if(!xpMembers.some(x => x.member.id === member.id && x.guild.id === guild.id)) {
+            console.log(`${member.displayName} adicionado da fila`);
+            xpMembers.push({ member, guild, channel });
+        }
+    });
 
     if(!xpInterval) {
         xpInterval = setInterval(() => {

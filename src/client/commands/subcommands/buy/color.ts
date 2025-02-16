@@ -7,6 +7,7 @@ import { Embed } from "../../../../models/";
 import { colorRoleService, guildService, memberService } from "../../../../services";
 import { mapLocale, t, format } from "../../../../utils/localization";
 import { colors } from "../../../../config";
+import e from "express";
 
 export const color = {
     data: new SlashCommandSubcommandBuilder()
@@ -72,10 +73,12 @@ export const color = {
                 await memberData.save();
 
                 roles.map(role => {
-                    guildMember.roles.remove(role.role_id)
+                    if(guildMember.roles.resolve(role.role_id)) {
+                        guildMember.roles.remove(role.role_id).catch(e => { throw new Error('buying failed') })
+                    }
                 });
 
-                guildMember.roles.add(role.role_id);
+                await guildMember.roles.add(role.role_id).catch(e => { throw new Error('buying failed') });
 
                 embed.setDescription(`Você comprou o cargo <@&${role.role_id}> (**${role.name}**)`);
             } else {
@@ -84,6 +87,6 @@ export const color = {
         }
 
 
-        return interaction.reply({ embeds: [ embed.build() ] });
+        return interaction.reply({ embeds: [ embed.build() ], ephemeral: true });
     }
 };
