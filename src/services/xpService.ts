@@ -131,6 +131,14 @@ class xpService {
       limit: 10
     });
   }
+
+  public async resetXP(guild: Guild): Promise<[affectedCount:number] | null> {
+    return await Member.update({ xp: 0 }, {
+      where: {
+        guild_id: guild.id
+      }
+    });
+  }
 }
 
 export default new xpService();

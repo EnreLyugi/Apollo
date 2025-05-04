@@ -1,12 +1,14 @@
-import { Song } from "@enrelyugi/discord-music-player";
-import { ChatInputCommandInteraction, Message } from "discord.js";
+import { Message, VoiceChannel } from "discord.js";
 import { Locales } from "../../../../utils/localization";
 
 export interface QueueData {
+    channel: VoiceChannel;
+    requestedBy: string;
     wsId: string;
     interactionId: string;
     channelId: string;
     locale: Locales | undefined;
     currentMessage: Message;
-    song: Song;
+    track: any;
+    customData: any;
 }

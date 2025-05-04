@@ -1,6 +1,6 @@
 import { sockets } from "../../socket";
 
-export const onPlayerError = async (queue: any, error: any) => {
+export const onPlayerSkip = async (queue: any, track: any) => {
     const data = queue.metadata;
     const { channelId, locale } = data;
     const ws = sockets.get(data.wsId);
@@ -13,7 +13,7 @@ export const onPlayerError = async (queue: any, error: any) => {
     };
 
     ws.send(JSON.stringify(message));
-    console.error(error);
+    console.error(`Skipping ${track.title}`);
 
     /*const guild = queue.guild;
 

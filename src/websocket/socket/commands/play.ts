@@ -1,7 +1,7 @@
-import { Embed } from "../../../models";
+import { GuildBasedChannel, VoiceChannel } from "discord.js";
 import { mapLocale } from "../../../utils/localization";
 import client from "../../client";
-import player from "../../player";
+import { useMainPlayer } from "discord-player";
 
 interface PlayData {
     guildId: string;
@@ -21,60 +21,23 @@ export const play = async (data: PlayData, wsId: string) => {
 
     const locale = mapLocale(guild.preferredLocale);
 
-    const channel = guild.channels.resolve(channelId);
-    if(!channel) return;
+    const channel = guild.channels.resolve(channelId) as GuildBasedChannel;
+    if (!channel) return;
+    if(!(channel instanceof VoiceChannel)) return;
 
     const user = client.users.cache.get(userId);
 
-    const guildQueue = player.getQueue(guild.id);
-    const queue = player.createQueue(guild.id, {
-        data: {
-            interactionId,
-            channelId: interactionChannelId,
-            locale,
-            wsId
+    const mainPlayer = useMainPlayer();
+    await mainPlayer.play(channel, music, {
+        nodeOptions: {
+            metadata: {
+                channel: channel,
+                requestedBy: user,
+                interactionId,
+                channelId: interactionChannelId,
+                locale,
+                wsId
+            }
         }
     });
-
-    await queue.join(channel);
-
-    if (
-        (music.includes("playlist") &&
-            (music.includes("youtube.com") ||
-            music.includes("youtu.be") ||
-            music.includes("spotify.com"))) ||
-        ((!music.includes("i=") || music.includes("playlist")) &&
-        music.includes("apple.com"))
-    ) {
-        await queue
-            .playlist(music, {
-                maxSongs: 10000,
-                requestedBy: user,
-                channelId,
-                interactionId
-            })
-            .catch(async (err) => {
-                /*let embed = new Embed();
-                let response = embed
-                    .setColor("#FF0000")
-                    .setAuthor({ name: t('misc.error_ocurred', locale) })
-                    .setDescription(err.message);
-                await interaction.editReply({ embeds: [ response.build() ] });*/
-                if (!guildQueue) queue.stop();
-            });
-    } else {
-        await queue.play(music, {
-            requestedBy: user,
-            channelId,
-            interactionId
-        })
-        .catch((err) => {
-            /*let response = new Embed()
-                .setColor(`#FF0000`)
-                .setAuthor({ name: t('misc.error_ocurred', locale) })
-                .setDescription(err.message);
-            interaction.editReply({ embeds: [ response.build() ] });*/
-            if (!guildQueue) queue.stop();
-        });
-    }
 }

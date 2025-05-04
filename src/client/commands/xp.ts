@@ -185,6 +185,18 @@ export const xpAdmin = {
                 })
                 .setRequired(true)
             )
+        )
+        .addSubcommand(new SlashCommandSubcommandBuilder()
+            .setName('reset')
+            .setNameLocalizations({
+                'en-US': t('commands.xpadmin.subcommands.reset.name', 'en-US'),
+                'pt-BR': t('commands.xpadmin.subcommands.reset.name', 'pt-BR')
+            })
+            .setDescription(t('commands.xpadmin.subcommands.reset.description', 'en-US'))
+            .setDescriptionLocalizations({
+                'en-US': t('commands.xpadmin.subcommands.reset.description', 'en-US'),
+                'pt-BR': t('commands.xpadmin.subcommands.reset.description', 'pt-BR')
+            })
         ),
     usage: '/xp',
     execute: async (interaction: ChatInputCommandInteraction) => {
@@ -193,41 +205,61 @@ export const xpAdmin = {
         const user = interaction.options.getUser('user');
         const amount = interaction.options.getInteger('amount');
         const locale = mapLocale(interaction.locale);
-            
-        if(!user || !amount || !guild) return;
-
-        const member = guild.members.resolve(user.id);
-        if(!member) return;
+        
+        if(!guild) return;
 
         const embed = new Embed()
             .setAuthor({ name: guild.name, iconURL: guild.iconURL() || undefined })
             .setTimestamp(new Date())
 
-        if (subcommand === 'add') {
-            embed.setTitle(t('commands.xpadmin.subcommands.add.response.title', locale))
+        console.log(`command received! ${subcommand}`);
 
-            const memberData = await xpService.addXP(interaction.guild, member, amount);
+        if(subcommand === 'add' || subcommand === 'remove') {
+            if(!user || !amount) return;
 
-            if(memberData) {
-                embed.setDescription(format(t('commands.xpadmin.subcommands.add.response.added', locale), {
-                    amount,
-                    user: `${member}`
-                }));
-            } else {
-                embed.setDescription(t('commands.xpadmin.subcommands.add.response.error', locale))
+            const member = guild.members.resolve(user.id);
+            if(!member) return;
+            
+            if (subcommand === 'add') {
+                embed.setTitle(t('commands.xpadmin.subcommands.add.response.title', locale))
+
+                const memberData = await xpService.addXP(interaction.guild, member, amount);
+
+                if(memberData) {
+                    embed.setDescription(format(t('commands.xpadmin.subcommands.add.response.added', locale), {
+                        amount,
+                        user: `${member}`
+                    }));
+                } else {
+                    embed.setDescription(t('commands.xpadmin.subcommands.add.response.error', locale))
+                }
+            } else if(subcommand === 'remove') {
+                embed.setTitle(t('commands.xpadmin.subcommands.remove.response.title', locale))
+
+                const memberData = await xpService.removeXP(interaction.guild, member, amount);
+
+                if(memberData) {
+                    embed.setDescription(format(t('commands.xpadmin.subcommands.remove.response.removed', locale), {
+                        amount,
+                        user: `${member}`
+                    }));
+                } else {
+                    embed.setDescription(t('commands.xpadmin.subcommands.remove.response.error', locale))
+                }
             }
-        } else if(subcommand === 'remove') {
-            embed.setTitle(t('commands.xpadmin.subcommands.remove.response.title', locale))
+        }
+        
+        if(subcommand === 'reset') {
+            console.log("reset order received");
+            embed.setTitle(t('commands.xpadmin.subcommands.reset.response.title', locale))
 
-            const memberData = await xpService.removeXP(interaction.guild, member, amount);
-
+            console.log("asking for reset");
+            const memberData = await xpService.resetXP(interaction.guild);
+            console.log(memberData);
             if(memberData) {
-                embed.setDescription(format(t('commands.xpadmin.subcommands.remove.response.removed', locale), {
-                    amount,
-                    user: `${member}`
-                }));
+                embed.setDescription(t('commands.xpadmin.subcommands.reset.response.reseted', locale));
             } else {
-                embed.setDescription(t('commands.xpadmin.subcommands.remove.response.error', locale))
+                embed.setDescription(t('commands.xpadmin.subcommands.reset.response.error', locale))
             }
         }
 

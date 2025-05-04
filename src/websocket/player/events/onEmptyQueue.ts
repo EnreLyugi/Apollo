@@ -1,12 +1,12 @@
-import { Queue } from "@enrelyugi/discord-music-player";
 import { QueueData } from "./types";
-import { mapLocale, t } from "../../../utils/localization";
+import { t } from "../../../utils/localization";
 import Embed from "../../../models/embed";
 import { colors } from "../../../config";
 import { sockets } from "../../socket";
+import { GuildQueue } from "discord-player";
 
-export const onQueueEnd = async (queue: Queue) => {
-    const data = queue.data as QueueData;
+export const onEmptyQueue = async (queue: GuildQueue) => {
+    const data = queue.metadata as QueueData;
     const { channelId, locale } = data;
     const ws = sockets.get(data.wsId);
     if(!ws) return;

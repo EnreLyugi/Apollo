@@ -1,12 +1,12 @@
-import { Queue, Song } from "@enrelyugi/discord-music-player";
+import { t } from "../../../utils/localization";
 import { QueueData } from "./types";
-import { mapLocale, t } from "../../../utils/localization";
 import Embed from "../../../models/embed";
 import { updateEmbed } from "./utils";
 import { unpausedButtons } from "../components";
+import { GuildQueue } from "discord-player";
 
-export const onSongStart = async (queue: Queue, song: Song) => {
-    const data = queue.data as QueueData;
+export const onPlayerStart = async (queue: GuildQueue, track: any) => {
+    const data = queue.metadata as QueueData;
     const { channelId, locale } = data;
 
     const guild = queue.guild;
@@ -15,17 +15,17 @@ export const onSongStart = async (queue: Queue, song: Song) => {
     if(!channel) return;
     if(!channel.isTextBased()) return;
 
-    const requestedBy = song.requestedBy;
+    const requestedBy = data.requestedBy;
     if (!requestedBy) return;
 
     const response = new Embed()
         .setColor("#00FF00")
         .setAuthor({ name: t('player.states.playing_now', locale) })
-        .setThumbnail({ url: song.thumbnail })
+        .setThumbnail({ url: track.thumbnail })
         .setDescription(
-            `[${song.name}](${song.url})\n${t('misc.duration', locale)} ${
-            "`" + song.duration + "`"
-            }\n\n${t('player.misc.requested_by')}: ${requestedBy}`
+            `[${track.cleanTitle}](${track.url})\n${t('misc.duration', locale)} ${
+            "`" + track.duration + "`"
+            }\n\n${t('player.misc.requested_by', locale)}: ${requestedBy}`
         )
         .addField(
             `\u200b`,
@@ -37,12 +37,15 @@ export const onSongStart = async (queue: Queue, song: Song) => {
         components: [ unpausedButtons as any ],
     });
 
+    track.currentMessage = responseMessage;
     data.currentMessage = responseMessage;
-    data.song = song;
+    data.track = track;
 
-    queue.data = data;
+    queue.metadata = data;
 
     setTimeout(function () {
-        updateEmbed(queue, song);
+        updateEmbed(queue, track);
     }, 2000);
+
+    //queue.metadata.channel.send(`Started playing **${track.cleanTitle}**!`);
 }

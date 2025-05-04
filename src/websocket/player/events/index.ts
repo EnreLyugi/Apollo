@@ -1,8 +1,12 @@
-import { onClientDisconnect } from "./onClientDisconnect";
 import { onPlayerError } from "./onPlayerError";
-import { onPlaylistAdd } from "./onPlaylistAdd";
-import { onQueueEnd } from "./onQueueEnd";
-import { onSongAdd } from "./onSongAdd";
-import { onSongStart } from "./onSongStart";
+import { onAudioTracksAdd } from "./onAudioTracksAdd";
+import { onEmptyQueue } from "./onEmptyQueue";
+import { onPlayerStart } from "./onPlayerStart";
+import { onAudioTrackAdd } from "./onAudioTrackAdd"
+import { onPlayerSkip } from "./onPlayerSkip";
+import { onPlayerFinish } from "./onPlayerFinish";
+import { onPlayerPause } from "./onPlayerPause";
+import { onPlayerResume } from "./onPlayerResume";
+import { onDisconnect } from "./onDisconnect";
 
-export { onSongAdd, onSongStart, onPlaylistAdd, onQueueEnd, onClientDisconnect, onPlayerError };
+export { onAudioTracksAdd, onEmptyQueue, onPlayerError, onPlayerStart, onAudioTrackAdd, onPlayerSkip, onPlayerFinish, onPlayerPause, onPlayerResume, onDisconnect };

@@ -180,6 +180,15 @@
                         "removed": "{amount}xp Removed to {user}",
                         "error": "An error ocurred!"
                     }
+                },
+                "reset": {
+                    "name": "reset",
+                    "description": "Reset all users XP",
+                    "response": {
+                        "title": "Reset XP",
+                        "reseted": "XP reseted on the server!",
+                        "error": "An error ocurred!"
+                    }
                 }
             }
         },

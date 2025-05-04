@@ -141,6 +141,15 @@
                         "removed": "{amount}xp Removido para {user}",
                         "error": "Ocorreu um erro!"
                     }
+                },
+                "reset": {
+                    "name": "resetar",
+                    "description": "Reseta o XP de todos os usuários",
+                    "response": {
+                        "title": "Resetar XP",
+                        "reseted": "XP resetado no servidor!",
+                        "error": "Ocorreu um erro!"
+                    }
                 }
             }
         },

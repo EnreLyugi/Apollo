@@ -1,12 +1,12 @@
-import { Queue } from "@enrelyugi/discord-music-player";
 import { QueueData } from "./types";
-import { mapLocale, t } from "../../../utils/localization";
+import { t } from "../../../utils/localization";
 import Embed from "../../../models/embed";
 import { colors } from "../../../config";
 import { sockets } from "../../socket";
+import { GuildQueue } from "discord-player";
 
-export const onClientDisconnect = async (queue: Queue) => {
-    const data = queue.data as QueueData;
+export const onDisconnect = async (queue: GuildQueue) => {
+    const data = queue.metadata as QueueData;
     const { channelId, locale } = data;
     const ws = sockets.get(data.wsId);
     if(!ws) return;
@@ -15,7 +15,7 @@ export const onClientDisconnect = async (queue: Queue) => {
       event: 'client_disconnected',
       guildId: queue.guild.id,
       channelId: data.channelId,
-      playingChannel: queue.connection?.channel.id
+      playingChannel: data.channel.id
     };
 
     ws.send(JSON.stringify(message));
