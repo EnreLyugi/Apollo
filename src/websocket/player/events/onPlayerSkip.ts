@@ -13,7 +13,6 @@ export const onPlayerSkip = async (queue: any, track: any) => {
     };
 
     ws.send(JSON.stringify(message));
-    console.error(`Skipping ${track.title}`);
 
     /*const guild = queue.guild;
 

@@ -15,17 +15,14 @@ export const onPlayerStart = async (queue: GuildQueue, track: any) => {
     if(!channel) return;
     if(!channel.isTextBased()) return;
 
-    const requestedBy = data.requestedBy;
-    if (!requestedBy) return;
-
     const response = new Embed()
         .setColor("#00FF00")
         .setAuthor({ name: t('player.states.playing_now', locale) })
         .setThumbnail({ url: track.thumbnail })
         .setDescription(
-            `[${track.cleanTitle}](${track.url})\n${t('misc.duration', locale)} ${
+            `[${track.title}](${track.url})\n${t('misc.duration', locale)} ${
             "`" + track.duration + "`"
-            }\n\n${t('player.misc.requested_by', locale)}: ${requestedBy}`
+            }\n\n${t('player.misc.requested_by', locale)}: ${track.requestedBy}`
         )
         .addField(
             `\u200b`,
@@ -46,6 +43,4 @@ export const onPlayerStart = async (queue: GuildQueue, track: any) => {
     setTimeout(function () {
         updateEmbed(queue, track);
     }, 2000);
-
-    //queue.metadata.channel.send(`Started playing **${track.cleanTitle}**!`);
 }

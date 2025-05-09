@@ -16,18 +16,18 @@
                 "description": "The queue Ended"
             },
             "client_disconnect": {
-                "title": "Desconnected",
+                "title": "Disconnected",
                 "description": "I got disconnected, queue ended"
             }
         },
         "states": {
-            "playing_now": "Tocando Agora",
+            "playing_now": "Playing Now",
             "song_paused": "Music Paused",
             "song_finished": "Music Finished"
         },
         "misc": {
             "requested_by": "Requested by",
-            "invite_me": "Me convide"
+            "invite_me": "Invite me"
         },
         "errors": {
             "not_conected": "I'm not connect in any call"

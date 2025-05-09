@@ -14,6 +14,7 @@ interface MusicResponse {
     duration: string;
     thumbnail: string;
     length: number;
+    e: string;
 }
 
 export const play = {
@@ -116,6 +117,9 @@ export const play = {
                         
                         **${responseData.length}** ${t('misc.songs', locale)}`
                     );
+            } else if (responseData.event == 'play_error') {
+                response.setColor(`#FF0000`)
+                response.setDescription(responseData.e)
             }
 
             await interaction.editReply({ embeds: [ response.build() ] });

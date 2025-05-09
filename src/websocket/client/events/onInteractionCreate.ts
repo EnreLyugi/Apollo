@@ -20,25 +20,26 @@ export const onInteractionCreate = async (interaction: Interaction) => {
 
         if(guild.members.me?.voice.channel != guild.members.resolve(interaction.user.id)?.voice.channel) return;
 
-        if(interaction.customId == "rewindButton") {
-            queue.node.seek(100);
-            await interaction.update({ components: [ unpausedButtons as any ] });
-        }
+        switch(interaction.customId) {
+            case 'rewindButton':
+                queue.node.seek(100);
+                break;
 
-        if (interaction.customId == "pauseButton") {
-            queue.node.pause();
+            case 'pauseButton':
+                queue.node.pause();
+                await interaction.update({ components: [ pausedButtons as any ] });
+                break;
 
-            await interaction.update({ components: [ pausedButtons as any ] });
-        }
+            case 'unpauseButton':
+                queue.node.resume();
+                await interaction.update({ components: [ unpausedButtons as any ] });
+                break;
 
-        if (interaction.customId == "unpauseButton") {
-            queue.node.resume();
-        
-            await interaction.update({ components: [ unpausedButtons as any ] });
-        }
-
-        if (interaction.customId == "skipButton") {
-            queue.node.skip();
+            case 'skipButton':
+                queue.node.skip();
+                break;
+            default:
+                return;
         }
     }
 };

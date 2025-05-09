@@ -1,5 +1,5 @@
 export const progressBarOptions = {
-    "size": 13,
+    "size": 10,
     "block": "▰",
     "arrow": "▱",
     "space": "▱"

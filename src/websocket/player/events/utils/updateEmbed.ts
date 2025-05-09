@@ -23,18 +23,15 @@ export const updateEmbed = async function (queue: any, track: any) {
                 timecodes	boolean
             */
 
-            const requestedBy = data.requestedBy ?? '';
-            if (!requestedBy) return;
-
             const oldEmbed = data.currentMessage.embeds[0];
 
-            const newEmbed = EmbedBuilder.from(oldEmbed)
+            const embed = EmbedBuilder.from(oldEmbed)
                 .setDescription(
-                    `[${track.cleanTitle}](${track.url})\n${progressBar}\n\n\n${t('player.misc.requested_by', locale)}: ${requestedBy}`
+                    `[${track.title}](${track.url})\n${progressBar}\n\n\n${t('player.misc.requested_by', locale)}: ${track.requestedBy}`
                 );
 
             const message = await data.currentMessage.edit({
-                embeds: [ newEmbed ],
+                embeds: [ embed ],
                 components: [queue.node.isPaused() ? pausedButtons as any : unpausedButtons],
             }).catch((e: any) => {
                 console.error(e);
@@ -54,17 +51,15 @@ export const updateEmbed = async function (queue: any, track: any) {
 const HandleError = async function (track: any, update: NodeJS.Timeout, localization: string | undefined, data: any) {
     const locale = mapLocale(localization ?? '')
 
-    const requestedBy = data.requestedBy ?? '';
-
     const oldEmbed = data.currentMessage.embeds[0];
             
-    const newEmbed = EmbedBuilder.from(oldEmbed)
+    const embed = EmbedBuilder.from(oldEmbed)
         .setColor("#FF0000")
         .setAuthor({ name: t('player.states.song_finished', locale) })
-        .setDescription(`[${track.cleanTitle}](${track.url})\n\n${t('player.misc.requested_by', locale)} ${requestedBy}`);
+        .setDescription(`[${track.title}](${track.url})\n\n${t('player.misc.requested_by', locale)} ${track.requestedBy}`);
 
     const message = await data.currentMessage.edit({
-        embeds: [ newEmbed ],
+        embeds: [ embed ],
         components: [],
     });
 
