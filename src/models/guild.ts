@@ -7,7 +7,9 @@ interface GuildAttributes {
   language: string;
   color_roles_price: number;
   welcome_role: string | null;
+  birthday_role: string | null;
   welcome_channel: string | null;
+  birthday_channel: string | null;
   leave_channel: string | null;
   mod_log_channel: string | null;
   message_log_channel: string | null;
@@ -20,7 +22,9 @@ interface GuildCreationAttributes extends
     'language' |
     'color_roles_price' |
     'welcome_role' |
+    'birthday_role' |
     'welcome_channel' | 
+    'birthday_channel' |
     'leave_channel' | 
     'mod_log_channel' | 
     'message_log_channel' | 
@@ -32,7 +36,9 @@ class Guild extends Model<GuildAttributes, GuildCreationAttributes> implements G
   public language!: string;
   public color_roles_price!: number;
   public welcome_role!: string | null;
+  public birthday_role!: string | null;
   public welcome_channel!: string | null;
+  public birthday_channel!: string | null;
   public leave_channel!: string | null;
   public mod_log_channel!: string | null;
   public message_log_channel!: string | null;
@@ -64,7 +70,15 @@ Guild.init(
       type: DataTypes.STRING,
       defaultValue: null
     },
+    birthday_role: {
+      type: DataTypes.STRING,
+      defaultValue: null
+    },
     welcome_channel: {
+      type: DataTypes.STRING,
+      defaultValue: null
+    },
+    birthday_channel: {
       type: DataTypes.STRING,
       defaultValue: null
     },

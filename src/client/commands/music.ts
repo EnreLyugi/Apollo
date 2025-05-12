@@ -14,7 +14,7 @@ const commandData =
 const subcommandsMap = new Map();
 subcommands.forEach(subcommand => {
     subcommandsMap.set(subcommand.data.name, subcommand);
-    commandData.addSubcommand(subcommand.data)
+    commandData.addSubcommand(subcommand.data);
 });
 
 export const music = {

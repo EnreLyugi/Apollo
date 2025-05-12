@@ -15,16 +15,25 @@ import { mapLocale, t, format } from "../../../../utils/localization";
 import { colors } from "../../../../config";
 import { welcomeSettingsService } from "../../../../services";
 
-export const setChannel = {
+export const channel = {
     data: new SlashCommandSubcommandBuilder()
-        .setName('setchannel')
+        .setName('channel')
+        .setNameLocalizations({
+            "en-US": t('commands.set.subcommands.channel.name', 'en-US'),
+            "pt-BR": t('commands.set.subcommands.channel.name', 'pt-BR'),
+        })
+        .setDescription("Sets a channel")
+        .setDescriptionLocalizations({
+            "en-US": t('commands.set.subcommands.channel.description', 'en-US'),
+            "pt-BR": t('commands.set.subcommands.channel.description', 'pt-BR'),
+        })
         .addStringOption(new SlashCommandStringOption()
             .setName('channeltype')
             .setNameLocalizations({
                 "en-US": t('commands.set.subcommands.channel.options.channeltype.name', 'en-US'),
                 "pt-BR": t('commands.set.subcommands.channel.options.channeltype.name', 'pt-BR')
             })
-            .setDescription(t('commands.set.subcommands.channel.options.channeltype.description', 'en-US'))
+            .setDescription("Type of the channel to be set")
             .setDescriptionLocalizations({
                 "en-US": t('commands.set.subcommands.channel.options.channeltype.description', 'en-US'),
                 "pt-BR": t('commands.set.subcommands.channel.options.channeltype.description', 'pt-BR')
@@ -39,6 +48,14 @@ export const setChannel = {
                     "value": "welcome_channel"
                 },
                 {
+                    "name": "birthday_channel",
+                    "name_localizations": {
+                        "en-US": t('commands.set.subcommands.channel.options.channeltype.choices.birthday_channel.name', 'en-US'),
+                        "pt-BR": t('commands.set.subcommands.channel.options.channeltype.choices.birthday_channel.name', 'pt-BR')
+                    },
+                    "value": "birthday_channel"
+                },
+                {
                     "name": "voice_activity_log_channel",
                     "name_localizations": {
                         "en-US": t('commands.set.subcommands.channel.options.channeltype.choices.voice_activity_log_channel.name', 'en-US'),
@@ -50,13 +67,13 @@ export const setChannel = {
             .setRequired(true)
         )
         .addChannelOption(new SlashCommandChannelOption()
-            .setName('channel')
+            .setName('textchannel')
             .addChannelTypes(ChannelType.GuildText)
             .setNameLocalizations({
                 "en-US": t('commands.set.subcommands.channel.options.channel.name', 'en-US'),
                 "pt-BR": t('commands.set.subcommands.channel.options.channel.name', 'pt-BR')
             })
-            .setDescription(t('commands.setchannel.options.channel.description', 'en-US'))
+            .setDescription("Channel to be set")
             .setDescriptionLocalizations({
                 "en-US": t('commands.set.subcommands.channel.options.channel.description', 'en-US'),
                 "pt-BR": t('commands.set.subcommands.channel.options.channel.description', 'pt-BR')
@@ -67,7 +84,7 @@ export const setChannel = {
     execute: async (interaction: ChatInputCommandInteraction) => {
         const guild = interaction.guild;
         const channelType = interaction.options.getString('channeltype');
-        const channel = interaction.options.getChannel('channel');
+        const channel = interaction.options.getChannel('textchannel');
 
         if(!guild || !channel || !channelType) return;
 

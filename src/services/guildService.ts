@@ -1,5 +1,6 @@
 import { where } from 'sequelize';
 import Guild from '../models/guild';
+import { channel } from 'diagnostics_channel';
 
 class GuildService {
   public async createGuild(id: string): Promise<Guild> {
@@ -21,6 +22,9 @@ class GuildService {
       switch (roleType) {
         case 'welcome_role':
           guild.welcome_role = role_id;
+          break;
+        case 'birthday_role':
+          guild.birthday_role = role_id;
           break;
         default:
           throw new Error('Invalid Role Type')
@@ -52,6 +56,9 @@ class GuildService {
       switch (channelType) {
         case 'welcome_channel':
           guild.welcome_channel = channel_id;
+          break;
+        case 'birthday_channel':
+          guild.birthday_channel = channel_id;
           break;
         case 'voice_activity_log_channel':
           guild.voice_activity_log_channel = channel_id;

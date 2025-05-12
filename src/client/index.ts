@@ -18,21 +18,6 @@ client
 .on('guildMemberAdd', clientEvents.onGuildMemberAdd) //When a new member join's a server
 .on('roleDelete', clientEvents.onRoleDelete); //When a role is deleted
 
-/*client.once(Events.ClientReady, async () => {
-    const application = client.application;
-
-    if(!application) return
-    await application.commands.create({
-        name: 'addxp',
-        nameLocalizations: {
-            'en-US': t('application_commands.addxp.name', 'en-US'),
-            'pt-BR': t('application_commands.addxp.name', 'pt-BR')
-        },
-        type: ApplicationCommandType.User,
-        defaultMemberPermissions: PermissionFlagsBits.Administrator
-    });
-})*/ // PARA ADICIONAR!!! (Comandos de aplicação)
-
 client.login(process.env.DISCORD_TOKEN);
 
 export default client;

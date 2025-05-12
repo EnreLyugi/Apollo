@@ -40,6 +40,14 @@ export const role = {
                     "pt-BR": t('commands.set.subcommands.role.options.roletype.choices.welcome_role.name', 'pt-BR')
                 },
                 "value": "welcome_role"
+            },
+            {
+                "name": "birthday_role",
+                "name_localizations": {
+                    "en-US": t('commands.set.subcommands.role.options.roletype.choices.birthday_role.name', 'en-US'),
+                    "pt-BR": t('commands.set.subcommands.role.options.roletype.choices.birthday_role.name', 'pt-BR')
+                },
+                "value": "birthday_role"
             }
         ])
         .setRequired(true)

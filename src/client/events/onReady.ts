@@ -1,5 +1,7 @@
 import { Client, PresenceUpdateStatus } from "discord.js";
 import { guildService } from "../../services";
+import cron from 'node-cron';
+import { BirthdayController } from "../../controllers";
 
 
 export const onReady = async (client: Client) => {
@@ -8,5 +10,10 @@ export const onReady = async (client: Client) => {
 
     (await client.guilds.fetch()).forEach(async guild => {
         await guildService.createGuildIfNotExists(guild.id);
+    });
+
+    cron.schedule('0 0 * * *', async () => {
+        await BirthdayController.removeBirthdayRoles()
+        await BirthdayController.notifyBirthdays()
     });
 }

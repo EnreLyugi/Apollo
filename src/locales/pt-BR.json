@@ -5,7 +5,12 @@
         "songs": "Músicas"
     },
     "client": {
-        "error_on_command": "Ocorreu um erro ao executar esse comando."
+        "error_on_command": "Ocorreu um erro ao executar esse comando.",
+        "birthday": {
+            "title": "Feliz Aniversário!",
+            "body": "Olha só quem tá ficando mais velho(a)!\nParabéns {member}!! 🎉🎉🎉\nQue o seu dia seja incrível, do jeitinho que você merece. ✨",
+            "footer": "Att,\n{guildName}" 
+        }
     },
     "player": {
         "events": {
@@ -195,6 +200,9 @@
                         "welcome_channel": {
                             "name": "Canal de Boas-Vindas"
                         },
+                        "birthday_channel": {
+                            "name": "Canal de Notificação de Aniversáriantes"
+                        },
                         "voice_activity_log_channel": {
                             "name": "Canal de Logs de Call"
                         }
@@ -281,6 +289,9 @@
                                 "welcome_role": {
                                     "name": "Cargo de Boas-Vindas"
                                 },
+                                "birthday_role": {
+                                    "name": "Cargo de Aniversáriante"
+                                },
                                 "color": {
                                     "name": "Cargo de Cor"
                                 }
@@ -306,6 +317,9 @@
                                 "welcome_channel": {
                                     "name": "Canal de Boas-Vindas"
                                 },
+                                "birthday_channel": {
+                                    "name": "Canal de Notificação de Aniversáriantes"
+                                },
                                 "voice_activity_log_channel": {
                                     "name": "Canal de Logs de Call"
                                 }
@@ -314,6 +328,29 @@
                         "channel": {
                             "name": "canal",
                             "description": "Canal que será configurado"
+                        }
+                    }
+                },
+                "birthday": {
+                    "name": "aniversario",
+                    "description": "Configura um aniversário",
+                    "usage": "/setar aniversario <usuario> <data>",
+                    "response": {
+                        "title": "Data de Aniversário",
+                        "body": "Aniversário de {user} configurado para {date}."
+                    },
+                    "errors": {
+                        "invalid_format": "📅 Formato inválido. Use `DD/MM` ou `MM-DD`.",
+                        "invalid_date": "📅 Data Invalida. Por favor cheque os valores de dia e mês."
+                    },
+                    "choices": {
+                        "user": {
+                            "name": "usuario",
+                            "description": "Aniversáriante"
+                        },
+                        "date": {
+                            "name": "data",
+                            "description": "Data de aniversário (dd/MM)"
                         }
                     }
                 }

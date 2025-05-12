@@ -5,7 +5,12 @@
         "songs": "Musics"
     },
     "client": {
-        "error_on_command": "There was an error executing this command."
+        "error_on_command": "There was an error executing this command.",
+        "birthday": {
+            "title": "Happy Birthday!",
+            "body": "Look who's getting older!\nHappy birthday, {member}!! 🎉🎉🎉\nMay your day be amazing, just the way you deserve. ✨",
+            "footer": "nSincerely,\n{guildName}" 
+        }
     },
     "player": {
         "events": {
@@ -234,6 +239,9 @@
                         "welcome_channel": {
                             "name": "Welcome Channel"
                         },
+                        "birthday_channel": {
+                            "name": "Birthday Notification Channel"
+                        },
                         "voice_activity_log_channel": {
                             "name": "Call logs Channel"
                         }
@@ -320,6 +328,9 @@
                                 "welcome_role": {
                                     "name": "Welcome role"
                                 },
+                                "birthday_role": {
+                                    "name": "Birthday role"
+                                },
                                 "color": {
                                     "name": "Color role"
                                 }
@@ -345,6 +356,9 @@
                                 "welcome_channel": {
                                     "name": "Welcome Channel"
                                 },
+                                "birthday_channel": {
+                                    "name": "Birthday Notification Channel"
+                                },
                                 "voice_activity_log_channel": {
                                     "name": "Call logs Channel"
                                 }
@@ -353,6 +367,29 @@
                         "channel": {
                             "name": "channel",
                             "description": "Channel to be set"
+                        }
+                    }
+                },
+                "birthday": {
+                    "name": "birthday",
+                    "description": "Set a Birthday",
+                    "usage": "/set birthday <user> <date>",
+                    "response": {
+                        "title": "Birthday",
+                        "body": "{user}'s birthday set to {date}."
+                    },
+                    "errors": {
+                        "invalid_format": "📅 Invalid date format. Use `DD/MM` or `MM-DD`.",
+                        "invalid_date": "📅 Invalid date. Please check the day and month values."
+                    },
+                    "choices": {
+                        "user": {
+                            "name": "user",
+                            "description": "User to add"
+                        },
+                        "date": {
+                            "name": "date",
+                            "description": "Birthday date (MM-dd)"
                         }
                     }
                 }
