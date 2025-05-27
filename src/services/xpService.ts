@@ -2,7 +2,6 @@ import xpChannelService from './xpChannelService';
 import { Channel, Guild, GuildMember } from 'discord.js';
 import { userService, memberService, guildService, xpRoleService } from './';
 import Member from '../models/member';
-import { Server } from 'http';
 
 
 class xpService {

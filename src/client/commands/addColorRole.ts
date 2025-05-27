@@ -2,7 +2,6 @@ import {
     ChatInputCommandInteraction,
     PermissionFlagsBits,
     SlashCommandBuilder,
-    SlashCommandIntegerOption,
     SlashCommandRoleOption,
     SlashCommandStringOption
 } from "discord.js";

@@ -1,6 +1,5 @@
 import { ModalSubmitInteraction } from "discord.js";
 import { welcomeSettingsService } from "../../services";
-import { t } from "../../utils/localization";
 
 export const welcomeSettings = {
     data: {

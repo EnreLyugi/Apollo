@@ -2,7 +2,9 @@
     "misc": {
         "error_ocurred": "Error Ocurred",
         "duration": "Duration",
-        "songs": "Musics"
+        "songs": "Musics",
+        "user": "user",
+        "user2": "user2"
     },
     "client": {
         "error_on_command": "There was an error executing this command.",
@@ -100,45 +102,6 @@
                     "response": {
                         "title": "Top 10",
                         "not_found": "XP data were not found on this server."
-                    }
-                }
-            }
-        },
-        "shop": {
-            "name": "shop",
-            "description": "Some shops to spend your coins",
-            "options": {
-                "type": {
-                    "name": "type",
-                    "description": "Shop type that will be shown.",
-                    "choices": {
-                        "roles": {
-                            "name": "role",
-                            "response": {
-                                "title": "Color Roles",
-                                "footer": "type /buy color <number> to buy"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "buy": {
-            "name": "buy",
-            "description": "Buy stuff",
-            "subcommands": {
-                "color": {
-                    "name": "color",
-                    "description": "Buy a color",
-                    "options": {
-                        "colorid": {
-                            "name": "color",
-                            "description": "Number of the color you wish"
-                        }
-                    },
-                    "response": {
-                        "title": "Color buying",
-                        "insuficient": "You don't have enought coins!\n{coins} / {price}"
                     }
                 }
             }
@@ -429,6 +392,59 @@
                         "stopped": "Skipping Music"
                     }
                 }
+            }
+        },
+        "shop": {
+            "name": "shop",
+            "description": "Some shops to spend your coins",
+            "options": {
+                "type": {
+                    "name": "type",
+                    "description": "Shop type that will be shown.",
+                    "choices": {
+                        "roles": {
+                            "name": "role",
+                            "response": {
+                                "title": "Color Roles",
+                                "footer": "type /buy color <number> to buy"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "buy": {
+            "name": "buy",
+            "description": "Buy stuff",
+            "subcommands": {
+                "color": {
+                    "name": "color",
+                    "description": "Buy a color",
+                    "options": {
+                        "colorid": {
+                            "name": "color",
+                            "description": "Number of the color you wish"
+                        }
+                    },
+                    "response": {
+                        "title": "Color buying",
+                        "insuficient": "You don't have enought coins!\n{coins} / {price}"
+                    }
+                }
+            }
+        },
+        "ship": {
+            "name": "ship",
+            "description": "Shows the ship compatibility between two users.",
+            "options": {
+                "user": {
+                    "description": "User to be shipped"
+                }
+            },
+            "same_user_error": "❌ You can't ship the same user with themselves.",
+            "result": {
+                "title": "🔮 Ship Result",
+                "description": "**{user1}** 💞 **{user2}**\nCompatibility: **{value}** {emoji}"
             }
         }
     },

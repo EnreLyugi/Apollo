@@ -1,6 +1,5 @@
 import {
     ChatInputCommandInteraction,
-    PermissionFlagsBits,
     SlashCommandBuilder
 } from "discord.js";
 import { mapLocale, t } from "../../utils/localization";

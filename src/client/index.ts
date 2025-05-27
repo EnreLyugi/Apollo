@@ -1,6 +1,5 @@
-import { ApplicationCommandType, Client, Events, GatewayIntentBits, PermissionFlagsBits } from 'discord.js';
+import { Client, GatewayIntentBits } from 'discord.js';
 import * as clientEvents from './events/';
-import { t } from '../utils/localization';
 const client = new Client({ intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,

@@ -13,7 +13,14 @@ export const onReady = async (client: Client) => {
     });
 
     cron.schedule('0 0 * * *', async () => {
-        await BirthdayController.removeBirthdayRoles()
-        await BirthdayController.notifyBirthdays()
+        try {
+            await BirthdayController.removeBirthdayRoles();
+            await BirthdayController.notifyBirthdays();
+            await client.users.resolve('1245127937259208808')?.send('Rodou o cron agora!');
+        } catch (err) {
+            console.error(err);
+        }
+    }, {
+        timezone: "America/Sao_Paulo"
     });
 }

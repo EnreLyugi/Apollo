@@ -1,6 +1,4 @@
-import { where } from 'sequelize';
 import Guild from '../models/guild';
-import { channel } from 'diagnostics_channel';
 
 class GuildService {
   public async createGuild(id: string): Promise<Guild> {

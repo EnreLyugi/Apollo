@@ -4,7 +4,6 @@ import { guildService } from '../services';
 import { format, mapLocale, t } from '../utils/localization';
 import { Embed } from '../models';
 import { colors } from '../config';
-import { TaskFn } from 'node-cron';
 
 class BirthdayController {
   public async notifyBirthdays(): Promise<void> {

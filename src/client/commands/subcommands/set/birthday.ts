@@ -7,7 +7,6 @@ import {
 import { format, mapLocale, t } from "../../../../utils/localization";
 import { Embed } from "../../../../models";
 import { colors } from "../../../../config";
-import { formatDate, isValid, parse } from "date-fns";
 import birthdayService from "../../../../services/birthdayService";
 
 export const birthday = {

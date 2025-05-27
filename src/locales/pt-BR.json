@@ -2,7 +2,9 @@
     "misc": {
         "error_ocurred": "Ocorreu um erro",
         "duration": "Duração",
-        "songs": "Músicas"
+        "songs": "Músicas",
+        "user": "usuario",
+        "user2": "usuario2"
     },
     "client": {
         "error_on_command": "Ocorreu um erro ao executar esse comando.",
@@ -429,6 +431,20 @@
                         "insuficient": "Você não possui moedas o suficiente para efetuar essa compra!\n{coins} / {price}"
                     }
                 }
+            }
+        },
+        "ship": {
+            "name": "ship",
+            "description": "Mostra a compatibilidade de ship entre dois usuários.",
+            "options": {
+                "user": {
+                    "description": "Usuário que será shippado"
+                }
+            },
+            "same_user_error": "❌ Você não pode shippar o mesmo usuário consigo mesmo.",
+            "result": {
+                "title": "🔮 Resultado do Ship",
+                "description": "**{user1}** 💞 **{user2}**\nCompatibilidade: **{value}** {emoji}"
             }
         }
     },

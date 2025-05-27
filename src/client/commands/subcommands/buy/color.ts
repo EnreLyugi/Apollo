@@ -7,7 +7,6 @@ import { Embed } from "../../../../models/";
 import { colorRoleService, guildService, memberService } from "../../../../services";
 import { mapLocale, t, format } from "../../../../utils/localization";
 import { colors } from "../../../../config";
-import e from "express";
 
 export const color = {
     data: new SlashCommandSubcommandBuilder()

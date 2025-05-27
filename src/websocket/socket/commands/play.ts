@@ -1,4 +1,4 @@
-import { GuildBasedChannel, User, userMention, VoiceChannel } from "discord.js";
+import { GuildBasedChannel, User, VoiceChannel } from "discord.js";
 import { mapLocale } from "../../../utils/localization";
 import client from "../../client";
 import { useMainPlayer } from "discord-player";

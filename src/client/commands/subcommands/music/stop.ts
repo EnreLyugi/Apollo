@@ -1,7 +1,6 @@
 import { ApplicationCommandSubCommand, ChatInputCommandInteraction, SlashCommandSubcommandBuilder } from "discord.js";
 import { mapLocale, t } from "../../../../utils/localization";
 import { Embed } from "../../../../models";
-import { colors } from "../../../../config";
 
 export const stop = {
     data: new SlashCommandSubcommandBuilder()

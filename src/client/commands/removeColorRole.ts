@@ -2,9 +2,7 @@ import {
     ChatInputCommandInteraction,
     PermissionFlagsBits,
     SlashCommandBuilder,
-    SlashCommandIntegerOption,
-    SlashCommandRoleOption,
-    SlashCommandStringOption
+    SlashCommandRoleOption
 } from "discord.js";
 import { Embed } from "../../models/";
 import { colorRoleService } from "../../services";
