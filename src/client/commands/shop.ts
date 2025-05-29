@@ -10,6 +10,7 @@ import { Embed } from "../../models";
 import { nextPageButton } from "../buttons/nextPage";
 import { previousPageButton } from "../buttons/previousPage";
 import { colors } from "../../config";
+import { CommandCategory } from "./help";
 
 export const shop = {
     data: new SlashCommandBuilder()
@@ -17,6 +18,11 @@ export const shop = {
       .setNameLocalizations({
             "en-US": t('commands.shop.name', 'en-US'),
             "pt-BR": t('commands.shop.name', 'pt-BR')
+        })
+        .setDescription('Some shops to spend your coins')
+        .setDescriptionLocalizations({
+            "en-US": t('commands.shop.description', 'en-US'),
+            "pt-BR": t('commands.shop.description', 'pt-BR')
         })
         .addStringOption(new SlashCommandStringOption()
             .setName('type')
@@ -41,6 +47,7 @@ export const shop = {
             ])
             .setRequired(true)
         ),
+    category: CommandCategory.ECONOMY,
     usage: '/shop',
     execute: async (interaction: ChatInputCommandInteraction) => {
         const shopType = interaction.options.getString('type');

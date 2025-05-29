@@ -9,10 +9,20 @@ import { Embed } from "../../models/";
 import { colorRoleService } from "../../services";
 import { mapLocale, t, format } from "../../utils/localization";
 import { colors } from "../../config";
+import { CommandCategory } from "./help";
 
 export const addColorRole = {
     data: new SlashCommandBuilder()
         .setName('addcolorrole')
+        .setNameLocalizations({
+            "en-US": t('commands.addcolorrole.name', 'en-US'),
+            "pt-BR": t('commands.addcolorrole.name', 'pt-BR')
+        })
+        .setDescription('Set the roles that will be listed on colors shop')
+        .setDescriptionLocalizations({
+            "en-US": t('commands.addcolorrole.description', 'en-US'),
+            "pt-BR": t('commands.addcolorrole.description', 'pt-BR')
+        })
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addRoleOption(new SlashCommandRoleOption()
             .setName('role')
@@ -40,6 +50,7 @@ export const addColorRole = {
             })
             .setRequired(true)
         ),
+    category: CommandCategory.CONFIG,
     usage: '/addcolorrole <role>',
     execute: async (interaction: ChatInputCommandInteraction) => {
         const guild = interaction.guild;

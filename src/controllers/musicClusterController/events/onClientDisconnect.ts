@@ -5,8 +5,6 @@ export const onClientDisconnect = async (guildId: string, channelId: string, clu
     const guild = client.guilds.resolve(guildId);
     if(!guild) return;
 
-    console.log('Client Desconectado');
-
     const channel = guild.channels.resolve(channelId);
     if(!channel || !channel.isTextBased()) return;
 

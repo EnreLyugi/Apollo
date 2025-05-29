@@ -8,10 +8,20 @@ import { Embed } from "../../models/";
 import { xpChannelService } from "../../services";
 import { mapLocale, t, format } from "../../utils/localization";
 import { colors } from "../../config";
+import { CommandCategory } from "./help";
 
 export const disablexp = {
     data: new SlashCommandBuilder()
         .setName('disablexp')
+        .setNameLocalizations({
+            "en-US": t('commands.disablexp.name', 'en-US'),
+            "pt-BR": t('commands.disablexp.name', 'pt-BR')
+        })
+        .setDescription('Disable XP gain in a channel')
+        .setDescriptionLocalizations({
+            "en-US": t('commands.disablexp.description', 'en-US'),
+            "pt-BR": t('commands.disablexp.description', 'pt-BR')
+        })
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addChannelOption(new SlashCommandChannelOption()
             .setName('channel')
@@ -26,6 +36,7 @@ export const disablexp = {
             })
             .setRequired(true)
         ),
+    category: CommandCategory.XP,
     usage: '/disablexp <channel>',
     execute: async (interaction: ChatInputCommandInteraction) => {
         const guild = interaction.guild;

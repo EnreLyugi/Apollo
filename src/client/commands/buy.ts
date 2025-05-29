@@ -4,6 +4,7 @@ import {
 } from "discord.js";
 import { mapLocale, t } from "../../utils/localization";
 import { subcommands } from './subcommands/buy';
+import { CommandCategory } from "./help";
 
 const commandData =
     new SlashCommandBuilder()
@@ -11,6 +12,11 @@ const commandData =
         .setNameLocalizations({
             "en-US": t('commands.buy.name', 'en-US'),
             "pt-BR": t('commands.buy.name', 'pt-BR')
+        })
+        .setDescription('Buy items')
+        .setDescriptionLocalizations({
+            "en-US": t('commands.buy.description', 'en-US'),
+            "pt-BR": t('commands.buy.description', 'pt-BR')
         });
 
 const subcommandsMap = new Map();
@@ -21,6 +27,7 @@ subcommands.forEach(subcommand => {
 
 export const buy = {
     data: commandData,
+    category: CommandCategory.ECONOMY,
     usage: '/buy',
     execute: async (interaction: ChatInputCommandInteraction) => {
         const locale = mapLocale(interaction.locale);

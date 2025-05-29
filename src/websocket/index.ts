@@ -1,6 +1,8 @@
+import { initializePlayer } from './player';
+
 (async () => {
     await import('./client/'); //Constructs Discord Client
-    await import('./player/'); //Constructs Player Client
+    await initializePlayer(); //Initialize Player Client
     await import('./socket/'); //Constructs Socket Client
 })();
 

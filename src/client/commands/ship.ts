@@ -2,14 +2,20 @@ import { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandUserOptio
 import { format, mapLocale, t } from "../../utils/localization";
 import { Embed } from "../../models";
 import { shipService } from "../../services";
+import { colors } from "../../config";
+import { CommandCategory } from "./help";
 
 export const ship = {
   data: new SlashCommandBuilder()
     .setName('ship')
-    .setDescription('Get a ship probability percentage')
+    .setNameLocalizations({
+      "en-US": t('commands.ship.name', 'en-US'),
+      "pt-BR": t('commands.ship.name', 'pt-BR')
+    })
+    .setDescription('Shows the ship compatibility between two users.')
     .setDescriptionLocalizations({
-      'en-US': t('commands.ship.description', 'en-US'),
-      'pt-BR': t('commands.ship.description', 'pt-BR')
+      "en-US": t('commands.ship.description', 'en-US'),
+      "pt-BR": t('commands.ship.description', 'pt-BR')
     })
     .addUserOption(new SlashCommandUserOption()
       .setName('user')
@@ -37,6 +43,7 @@ export const ship = {
       })
     )
   ,
+  category: CommandCategory.FUN,
   usage: '/ship',
   execute: async (interaction: ChatInputCommandInteraction) => {
     const user1 = interaction.options.getUser('user', true);

@@ -1,14 +1,14 @@
 import { Interaction } from "discord.js";
 import { QueueData } from "../../player/events/types";
 import { pausedButtons, unpausedButtons } from "../../player/components";
-import { useMainPlayer } from "discord-player";
+import { getPlayer } from "../../player";
 
 export const onInteractionCreate = async (interaction: Interaction) => {
     if(interaction.isButton()) {
         const guild = interaction.guild;
         if(!guild) return;
         
-        const player = useMainPlayer();
+        const player = getPlayer();
         const queue = player.nodes.get(guild.id);
 
         if (!queue) return interaction.message.delete().catch((e) => {});

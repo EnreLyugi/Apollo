@@ -99,8 +99,6 @@ export const play = {
         try {
             const responseData = await waitForWsResponse(interaction.id);
 
-            console.log(responseData)
-
             const response = new Embed()
                 .setColor(`#${colors.default_color}`)
                 .setAuthor({ name: t(`player.events.${responseData.event}`, locale) })

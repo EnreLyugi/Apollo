@@ -48,7 +48,7 @@ export const updateEmbed = async function (queue: any, track: any) {
     }, 2000);
 }
 
-const HandleError = async function (track: any, update: NodeJS.Timeout, localization: string | undefined, data: any) {
+export const HandleError = async function (track: any, update: NodeJS.Timeout | null, localization: string | undefined, data: any) {
     const locale = mapLocale(localization ?? '')
 
     const oldEmbed = data.currentMessage.embeds[0];
@@ -65,5 +65,7 @@ const HandleError = async function (track: any, update: NodeJS.Timeout, localiza
 
     data.currentMessage = message;  
     
-    clearInterval(update);
+    if (update) {
+        clearInterval(update);
+    }
 };

@@ -8,10 +8,20 @@ import { Embed } from "../../models/";
 import { colorRoleService } from "../../services";
 import { mapLocale, t, format } from "../../utils/localization";
 import { colors } from "../../config";
+import { CommandCategory } from "./help";
 
 export const removeColorRole = {
     data: new SlashCommandBuilder()
         .setName('removecolorrole')
+        .setNameLocalizations({
+            "en-US": t('commands.removecolorrole.name', 'en-US'),
+            "pt-BR": t('commands.removecolorrole.name', 'pt-BR')
+        })
+        .setDescription('Remove color roles from the shop')
+        .setDescriptionLocalizations({
+            "en-US": t('commands.removecolorrole.description', 'en-US'),
+            "pt-BR": t('commands.removecolorrole.description', 'pt-BR')
+        })
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addRoleOption(new SlashCommandRoleOption()
             .setName('role')
@@ -26,6 +36,7 @@ export const removeColorRole = {
             })
             .setRequired(true)
         ),
+    category: CommandCategory.CONFIG,
     usage: '/removecolorrole <role>',
     execute: async (interaction: ChatInputCommandInteraction) => {
         const guild = interaction.guild;

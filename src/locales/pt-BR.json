@@ -76,9 +76,33 @@
     "commands": {
         "help": {
             "name": "ajuda",
-            "description": "Responde com ajuda de comandos!",
-            "usage": "/ajuda",
-            "template": "Descrição do comando: {commandDescription}\nUso: {commandUsage}"
+            "description": "Mostra os comandos disponíveis e seus usos",
+            "usage": "/ajuda [comando]",
+            "options": {
+                "command": {
+                    "name": "comando",
+                    "description": "Obter ajuda detalhada para um comando específico"
+                }
+            },
+            "list": {
+                "title": "📚 Comandos Disponíveis",
+                "description": "Aqui estão todos os comandos disponíveis agrupados por categoria. Use `/ajuda <comando>` para informações detalhadas sobre um comando específico.",
+                "footer": "Dica: Use a opção de comando para ver informações detalhadas sobre um comando específico"
+            },
+            "categories": {
+                "music": "🎵 Música",
+                "economy": "💰 Economia",
+                "xp": "⭐ Experiência",
+                "config": "⚙️ Configuração",
+                "fun": "🎮 Diversão",
+                "utility": "🛠️ Utilidades"
+            },
+            "specific_command": {
+                "title": "Ajuda: /{command}",
+                "template": "**Descrição:** {commandDescription}\n**Uso:** {commandUsage}",
+                "subcommands_title": "📝 Subcomandos:",
+                "variations_title": "📋 Variações do Comando:"
+            }
         },
         "ping": {
             "name": "ping",
@@ -87,13 +111,13 @@
         },
         "xp": {
             "name": "xp",
-            "description": "Responde com seu XP atual!",
+            "description": "Mostra seu XP atual no servidor",
             "current_xp": "Seu XP Atual: {serverXp}",
             "usage": "/xp"
         },
         "xpuser": {
             "name": "xp",
-            "description": "Responde com seu XP atual!",
+            "description": "Comandos gerais de XP (rank, etc)",
             "usage": "/xp [ação]",
             "subcommands": {
                 "rank": {
@@ -108,7 +132,7 @@
         },
         "xpadmin": {
             "name": "xp",
-            "description": "Responde com seu XP atual!",
+            "description": "Comandos de administração de XP (adicionar, remover, resetar)",
             "usage": "/xp [ação]",
             "subcommands": {
                 "add": {
@@ -365,7 +389,7 @@
             "subcommands": {
                 "play": {
                     "name": "tocar",
-                    "description": "Toca Música",
+                    "description": "Toca uma música",
                     "usage": "/musica tocar <musica>",
                     "options": {
                         "music": {
@@ -385,7 +409,7 @@
                 },
                 "skip": {
                     "name": "pular",
-                    "description": "Passa para a proxima musica",
+                    "description": "Pula para a próxima música",
                     "usage": "/musica pular",
                     "response": {
                         "title": "Pular Música",

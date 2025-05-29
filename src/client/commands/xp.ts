@@ -9,11 +9,21 @@ import {
 import { Embed } from "../../models/"
 import { memberService, userService, xpService } from '../../services/';
 import { t, format, mapLocale } from '../../utils/localization';
+import { CommandCategory } from "./help";
 
 export const xp = {
     data: new SlashCommandBuilder()
-        .setName('xp'),        
-    usage: '/xp',
+        .setName('xp')
+        .setNameLocalizations({
+            "en-US": t('commands.xp.name', 'en-US'),
+            "pt-BR": t('commands.xp.name', 'pt-BR')
+        })
+        .setDescription('Shows your current XP')
+        .setDescriptionLocalizations({
+            "en-US": t('commands.xp.description', 'en-US'),
+            "pt-BR": t('commands.xp.description', 'pt-BR')
+        }),
+    category: CommandCategory.XP,
     execute: async (interaction: ChatInputCommandInteraction) => {
         const guild = interaction.guild;
         if(!guild) return;

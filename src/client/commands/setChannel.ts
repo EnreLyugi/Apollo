@@ -15,10 +15,20 @@ import { guildService } from "../../services";
 import { mapLocale, t, format } from "../../utils/localization";
 import { colors } from "../../config";
 import { welcomeSettingsService } from "../../services";
+import { CommandCategory } from "./help";
 
 export const setChannel = {
     data: new SlashCommandBuilder()
         .setName('setchannel')
+        .setNameLocalizations({
+            "en-US": t('commands.setchannel.name', 'en-US'),
+            "pt-BR": t('commands.setchannel.name', 'pt-BR')
+        })
+        .setDescription('Setup a channel for automatic messages')
+        .setDescriptionLocalizations({
+            "en-US": t('commands.setchannel.description', 'en-US'),
+            "pt-BR": t('commands.setchannel.description', 'pt-BR')
+        })
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addStringOption(new SlashCommandStringOption()
             .setName('channeltype')
@@ -65,6 +75,7 @@ export const setChannel = {
             })
             .setRequired(true)
         ),
+    category: CommandCategory.CONFIG,
     usage: '/setchannel <channeltype> <channel>',
     execute: async (interaction: ChatInputCommandInteraction) => {
         const guild = interaction.guild;

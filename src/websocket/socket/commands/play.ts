@@ -1,7 +1,7 @@
 import { GuildBasedChannel, User, VoiceChannel } from "discord.js";
 import { mapLocale } from "../../../utils/localization";
 import client from "../../client";
-import { useMainPlayer } from "discord-player";
+import { getPlayer } from "../../player";
 import { sockets } from "../../socket";
 
 interface PlayData {
@@ -18,7 +18,7 @@ interface PlayData {
 interface CustomUser extends User {
     wsId?: string;
     interactionId?: string;
-  }
+}
 
 export const play = async (data: PlayData, wsId: string) => {
     const { guildId, channelId, userId, music, interactionId, interactionChannelId } = data;
@@ -38,9 +38,9 @@ export const play = async (data: PlayData, wsId: string) => {
     user.wsId = wsId;
     user.interactionId = interactionId;
 
-    const mainPlayer = useMainPlayer();
-    try{
-        await mainPlayer.play(channel, music, {
+    try {
+        const player = getPlayer();
+        await player.play(channel, music, {
             requestedBy: user,
             nodeOptions: {
                 metadata: {
@@ -52,7 +52,7 @@ export const play = async (data: PlayData, wsId: string) => {
                     wsId
                 }
             }
-        })
+        });
     } catch(e) {
         const ws = sockets.get(wsId);
 

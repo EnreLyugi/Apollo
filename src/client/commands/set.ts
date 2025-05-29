@@ -5,6 +5,7 @@ import {
 } from "discord.js";
 import { mapLocale, t } from "../../utils/localization";
 import { subcommands } from './subcommands/set';
+import { CommandCategory } from "./help";
 
 const commandData =
     new SlashCommandBuilder()
@@ -13,6 +14,11 @@ const commandData =
         .setNameLocalizations({
             "en-US": t('commands.set.name', 'en-US'),
             "pt-BR": t('commands.set.name', 'pt-BR')
+        })
+        .setDescription('Sets some settings')
+        .setDescriptionLocalizations({
+            "en-US": t('commands.set.description', 'en-US'),
+            "pt-BR": t('commands.set.description', 'pt-BR')
         });
 
 const subcommandsMap = new Map();
@@ -23,6 +29,7 @@ subcommands.forEach(subcommand => {
 
 export const set = {
     data: commandData,
+    category: CommandCategory.CONFIG,
     usage: '/set',
     execute: async (interaction: ChatInputCommandInteraction) => {
         const locale = mapLocale(interaction.locale);
