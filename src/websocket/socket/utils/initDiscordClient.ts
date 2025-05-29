@@ -3,35 +3,35 @@ import * as clientEvents from "../../client/events"
 
 export const initDiscordClient = async () => {
     return new Promise((resolve, reject) => {
-        // Se o client já estiver pronto, apenas retorna
+        // If client is already ready, just return
         if (client.isReady() && client.user) {
-            resolve('Bot já está conectado.');
+            resolve('Bot is already connected');
             return;
         }
 
-        // Caso contrário, espera o evento ready
+        // Otherwise, wait for ready event
         const timeout = setTimeout(() => {
-            reject('Timeout ao esperar o bot ficar pronto');
-        }, 10000); // 10 segundos de timeout
+            reject('Timeout waiting for bot to be ready');
+        }, 10000); // 10 seconds timeout
 
         client.once('ready', () => {
             clearTimeout(timeout);
-            resolve('Bot pronto');
+            resolve('Bot is ready');
         });
 
         client.on('interactionCreate', clientEvents.onInteractionCreate);
 
-        // Cada serviço já tem seu próprio DISCORD_TOKEN configurado
+        // Each service has its own DISCORD_TOKEN configured
         const token = process.env.DISCORD_TOKEN;
         if (!token) {
-            console.error('Token não encontrado');
-            reject('Token não encontrado');
+            console.error('Token not found');
+            reject('Token not found');
             return;
         }
 
         client.login(token).catch((error) => {
-            console.error('Erro ao fazer login no bot:', error);
-            reject('Erro ao conectar o bot');
+            console.error('Error logging in:', error);
+            reject('Failed to connect bot');
         });
     });
 }

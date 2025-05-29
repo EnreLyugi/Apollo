@@ -122,8 +122,15 @@ export const play = {
 
             await interaction.editReply({ embeds: [ response.build() ] });
         } catch (error) {
-            console.error('Erro ao aguardar resposta do WebSocket:', error);
-            await interaction.editReply('Ocorreu um erro ao tentar tocar a música.');
+            console.error('Error waiting for WebSocket response:', error);
+            await interaction.editReply({ 
+                embeds: [
+                    new Embed()
+                        .setColor('#FF0000')
+                        .setDescription(t('misc.error_ocurred', locale))
+                        .build()
+                ]
+            });
         }
     },
 };

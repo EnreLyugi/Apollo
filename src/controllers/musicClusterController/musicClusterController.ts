@@ -58,12 +58,12 @@ class MusicClusterController {
                             resolve(data.available);
                         }
                     } catch (error) {
-                        console.error('Erro ao processar mensagem:', error);
+                        console.error('Error processing message:', error);
                     }
                 });
 
                 socket.on("error", (error) => {
-                    console.error('Erro ao conectar:', error.message);
+                    console.error('Error connecting:', error.message);
                     clearTimeout(timeout);
                     resolve(false);
                 });
@@ -71,15 +71,15 @@ class MusicClusterController {
 
             return available;
         } catch (error) {
-            console.error('Exceção ao tentar conectar:', error);
+            console.error('Exception while trying to connect:', error);
             return false;
         }
     }
 
     private async getClusterForGuild(guild: Guild): Promise<string | undefined> {
-        // Filtra apenas clusters que estão ativamente tocando no servidor
+        // Filter only clusters that are actively playing in the server
         const usedPorts = this.clusters
-            .filter(cluster => cluster.channels.length > 0) // Só considera clusters que têm canais ativos
+            .filter(cluster => cluster.channels.length > 0) // Only consider clusters with active channels
             .filter(cluster => cluster.channels.some(channel => {
                 // Check if the bot is still in the guild and channel
                 const guildStillExists = client.guilds.cache.has(channel.guild.id);
@@ -126,7 +126,7 @@ class MusicClusterController {
             const port = await this.getClusterForGuild(guild);
 
             if(!port) {
-                console.error(`Todos os clusters estão indisponíveis para o Servidor ${guild.id}.`);
+                console.error(`All clusters are unavailable for Server ${guild.id}.`);
                 return null;
             }
 
@@ -146,7 +146,7 @@ class MusicClusterController {
                 });
     
                 socket.on("error", (err) => {
-                    console.error(`Erro no WebSocket para a porta ${port}:`, err);
+                    console.error(`WebSocket error on port ${port}:`, err);
                     reject(err);
                 });
             });
@@ -167,7 +167,7 @@ class MusicClusterController {
                 this.clusters.push(clusterData);
                 this.setupSockectEvents(clusterData);
             } catch (error) {
-                console.error('Erro ao conectar ao cluster:', error);
+                console.error('Error connecting to cluster:', error);
                 return null;
             }
         }

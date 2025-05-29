@@ -41,12 +41,12 @@ export const onVoiceStateUpdate = async (oldState: VoiceState, newState: VoiceSt
     if(unmutedMembers.length < 2  || isXpDisabled) {
         unmutedMembers.forEach(member => {
             if(xpMembers.some(x => x.member.id === member.id && x.guild.id === guild.id)) {
-                console.log(`${member.displayName} removido da fila`);
+                console.log(`${member.displayName} removed from queue`);
                 removeMember(member, channel.guild);
             }
         });
         if(xpMembers.some(x => x.member.id === member.id && x.guild.id === guild.id)) {
-            console.log(`${member.displayName} removido da fila`);
+            console.log(`${member.displayName} removed from queue`);
             removeMember(member, channel.guild);
         }
         return;
@@ -54,7 +54,7 @@ export const onVoiceStateUpdate = async (oldState: VoiceState, newState: VoiceSt
 
     if(newState.selfDeaf || newState.selfMute || newState.serverDeaf || newState.serverMute) {
         if(xpMembers.some(x => x.member.id === member.id && x.guild.id === guild.id)) {
-            console.log(`${member.displayName} removido da fila`);
+            console.log(`${member.displayName} removed from queue`);
             removeMember(member, channel.guild);
         }
         return;
@@ -62,7 +62,7 @@ export const onVoiceStateUpdate = async (oldState: VoiceState, newState: VoiceSt
 
     unmutedMembers.map(member => {
         if(!xpMembers.some(x => x.member.id === member.id && x.guild.id === guild.id)) {
-            console.log(`${member.displayName} adicionado da fila`);
+            console.log(`${member.displayName} added to queue`);
             xpMembers.push({ member, guild, channel });
         }
     });
@@ -106,7 +106,7 @@ function activityLog(oldState: VoiceState, newState: VoiceState, logChannel: Gui
         .setFooter({ text: member.id, iconURL: guild.iconURL() || undefined })
         .setTimestamp(new Date())
 
-    if(!oldState.channel && newState.channel) { //Usuário entrou em uma call
+    if(!oldState.channel && newState.channel) { // User joined a call
         const description = format(t(`logs.voice_activity.joined_channel`, locale), {
             username: `${member}`,
             channel: `${newState.channel}`
@@ -116,7 +116,7 @@ function activityLog(oldState: VoiceState, newState: VoiceState, logChannel: Gui
             .setColor('#32FF32')
             .setAuthor({ name: t(`logs.voice_activity.joined_channel_title`, locale), iconURL: member.displayAvatarURL() })
             .setDescription(description)
-    } else if(oldState.channel && !newState.channel) { //Usuário saiu de uma call
+    } else if(oldState.channel && !newState.channel) { // User left a call
         const description = format(t(`logs.voice_activity.left_channel`, locale), {
             username: `${member}`,
             channel: `${oldState.channel}`
@@ -126,7 +126,7 @@ function activityLog(oldState: VoiceState, newState: VoiceState, logChannel: Gui
             .setColor('#FF3232')
             .setAuthor({ name: t(`logs.voice_activity.left_channel_title`, locale), iconURL: member.displayAvatarURL() })
             .setDescription(description)
-    } else if(oldState.channelId !== newState.channelId) { //Usuário mudou de canal
+    } else if(oldState.channelId !== newState.channelId) { // User changed channel
         const description = format(t(`logs.voice_activity.changed_channel`, locale), {
             username: `${member}`,
             channel1: `${oldState.channel}`,

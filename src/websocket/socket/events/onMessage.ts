@@ -4,6 +4,7 @@ import { connectClient, disconnectClient, checkAvailability } from "../commands"
 import { play } from "../commands/play";
 import { stop } from "../commands/stop";
 import { skip } from "../commands/skip";
+import { t } from "../../../utils/localization";
 
 export const onMessage = async (message: WebSocket.Data, wsId: string) => {
     const data = JSON.parse(message.toString());
@@ -32,7 +33,7 @@ export const onMessage = async (message: WebSocket.Data, wsId: string) => {
             checkAvailability(data, ws);
             break;
         default:
-            ws.send(JSON.stringify({ event: 'error', message: 'Comando desconhecido',  }));
+            ws.send(JSON.stringify({ event: 'error', message: t('errors.unknown_command', 'en-US') }));
             break;
     }
 }

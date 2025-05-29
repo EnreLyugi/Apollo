@@ -68,7 +68,7 @@ class xpService {
     };
 
     const xp = Math.round(Math.random() * 9) + 1;
-    console.log(`${xp}xp adicionado para ${member.displayName} em ${guild.name}`);
+    console.log(`${xp}xp added to ${member.displayName} in ${guild.name}`);
     [userData, memberData].forEach(async data => {
       data.xp += xp;
       await data.save();

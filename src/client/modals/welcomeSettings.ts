@@ -19,7 +19,7 @@ export const welcomeSettings = {
 
         const channel = guild.channels.resolve(channelId);
         if(!channel) return interaction.reply({
-            content: 'Canal Inválido!',
+            content: 'Invalid Channel!',
             ephemeral: true,
         });
 

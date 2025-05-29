@@ -8,7 +8,7 @@ interface CheckAvailabilityData {
 export const checkAvailability = async (data: CheckAvailabilityData, ws: WebSocket) => {
     const { guildId } = data;
     
-    // Verifica se o client está pronto
+    // Check if client is ready
     if (!client.isReady()) {
         ws.send(JSON.stringify({
             event: 'availability_response',
@@ -17,11 +17,11 @@ export const checkAvailability = async (data: CheckAvailabilityData, ws: WebSock
         return;
     }
 
-    // Verifica se o bot está no servidor
+    // Check if bot is in the guild
     const guild = client.guilds.cache.get(guildId);
     const available = !!guild;
 
-    // Se o bot não estiver no servidor, tenta entrar (isso só funciona se o bot tiver sido convidado)
+    // If bot is not in the guild, try to join (this only works if the bot has been invited)
     if (!available) {
         ws.send(JSON.stringify({
             event: 'availability_response',

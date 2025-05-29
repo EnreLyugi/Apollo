@@ -26,7 +26,7 @@ interface Command {
     category: CommandCategory;
 }
 
-// Função para descobrir variações de um comando
+// Function to discover command variations
 function findCommandVariations(commandName: string): string[] {
     const commandsPath = path.join(__dirname);
     const commandFiles = fs.readdirSync(commandsPath).filter(file => 
@@ -41,14 +41,14 @@ function findCommandVariations(commandName: string): string[] {
     return variations.length > 1 ? variations : [];
 }
 
-// Função para descobrir automaticamente todos os comandos
+// Function to automatically discover all commands
 function discoverCommands(): { name: string; value: string }[] {
     const commandsPath = path.join(__dirname);
     const commandFiles = fs.readdirSync(commandsPath).filter(file => 
         file.endsWith('.ts') && !file.startsWith('index') && !file.startsWith('help')
     );
 
-    // Filtra comandos para evitar duplicatas de variações
+    // Filter commands to avoid variation duplicates
     const processedCommands = new Set<string>();
     const availableCommands: { name: string; value: string }[] = [];
 
@@ -62,13 +62,13 @@ function discoverCommands(): { name: string; value: string }[] {
         }
     }
 
-    // Adiciona o comando help
+    // Add help command
     availableCommands.push({ name: 'help', value: 'help' });
 
     return availableCommands;
 }
 
-// Lista de comandos disponíveis
+// List of available commands
 const availableCommands = discoverCommands();
 
 export const help: Command = {
@@ -112,7 +112,7 @@ export const help: Command = {
         const commandName = interaction.options.getString('command');
         
         if (commandName) {
-            // Mostra ajuda detalhada para um comando específico
+            // Show detailed help for a specific command
             const command = commands.find(cmd => cmd.data.name === commandName);
             if (!command) return;
 
@@ -126,7 +126,7 @@ export const help: Command = {
                     commandUsage: t(`commands.${command.data.name}.usage`, locale)
                 }));
 
-            // Verifica se existem subcomandos no diretório
+            // Check if there are subcommands in the directory
             const subcommandsPath = path.join(__dirname, 'subcommands', commandName);
             if (fs.existsSync(subcommandsPath)) {
                 let subcommandsText = '\n\n' + t('commands.help.specific_command.subcommands_title', locale) + '\n';
@@ -146,7 +146,7 @@ export const help: Command = {
                 commandInfo.setDescription((currentEmbed.data.description || '') + subcommandsText);
             }
 
-            // Verifica se o comando tem variações
+            // Check if command has variations
             const variations = findCommandVariations(commandName);
             if (variations.length > 0) {
                 let variationsText = '\n\n' + t('commands.help.specific_command.variations_title', locale) + '\n';
@@ -163,19 +163,19 @@ export const help: Command = {
 
             await interaction.reply({ embeds: [commandInfo.build()], ephemeral: true });
         } else {
-            // Mostra lista simplificada de todos os comandos
+            // Show simplified list of all commands
             const commandList = new Embed()
                 .setColor(`#${colors.default_color}`)
                 .setTitle(t('commands.help.list.title', locale))
                 .setDescription(t('commands.help.list.description', locale));
 
-            // Agrupa comandos por categoria usando a categoria definida em cada comando
+            // Group commands by category using the category defined in each command
             const categories: Record<CommandCategory, string[]> = Object.values(CommandCategory).reduce((acc, category) => {
                 acc[category] = [];
                 return acc;
             }, {} as Record<CommandCategory, string[]>);
 
-            // Adiciona cada comando à sua categoria
+            // Add each command to its category
             for (const command of commands) {
                 if ('category' in command) {
                     const baseName = command.data.name.replace(/user$|admin$/, '');
@@ -189,12 +189,12 @@ export const help: Command = {
                 }
             }
 
-            // Adiciona o comando help à categoria utility
+            // Add help command to utility category
             if (!categories[CommandCategory.UTILITY].includes('help')) {
                 categories[CommandCategory.UTILITY].push('help');
             }
 
-            // Mostra os comandos agrupados por categoria
+            // Show commands grouped by category
             for (const [category, categoryCommands] of Object.entries(categories)) {
                 if (categoryCommands.length > 0) {
                     let categoryText = '';
