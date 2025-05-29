@@ -1,5 +1,105 @@
 # Apollo Discord Bot
 
+[🇺🇸 English](#-english) | [🇧🇷 Português](#-português)
+
+---
+
+# 🇺🇸 English
+
+A powerful multifunctional Discord bot developed by Enre Lyugi, featuring music playback, XP system, customizable welcome messages, birthday notifications, and much more.
+
+## 🌟 Features
+
+### 🎵 Music System
+- Music playback via URL or name
+- Support for multiple music platforms
+- Control commands: play, stop, skip
+
+### ⭐ XP System
+- Levels and XP system
+- Automatic roles based on XP
+- Custom XP configuration per server
+
+### 👋 Welcome System
+- Customizable welcome messages
+- Support for custom images
+- Automatic role for new members
+
+### 🎂 Birthday System
+- Birthday notifications
+- Special roles for birthday members
+- Dedicated birthday channel
+
+### 🛍️ Shop System
+- Color roles shop
+- Integrated economy system
+
+### 📝 Logging
+- Voice activity logs
+- Moderation logs
+- Message logs
+
+## 🛠️ Technologies
+
+- TypeScript
+- Node.js
+- Discord.js
+- Sequelize (PostgreSQL)
+- Discord Player
+- Express
+- WebSocket
+
+## ⚙️ Setup
+
+1. Clone the repository
+2. Install dependencies:
+```bash
+yarn install
+```
+
+3. Configure the required environment variables:
+- `DISCORD_TOKEN`
+- `DISCORD_CLIENT_ID`
+- Other necessary database environment variables
+
+4. Run the bot:
+```bash
+# Development
+yarn dev
+
+# Production
+yarn build
+yarn start
+```
+
+## 📜 Main Commands
+
+- `/music play` - Play a song
+- `/music stop` - Stop playback
+- `/music skip` - Skip to next song
+- `/xp` - Check your XP
+- `/set channel` - Configure automatic channels
+- `/set role` - Configure special roles
+- `/shop` - Access the shop
+- `/help` - List all available commands
+
+## 🌐 Supported Languages
+
+- English (US)
+- Portuguese (BR)
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Developer
+
+Developed by Enre Lyugi
+
+---
+
+# 🇧🇷 Português
+
 Um bot Discord multifuncional desenvolvido por Enre Lyugi, com recursos de música, sistema de XP, mensagens de boas-vindas personalizadas, notificações de aniversário e muito mais.
 
 ## 🌟 Funcionalidades
@@ -77,19 +177,7 @@ yarn start
 - `/shop` - Acessa a loja
 - `/help` - Lista todos os comandos disponíveis
 
-## 🌐 Idiomas Suportados
-
-- Português (BR)
-- Inglês (US)
-
-## 📄 Licença
-
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
-## 👨‍💻 Desenvolvedor
-
-Desenvolvido por Enre Lyugi
-
 ---
 
+For support or more information, please contact the developer.
 Para suporte ou mais informações, entre em contato com o desenvolvedor.
