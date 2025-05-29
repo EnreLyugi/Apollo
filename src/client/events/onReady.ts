@@ -16,9 +16,12 @@ export const onReady = async (client: Client) => {
         try {
             await BirthdayController.removeBirthdayRoles();
             await BirthdayController.notifyBirthdays();
-            await client.users.resolve('1245127937259208808')?.send('Rodou o cron agora!');
+
+            const user = client.users.resolve('1245127937259208808');
+            if(user)
+                await user.send('Rodou o cron agora!');
         } catch (err) {
-            console.error(err);
+            console.error('[CRON] Erro ao rodar cron diário:', err);
         }
     }, {
         timezone: "America/Sao_Paulo"

@@ -12,16 +12,16 @@ class BirthdayController {
     if(birthdays && birthdays.length > 0) {
       for(const birthday of birthdays) {
         const user = await client.users.fetch(birthday.user_id);
-
         if(!user) continue;
 
         for(const guild of client.guilds.cache.values()) {
           try {
-            const member = await guild.members.fetch(user.id);
+            const member = await guild.members.fetch(birthday.user_id);
             if(!member) continue;
 
             const guildData = await guildService.getGuildById(guild.id);
             if(!guildData) continue;
+
             if(guildData.birthday_channel) {
               const channel = guild.channels.resolve(guildData.birthday_channel);
               if(!channel) continue;

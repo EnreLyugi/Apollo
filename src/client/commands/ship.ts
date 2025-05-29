@@ -58,6 +58,12 @@ export const ship = {
     const ship = await shipService.getShip(user1.id, user2.id);
     const value = ship.value;
 
+    const image = await shipService.generateShipImage(
+      user1.displayAvatarURL({ extension: "png", size: 512 }),
+      user2.displayAvatarURL({ extension: "png", size: 512 }),
+      value
+    );
+
     const emoji = value >= 80 ? "💖" : value >= 50 ? "💘" : "💔";
     const color = value >= 80 ? "DarkVividPink" : value >= 50 ? "Orange" : "Red";
 
@@ -73,13 +79,13 @@ export const ship = {
           }
         )
       )
-      .setThumbnail({ url: user1.displayAvatarURL({ extension: "png", size: 512 }) })
-      .setImage({ url: user2.displayAvatarURL({ extension: "png", size: 512 }) })
+      .setImage({ url: "attachment://ship.png" })
       .setColor(color)
       .setTimestamp(new Date());
 
     await interaction.reply({
-      embeds: [embed.build()]
+      embeds: [embed.build()],
+      files: [image]
     });
   }
 }
