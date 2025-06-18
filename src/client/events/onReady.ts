@@ -1,5 +1,5 @@
 import { Client, PresenceUpdateStatus } from "discord.js";
-import { guildService } from "../../services";
+import { banService, guildService } from "../../services";
 import cron from 'node-cron';
 import { BirthdayController } from "../../controllers";
 

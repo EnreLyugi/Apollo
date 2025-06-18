@@ -5,5 +5,6 @@ import XpRole from "./xpRole";
 import ColorRole from "./colorRole";
 import Birthday from "./birthday";
 import Ship from "./ship";
+import Ban from "./ban";
 
-export { User, Embed, WelcomeSettings, XpRole, ColorRole, Birthday, Ship };
+export { User, Embed, WelcomeSettings, XpRole, ColorRole, Birthday, Ship, Ban };

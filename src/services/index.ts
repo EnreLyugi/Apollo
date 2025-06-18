@@ -7,5 +7,6 @@ import xpRoleService from "./xpRoleService";
 import xpService from "./xpService";
 import colorRoleService from "./colorRoleService";
 import shipService from "./shipService";
+import banService from "./banService";
 
-export { guildService, userService, xpChannelService, memberService, welcomeSettingsService, xpRoleService, xpService, colorRoleService, shipService }
+export { guildService, userService, xpChannelService, memberService, welcomeSettingsService, xpRoleService, xpService, colorRoleService, shipService, banService }

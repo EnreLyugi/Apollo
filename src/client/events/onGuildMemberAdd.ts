@@ -1,13 +1,19 @@
 import { GuildMember } from "discord.js";
 import { Embed } from "../../models";
 import { colors } from "../../config";
-import { guildService, welcomeSettingsService } from "../../services";
+import { banService, guildService, welcomeSettingsService } from "../../services";
 import { format } from "../../utils/localization";
 
 export const onGuildMemberAdd = async (member: GuildMember) => {
     if(member.user.bot) return;
     const guild = member.guild;
-    const welcomeSettings = await welcomeSettingsService.fetch(guild.id)
+    const welcomeSettings = await welcomeSettingsService.fetch(guild.id);
+
+    const hasBan = banService.getBan(member.id, guild.id);
+
+    if(hasBan != null) {
+        member.ban();
+    }
 
     if(welcomeSettings) {
         const embed = new Embed()
