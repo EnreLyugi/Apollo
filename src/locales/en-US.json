@@ -263,6 +263,51 @@
                 "role_setup": "Role **{role}** Added for level **{level}** (**{xp}xp**)."
             }
         },
+        "listxproles": {
+            "name": "listxproles",
+            "description": "Lists all XP reward roles configured on this server.",
+            "response": {
+                "title": "XP roles",
+                "empty": "No XP roles are configured. Use `/addxprole` to add one.",
+                "line": "• {role} — level **{level}** — **{xp}** XP",
+                "truncated": "(list truncated — too many roles)"
+            }
+        },
+        "editxprole": {
+            "name": "editxprole",
+            "description": "Changes the XP (and optionally the level) for an XP role in the database.",
+            "options": {
+                "xp": {
+                    "description": "New XP threshold required for this role."
+                },
+                "level": {
+                    "description": "New level label (optional; keeps current if omitted)."
+                }
+            },
+            "response": {
+                "title": "XP role updated",
+                "body": "{role}: level **{level}**, **{xp}** XP.",
+                "hint": "To apply Discord roles based on each member's XP, run **sync XP roles** (`/syncxproles`)."
+            },
+            "errors": {
+                "not_configured": "This role is not set as an XP role. Use `/addxprole` first.",
+                "save_failed": "Could not save the change. Check the logs."
+            }
+        },
+        "syncxproles": {
+            "name": "syncxproles",
+            "description": "Recalculates and applies XP roles to all members with bot records in this server.",
+            "response": {
+                "title": "XP role sync",
+                "started": "Processing **{pending}** members with bot records. This may take several minutes.\n\nYou'll get a **private** follow-up when it's done.",
+                "followup": "Sync finished: roles updated for **{synced}** members.",
+                "empty": "No one has XP records in this server — nothing to sync."
+            },
+            "errors": {
+                "sync_failed": "Something went wrong while syncing roles. Check the logs.",
+                "followup_expired": "Sync took too long to send the summary (Discord limit). Check the bot logs."
+            }
+        },
         "addcolorrole": {
             "name": "addcolorrole",
             "description": "Set the roles that will be listed on colors shop.",
@@ -378,6 +423,28 @@
                             "name": "date",
                             "description": "Birthday date (MM-dd)"
                         }
+                    }
+                },
+                "invite_role": {
+                    "name": "invite-role",
+                    "description": "Assign a role to members who join via a specific invite",
+                    "usage": "/set invite-role",
+                    "options": {
+                        "invite_code": {
+                            "name": "invite_code",
+                            "description": "Invite code or discord.gg/… link"
+                        },
+                        "role": {
+                            "name": "role",
+                            "description": "Role to assign; omit to remove this mapping"
+                        }
+                    },
+                    "response": {
+                        "set": "Invite **{code}** → role **{role}**. New members joining through that invite receive this role.",
+                        "removed": "Mapping removed for invite **{code}**."
+                    },
+                    "errors": {
+                        "invalid_code": "Invalid invite code."
                     }
                 }
             }

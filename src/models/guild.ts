@@ -14,6 +14,7 @@ interface GuildAttributes {
   mod_log_channel: string | null;
   message_log_channel: string | null;
   voice_activity_log_channel: string | null;
+  invite_roles: Record<string, string> | null;
 }
 
 interface GuildCreationAttributes extends 
@@ -28,7 +29,8 @@ interface GuildCreationAttributes extends
     'leave_channel' | 
     'mod_log_channel' | 
     'message_log_channel' | 
-    'voice_activity_log_channel'>{}
+    'voice_activity_log_channel' |
+    'invite_roles'>{}
 
 class Guild extends Model<GuildAttributes, GuildCreationAttributes> implements GuildAttributes {
   public id!: string;
@@ -43,6 +45,7 @@ class Guild extends Model<GuildAttributes, GuildCreationAttributes> implements G
   public mod_log_channel!: string | null;
   public message_log_channel!: string | null;
   public voice_activity_log_channel!: string | null;
+  public invite_roles!: Record<string, string> | null;
 }
 
 Guild.init(
@@ -97,7 +100,12 @@ Guild.init(
     voice_activity_log_channel: {
       type: DataTypes.STRING,
       defaultValue: null
-    }
+    },
+    invite_roles: {
+      type: DataTypes.JSON,
+      allowNull: true,
+      defaultValue: null,
+    },
   },
   {
     sequelize,

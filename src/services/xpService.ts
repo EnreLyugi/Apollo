@@ -23,27 +23,44 @@ class xpService {
     const xpRoles = await xpRoleService.getPreviousRoles(guild.id, xp);
     const unreachedRoles = await xpRoleService.getUnreachedRoles(guild.id, xp);
 
-    if(xpRoles) {
-      xpRoles.forEach((role, index) => {
-        if(index == 0) {
-          if(!member.roles.resolve(role.role_id)) {
-            member.roles.add(role.role_id);
+    if (xpRoles) {
+      for (let index = 0; index < xpRoles.length; index++) {
+        const role = xpRoles[index];
+        if (index === 0) {
+          if (!member.roles.cache.has(role.role_id)) {
+            await member.roles.add(role.role_id).catch(() => {});
           }
-        } else {
-          if(member.roles.resolve(role.role_id)) {
-            member.roles.remove(role.role_id)
-          }
+        } else if (member.roles.cache.has(role.role_id)) {
+          await member.roles.remove(role.role_id).catch(() => {});
         }
-      });
+      }
     }
 
-    if(unreachedRoles) {
-      unreachedRoles.forEach((role) => {
-        if(member.roles.resolve(role.role_id)) {
-          member.roles.remove(role.role_id)
+    if (unreachedRoles) {
+      for (const role of unreachedRoles) {
+        if (member.roles.cache.has(role.role_id)) {
+          await member.roles.remove(role.role_id).catch(() => {});
         }
-      })
+      }
     }
+  }
+
+  public async resyncGuildXpRoles(guild: Guild): Promise<number> {
+    const rows = await Member.findAll({ where: { guild_id: guild.id } });
+    const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    let synced = 0;
+    for (const row of rows) {
+      let member: GuildMember;
+      try {
+        member = await guild.members.fetch(row.member_id);
+      } catch {
+        continue;
+      }
+      await this.handleRoles(guild, member, row.xp);
+      synced++;
+      await delay(120);
+    }
+    return synced;
   }
 
   public async handleXP(channel: Channel, guild: Guild, member: GuildMember) {
@@ -77,7 +94,7 @@ class xpService {
     memberData.coin++;
     await memberData.save();
 
-    this.handleRoles(guild, member, memberData.xp)
+    await this.handleRoles(guild, member, memberData.xp);
 
     this.addCooldown(user.id, guild.id);
     setTimeout(() => this.removeCooldown(user.id, guild.id), 60000);
@@ -91,7 +108,7 @@ class xpService {
     memberData.xp += amount;
     await memberData.save();
 
-    this.handleRoles(guild, member, memberData.xp);
+    await this.handleRoles(guild, member, memberData.xp);
 
     //console.log(`${amount}xp adicionado para ${member.displayName} em ${guild.name}`);
 
@@ -106,7 +123,7 @@ class xpService {
     memberData.xp = Math.max(0, memberData.xp - amount);
     await memberData.save();
 
-    this.handleRoles(guild, member, memberData.xp)
+    await this.handleRoles(guild, member, memberData.xp);
 
     return memberData
   }

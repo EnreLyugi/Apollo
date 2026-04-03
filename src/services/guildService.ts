@@ -1,4 +1,5 @@
 import Guild from '../models/guild';
+import { normalizeInviteCode } from '../utils/inviteCode';
 
 class GuildService {
   public async createGuild(id: string): Promise<Guild> {
@@ -40,7 +41,50 @@ class GuildService {
 
     if(!guild) return null;
 
-    return guild.welcome_role;
+    switch (roleType) {
+      case 'welcome_role':
+        return guild.welcome_role;
+      case 'birthday_role':
+        return guild.birthday_role;
+      default:
+        return null;
+    }
+  }
+
+  public async setInviteRole(
+    guild_id: string,
+    inviteCodeInput: string,
+    role_id: string | null,
+  ): Promise<Guild> {
+    const code = normalizeInviteCode(inviteCodeInput);
+    if (!code) {
+      throw new Error('Invalid invite code');
+    }
+
+    let guild = await this.getGuildById(guild_id);
+    if (!guild) {
+      guild = await this.createGuild(guild_id);
+    }
+
+    const map: Record<string, string> = { ...(guild.invite_roles || {}) };
+    if (role_id === null) {
+      delete map[code];
+    } else {
+      map[code] = role_id;
+    }
+
+    guild.invite_roles = Object.keys(map).length > 0 ? map : null;
+    await guild.save();
+    return guild;
+  }
+
+  public getInviteRoleForNormalizedCode(
+    guild: Guild | null,
+    inviteCode: string,
+  ): string | null {
+    if (!guild?.invite_roles) return null;
+    const code = normalizeInviteCode(inviteCode);
+    return guild.invite_roles[code] ?? null;
   }
 
   public async setChannel(channelType: string, guild_id: string, channel_id: string): Promise<Guild> {

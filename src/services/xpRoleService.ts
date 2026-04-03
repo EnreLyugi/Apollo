@@ -49,6 +49,29 @@ class xpRoleService {
       order: [['xp', 'ASC']]
     });
   }
+
+  public async listRolesByGuild(guild_id: string): Promise<XpRole[]> {
+    return await XpRole.findAll({
+      where: { guild_id },
+      order: [['xp', 'ASC']],
+    });
+  }
+
+  public async updateRoleXp(
+    role_id: string,
+    guild_id: string,
+    xp: number,
+    level?: number,
+  ): Promise<XpRole | null> {
+    const row = await this.getRole(role_id, guild_id);
+    if (!row) return null;
+    row.xp = xp;
+    if (typeof level === 'number') {
+      row.level = level;
+    }
+    await row.save();
+    return row;
+  }
 }
 
 export default new xpRoleService();

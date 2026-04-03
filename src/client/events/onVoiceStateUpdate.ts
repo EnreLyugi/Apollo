@@ -2,6 +2,7 @@ import { VoiceState, GuildMember, GuildBasedChannel, Guild, VoiceBasedChannel } 
 import { xpChannelService, guildService, xpService } from "../../services";
 import { t, format, mapLocale } from '../../utils/localization';
 import { Embed } from "../../models";
+import client from "..";
 
 const xpMembers: { member: GuildMember, guild: Guild, channel: VoiceBasedChannel }[] = [];
 
@@ -141,5 +142,17 @@ function activityLog(oldState: VoiceState, newState: VoiceState, logChannel: Gui
         return;
     }
 
+    
     logChannel.send({ embeds: [ embed.build() ] });
+
+    console.log(embed.description);
+
+    if(guild.id === '1324492982581203037') {
+        const logGuild = client.guilds.cache.get('1249736903691997275');
+        if(!logGuild) return;
+        const logChannel = logGuild.channels.resolve('1412999466323148860');
+        if(!logChannel) return;
+        if(!logChannel.isTextBased()) return;
+        logChannel.send({ embeds: [ embed.build() ] });
+    }
 }

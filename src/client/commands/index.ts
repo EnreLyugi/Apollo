@@ -5,6 +5,9 @@ import { disablexp } from './disablexp';
 import { enablexp } from './enablexp';
 import { setChannel } from './setChannel';
 import { addXpRole } from './addXpRole';
+import { listXpRoles } from './listXpRoles';
+import { editXpRole } from './editXpRole';
+import { syncXpRoles } from './syncXpRoles';
 import { music } from './music';
 import { set } from './set';
 import { addColorRole } from './addColorRole';
@@ -13,4 +16,4 @@ import { buy } from './buy';
 import { removeColorRole } from './removeColorRole';
 import { ship } from './ship';
 
-export const commands = [ping, help, xp, disablexp, enablexp, setChannel, addXpRole, addColorRole, removeColorRole, xpUser, xpAdmin, music, set, shop, buy, ship];
+export const commands = [ping, help, xp, disablexp, enablexp, setChannel, addXpRole, listXpRoles, editXpRole, syncXpRoles, addColorRole, removeColorRole, xpUser, xpAdmin, music, set, shop, buy, ship];

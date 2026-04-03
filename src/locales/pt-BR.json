@@ -263,6 +263,51 @@
                 "role_setup": "Cargo **{role}** Adicionado para o level **{level}** (**{xp}xp**)."
             }
         },
+        "listxproles": {
+            "name": "listarcargosxp",
+            "description": "Lista todos os cargos de recompensa por XP deste servidor.",
+            "response": {
+                "title": "Cargos de XP",
+                "empty": "Nenhum cargo de XP está configurado. Use `/adicionarcargodexp` para adicionar.",
+                "line": "• {role} — nível **{level}** — **{xp}** XP",
+                "truncated": "(lista cortada — muitos cargos)"
+            }
+        },
+        "editxprole": {
+            "name": "editarcargoxp",
+            "description": "Altera o XP (e opcionalmente o nível) de um cargo de XP na base de dados.",
+            "options": {
+                "xp": {
+                    "description": "Nova quantidade de XP necessária para este cargo."
+                },
+                "level": {
+                    "description": "Novo nível exibido (opcional; mantém o atual se omitido)."
+                }
+            },
+            "response": {
+                "title": "Cargo de XP atualizado",
+                "body": "Cargo {role}: nível **{level}**, **{xp}** XP.",
+                "hint": "Para aplicar os cargos no Discord conforme o XP de cada membro, usa o comando **sincronizar cargos de XP** (`/sincronizarcargosxp`)."
+            },
+            "errors": {
+                "not_configured": "Este cargo não está configurado como cargo de XP. Use `/adicionarcargodexp` primeiro.",
+                "save_failed": "Não foi possível guardar a alteração. Verifica os logs."
+            }
+        },
+        "syncxproles": {
+            "name": "sincronizarcargosxp",
+            "description": "Recalcula e aplica os cargos de XP a todos os membros com registo no bot neste servidor.",
+            "response": {
+                "title": "Sincronização de cargos de XP",
+                "started": "A processar **{pending}** membros com registo no bot. Isto pode demorar vários minutos.\n\nEnviarei outra mensagem **só para ti** quando terminar.",
+                "followup": "Sincronização concluída: cargos atualizados para **{synced}** membros.",
+                "empty": "Ninguém tem registo de XP neste servidor — não há nada para sincronizar."
+            },
+            "errors": {
+                "sync_failed": "Ocorreu um erro ao sincronizar cargos. Verifica os logs.",
+                "followup_expired": "A sincronização demorou demasiado e não foi possível enviar o resumo (limite do Discord). Verifica os logs do bot."
+            }
+        },
         "addcolorrole": {
             "name": "adicionarcargodecor",
             "description": "Configura os cargos disponíveis na loja de cores.",
@@ -378,6 +423,28 @@
                             "name": "data",
                             "description": "Data de aniversário (dd/MM)"
                         }
+                    }
+                },
+                "invite_role": {
+                    "name": "cargo-convite",
+                    "description": "Associa um cargo a quem entra por um convite específico",
+                    "usage": "/setar cargo-convite",
+                    "options": {
+                        "invite_code": {
+                            "name": "codigo_convite",
+                            "description": "Código do convite ou link (discord.gg/…)"
+                        },
+                        "role": {
+                            "name": "cargo",
+                            "description": "Cargo a atribuir; omita para remover o vínculo"
+                        }
+                    },
+                    "response": {
+                        "set": "Convite **{code}** → cargo **{role}**. Novos membros que entrarem por esse convite recebem esse cargo.",
+                        "removed": "Vínculo removido para o convite **{code}**."
+                    },
+                    "errors": {
+                        "invalid_code": "Código de convite inválido."
                     }
                 }
             }
