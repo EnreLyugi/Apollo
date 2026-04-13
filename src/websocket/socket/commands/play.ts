@@ -43,6 +43,9 @@ export const play = async (data: PlayData, wsId: string) => {
         await player.play(channel, music, {
             requestedBy: user,
             nodeOptions: {
+                leaveOnEmpty: false,
+                leaveOnEnd: false,
+                leaveOnStop: false,
                 metadata: {
                     channel: channel,
                     requestedBy: user,

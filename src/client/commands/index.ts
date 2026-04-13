@@ -15,5 +15,6 @@ import { shop } from './shop';
 import { buy } from './buy';
 import { removeColorRole } from './removeColorRole';
 import { ship } from './ship';
+import { users } from './users';
 
-export const commands = [ping, help, xp, disablexp, enablexp, setChannel, addXpRole, listXpRoles, editXpRole, syncXpRoles, addColorRole, removeColorRole, xpUser, xpAdmin, music, set, shop, buy, ship];
+export const commands = [ping, help, xp, disablexp, enablexp, setChannel, addXpRole, listXpRoles, editXpRole, syncXpRoles, addColorRole, removeColorRole, xpUser, xpAdmin, music, set, shop, buy, ship, users];

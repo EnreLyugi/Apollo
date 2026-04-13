@@ -1,5 +1,6 @@
 import {
     ChatInputCommandInteraction,
+    PermissionFlagsBits,
     SlashCommandBuilder,
 } from "discord.js";
 import { Embed } from "../../models/";
@@ -11,6 +12,7 @@ import { CommandCategory } from "./help";
 export const listXpRoles = {
     data: new SlashCommandBuilder()
         .setName("listxproles")
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .setNameLocalizations({
             "en-US": t("commands.listxproles.name", "en-US"),
             "pt-BR": t("commands.listxproles.name", "pt-BR"),

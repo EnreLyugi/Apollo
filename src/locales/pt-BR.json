@@ -537,6 +537,11 @@
                 "title": "🔮 Resultado do Ship",
                 "description": "**{user1}** 💞 **{user2}**\nCompatibilidade: **{value}** {emoji}"
             }
+        },
+        "users": {
+            "name": "users",
+            "description": "Lista todos os membros do servidor",
+            "usage": "/users"
         }
     },
     "application_commands": {
