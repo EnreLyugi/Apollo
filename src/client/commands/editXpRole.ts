@@ -1,5 +1,6 @@
 import {
     ChatInputCommandInteraction,
+    MessageFlags,
     PermissionFlagsBits,
     SlashCommandBuilder,
     SlashCommandIntegerOption,
@@ -82,7 +83,7 @@ export const editXpRole = {
         if (!existing) {
             return interaction.reply({
                 content: t("commands.editxprole.errors.not_configured", locale),
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
         }
 
@@ -97,7 +98,7 @@ export const editXpRole = {
             console.error("editxprole save:", e);
             return interaction.reply({
                 content: t("commands.editxprole.errors.save_failed", locale),
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
         }
 

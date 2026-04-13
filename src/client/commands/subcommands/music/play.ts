@@ -1,5 +1,6 @@
 import {
     ChatInputCommandInteraction,
+    MessageFlags,
     SlashCommandStringOption,
     SlashCommandSubcommandBuilder
 } from "discord.js";
@@ -58,7 +59,7 @@ export const play = {
 
         const interactionChannel = interaction.channel;
 
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
         const waitForWsResponse = (interactionId: string): Promise<MusicResponse> => {
             return new Promise((resolve, reject) => {

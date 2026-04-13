@@ -5,43 +5,43 @@ import {
     SlashCommandBuilder
 } from "discord.js";
 import { mapLocale, t } from "../../utils/localization";
-import { subcommands } from './subcommands/set';
+import { subcommands } from './subcommands/ticket';
 import { CommandCategory } from "./help";
 
 const commandData =
     new SlashCommandBuilder()
-        .setName('set')
+        .setName('ticket')
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .setNameLocalizations({
-            "en-US": t('commands.set.name', 'en-US'),
-            "pt-BR": t('commands.set.name', 'pt-BR')
+            "en-US": t('commands.ticket.name', 'en-US'),
+            "pt-BR": t('commands.ticket.name', 'pt-BR')
         })
-        .setDescription('Sets some settings')
+        .setDescription('Ticket system configuration')
         .setDescriptionLocalizations({
-            "en-US": t('commands.set.description', 'en-US'),
-            "pt-BR": t('commands.set.description', 'pt-BR')
+            "en-US": t('commands.ticket.description', 'en-US'),
+            "pt-BR": t('commands.ticket.description', 'pt-BR')
         });
 
 const subcommandsMap = new Map();
 subcommands.forEach(subcommand => {
     subcommandsMap.set(subcommand.data.name, subcommand);
-    commandData.addSubcommand(subcommand.data)
+    commandData.addSubcommand(subcommand.data);
 });
 
-export const set = {
+export const ticket = {
     data: commandData,
     category: CommandCategory.CONFIG,
-    usage: '/set',
+    usage: '/ticket',
     execute: async (interaction: ChatInputCommandInteraction) => {
         const locale = mapLocale(interaction.locale);
         const subcommandName = interaction.options.getSubcommand();
         const subcommand = subcommandsMap.get(subcommandName);
 
         try {
-            await subcommand.execute(interaction, subcommand);
+            await subcommand.execute(interaction);
         } catch (error) {
-            console.error(`Error executing command ${subcommandName}:`, error);
-            await interaction.reply({ content: t(`client.error_on_command`, locale), flags: MessageFlags.Ephemeral });
+            console.error(`Error executing ticket subcommand ${subcommandName}:`, error);
+            await interaction.reply({ content: t('client.error_on_command', locale), flags: MessageFlags.Ephemeral });
         }
     },
 };

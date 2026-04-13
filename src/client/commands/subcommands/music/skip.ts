@@ -1,4 +1,4 @@
-import { ApplicationCommandSubCommand, ChatInputCommandInteraction, SlashCommandSubcommandBuilder } from "discord.js";
+import { ApplicationCommandSubCommand, ChatInputCommandInteraction, MessageFlags, SlashCommandSubcommandBuilder } from "discord.js";
 import { mapLocale, t } from "../../../../utils/localization";
 import { Embed } from "../../../../models";
 import { colors } from "../../../../config";
@@ -23,7 +23,7 @@ export const skip = {
 
         const locale = mapLocale(interaction.locale);
 
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
         const waitForWsResponse = (interactionId: string): Promise<any> => {
             return new Promise((resolve, reject) => {

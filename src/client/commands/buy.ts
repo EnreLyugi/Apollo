@@ -1,5 +1,6 @@
 import {
     ChatInputCommandInteraction,
+    MessageFlags,
     SlashCommandBuilder
 } from "discord.js";
 import { mapLocale, t } from "../../utils/localization";
@@ -38,7 +39,7 @@ export const buy = {
             await subcommand.execute(interaction, subcommand);
         } catch (error) {
             console.error(`Error executing command ${subcommandName}:`, error);
-            await interaction.reply({ content: t(`client.error_on_command`, locale), ephemeral: true });
+            await interaction.reply({ content: t(`client.error_on_command`, locale), flags: MessageFlags.Ephemeral });
         }
     },
 };

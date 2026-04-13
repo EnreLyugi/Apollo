@@ -1,4 +1,4 @@
-import { ModalSubmitInteraction } from "discord.js";
+import { MessageFlags, ModalSubmitInteraction } from "discord.js";
 import { welcomeSettingsService } from "../../services";
 
 export const welcomeSettings = {
@@ -14,20 +14,20 @@ export const welcomeSettings = {
         const guild = interaction.guild;
         if(!guild) return interaction.reply({
             content: 'Erro!',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
 
         const channel = guild.channels.resolve(channelId);
         if(!channel) return interaction.reply({
             content: 'Invalid Channel!',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
 
         await welcomeSettingsService.saveSettings(channel.id, guild.id, title, description, image);
 
         await interaction.reply({
         content: 'Configurações de boas-vindas salvas com sucesso!',
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
         });
     }
 };

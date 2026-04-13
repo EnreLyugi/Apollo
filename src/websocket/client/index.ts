@@ -9,7 +9,7 @@ const client = new Client({
 });
 
 // Connect the bot as soon as the module is imported
-client.on('ready', () => {
+client.on('clientReady', () => {
     if (client.user) {
         console.log(`Cluster ${client.user.tag} started on socket ${process.env.WS_PORT}`);
         client.user.setPresence({ status: 'invisible' });

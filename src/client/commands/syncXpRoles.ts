@@ -1,5 +1,6 @@
 import {
     ChatInputCommandInteraction,
+    MessageFlags,
     PermissionFlagsBits,
     SlashCommandBuilder,
 } from "discord.js";
@@ -66,7 +67,7 @@ export const syncXpRoles = {
                             "commands.syncxproles.errors.sync_failed",
                             locale,
                         ),
-                        ephemeral: true,
+                        flags: MessageFlags.Ephemeral,
                     });
                 } catch (fe) {
                     console.error("syncxproles followUp (erro):", fe);
@@ -79,7 +80,7 @@ export const syncXpRoles = {
                         t("commands.syncxproles.response.followup", locale),
                         { synced },
                     ),
-                    ephemeral: true,
+                    flags: MessageFlags.Ephemeral,
                 });
             } catch (fe) {
                 console.error("syncxproles followUp (sucesso):", fe);
@@ -89,7 +90,7 @@ export const syncXpRoles = {
                             "commands.syncxproles.errors.followup_expired",
                             locale,
                         ),
-                        ephemeral: true,
+                        flags: MessageFlags.Ephemeral,
                     });
                 } catch {
                     /* interação expirou */

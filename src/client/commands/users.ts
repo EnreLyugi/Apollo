@@ -2,6 +2,7 @@ import {
     ActionRowBuilder,
     ChatInputCommandInteraction,
     GuildMember,
+    MessageFlags,
     PermissionFlagsBits,
     SlashCommandBuilder
 } from "discord.js";
@@ -51,7 +52,7 @@ export const users = {
         const guild = interaction.guild;
         if (!guild) return;
 
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
         const fetched = await guild.members.fetch();
         const members = [...fetched.values()]
@@ -77,7 +78,7 @@ export const users = {
 
         collector?.on('collect', async (btn) => {
             if (btn.user.id !== interaction.user.id) {
-                return btn.reply({ content: 'Você não pode usar esses botões.', ephemeral: true });
+                return btn.reply({ content: 'Você não pode usar esses botões.', flags: MessageFlags.Ephemeral });
             }
 
             if (btn.customId === 'nextPageButton') currentPage++;

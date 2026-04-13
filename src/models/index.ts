@@ -6,5 +6,7 @@ import ColorRole from "./colorRole";
 import Birthday from "./birthday";
 import Ship from "./ship";
 import Ban from "./ban";
+import TicketCategory from "./ticketCategory";
+import Ticket from "./ticket";
 
-export { User, Embed, WelcomeSettings, XpRole, ColorRole, Birthday, Ship, Ban };
+export { User, Embed, WelcomeSettings, XpRole, ColorRole, Birthday, Ship, Ban, TicketCategory, Ticket };

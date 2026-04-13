@@ -25,6 +25,9 @@ class GuildService {
         case 'birthday_role':
           guild.birthday_role = role_id;
           break;
+        case 'ticket_role':
+          guild.ticket_role = role_id;
+          break;
         default:
           throw new Error('Invalid Role Type')
       }
@@ -105,6 +108,9 @@ class GuildService {
         case 'voice_activity_log_channel':
           guild.voice_activity_log_channel = channel_id;
           break;
+        case 'ticket_channel':
+          guild.ticket_channel = channel_id;
+          break;
         default:
           throw new Error('Invalid Channel Type')
       }
@@ -114,6 +120,17 @@ class GuildService {
     } catch(e) {
       throw new Error('An Error Ocurred on setting welcome channel!');
     }
+  }
+
+  public async setTicketPanelText(guild_id: string, title: string, description: string): Promise<Guild> {
+    let guild = await this.getGuildById(guild_id);
+    if (!guild) {
+      guild = await this.createGuild(guild_id);
+    }
+    guild.ticket_panel_title = title;
+    guild.ticket_panel_description = description;
+    await guild.save();
+    return guild;
   }
 
   public async createGuildIfNotExists(id: string): Promise<Guild> {

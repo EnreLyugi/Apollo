@@ -1,6 +1,7 @@
 import {
     ActionRowBuilder,
     ChatInputCommandInteraction,
+    MessageFlags,
     SlashCommandBuilder,
     SlashCommandStringOption
   } from "discord.js";
@@ -90,14 +91,14 @@ export const shop = {
             await interaction.reply({ 
                 embeds: [updateEmbed(currentPage).build()], 
                 components: components(currentPage), 
-                ephemeral: true 
+                flags: MessageFlags.Ephemeral 
             });
     
             const collector = interaction.channel?.createMessageComponentCollector({ time: 60000 });
     
             collector?.on('collect', async (buttonInteraction) => {
                 if(buttonInteraction.user.id !== interaction.user.id) {
-                    return buttonInteraction.reply({ content: 'Você não pode usar esses botões.', ephemeral: true });
+                    return buttonInteraction.reply({ content: 'Você não pode usar esses botões.', flags: MessageFlags.Ephemeral });
                 }
     
                 if (buttonInteraction.customId === 'nextPageButton') {

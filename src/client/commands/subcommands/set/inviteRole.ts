@@ -1,5 +1,6 @@
 import {
     ChatInputCommandInteraction,
+    MessageFlags,
     SlashCommandRoleOption,
     SlashCommandStringOption,
     SlashCommandSubcommandBuilder,
@@ -94,7 +95,7 @@ export const inviteRole = {
         if (!code) {
             return interaction.reply({
                 content: t("commands.set.subcommands.invite_role.errors.invalid_code", locale),
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
         }
 

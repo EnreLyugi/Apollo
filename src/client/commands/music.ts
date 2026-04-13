@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandSubcommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder, SlashCommandSubcommandBuilder } from "discord.js";
 import { mapLocale, t } from "../../utils/localization";
 import { subcommands } from './subcommands/music';
 import { musicClusterController } from "../../controllers";
@@ -49,7 +49,7 @@ export const music = {
             await subcommand.execute(interaction, socket);
         } catch (error) {
             console.error(`Error executing command ${subcommandName}:`, error);
-            await interaction.reply({ content: t(`client.error_on_command`, locale), ephemeral: true });
+            await interaction.reply({ content: t(`client.error_on_command`, locale), flags: MessageFlags.Ephemeral });
         }
     },
 };

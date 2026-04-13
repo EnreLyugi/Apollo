@@ -1,5 +1,6 @@
 import {
     ChatInputCommandInteraction,
+    MessageFlags,
     SlashCommandBuilder,
     SlashCommandStringOption,
     ApplicationCommand
@@ -161,7 +162,7 @@ export const help: Command = {
                 commandInfo.setDescription((currentEmbed.data.description || '') + variationsText);
             }
 
-            await interaction.reply({ embeds: [commandInfo.build()], ephemeral: true });
+            await interaction.reply({ embeds: [commandInfo.build()], flags: MessageFlags.Ephemeral });
         } else {
             // Show simplified list of all commands
             const commandList = new Embed()
@@ -223,7 +224,7 @@ export const help: Command = {
                 text: t('commands.help.list.footer', locale)
             });
 
-            await interaction.reply({ embeds: [commandList.build()], ephemeral: true });
+            await interaction.reply({ embeds: [commandList.build()], flags: MessageFlags.Ephemeral });
         }
     }
 };

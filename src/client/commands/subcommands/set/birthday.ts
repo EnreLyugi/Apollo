@@ -1,5 +1,6 @@
 import {
   ChatInputCommandInteraction,
+  MessageFlags,
   SlashCommandSubcommandBuilder,
   SlashCommandStringOption,
   SlashCommandUserOption
@@ -65,7 +66,7 @@ export const birthday = {
     } else {
       return interaction.reply({
         content: t("commands.set.subcommands.birthday.errors.invalid_format", locale),
-        ephemeral: true
+        flags: MessageFlags.Ephemeral
       });
     }
 
@@ -76,7 +77,7 @@ export const birthday = {
     ) {
       return interaction.reply({
         content: t("commands.set.subcommands.birthday.errors.invalid_date", locale),
-        ephemeral: true
+        flags: MessageFlags.Ephemeral
       });
     }
 

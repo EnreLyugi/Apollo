@@ -71,6 +71,24 @@
                     "placeholder": "Image URL."
                 }
             }
+        },
+        "ticketPanelSettings": {
+            "title": "Ticket Panel Settings",
+            "inputs": {
+                "channelid": {
+                    "title": "Channel ID",
+                    "placeholder": "Channel ID (do not change)"
+                },
+                "title": {
+                    "title": "Panel Title",
+                    "placeholder": "e.g. Support Tickets"
+                },
+                "description": {
+                    "title": "Panel Description",
+                    "placeholder": "e.g. Select a category below to open a ticket."
+                }
+            },
+            "invalid_channel": "Invalid channel."
         }
     },
     "commands": {
@@ -542,6 +560,87 @@
             "name": "users",
             "description": "Lists all server members",
             "usage": "/users"
+        },
+        "ticket": {
+            "name": "ticket",
+            "description": "Ticket system configuration",
+            "usage": "/ticket",
+            "subcommands": {
+                "panel": {
+                    "name": "panel",
+                    "description": "Sets the ticket panel channel",
+                    "options": {
+                        "channel": {
+                            "name": "channel",
+                            "description": "Channel where the ticket panel will be sent"
+                        }
+                    },
+                    "response_title": "Ticket Panel",
+                    "no_categories": "You need to create at least one ticket category first. Use `/ticket category`.",
+                    "success": "Ticket panel sent successfully!"
+                },
+                "category": {
+                    "name": "category",
+                    "description": "Manages ticket categories",
+                    "options": {
+                        "action": {
+                            "name": "action",
+                            "description": "Action to perform (add/remove)"
+                        },
+                        "name": {
+                            "name": "name",
+                            "description": "Category name"
+                        },
+                        "description": {
+                            "name": "description",
+                            "description": "Category description (only for add)"
+                        }
+                    },
+                    "response_title": "Ticket Category",
+                    "already_exists": "A category with this name already exists.",
+                    "added": "Category **{name}** added successfully!",
+                    "not_found": "Category not found.",
+                    "removed": "Category **{name}** removed successfully!"
+                },
+                "role": {
+                    "name": "role",
+                    "description": "Sets the support role for tickets",
+                    "options": {
+                        "role": {
+                            "name": "role",
+                            "description": "Support role that will have access to tickets"
+                        }
+                    },
+                    "response_title": "Ticket Role",
+                    "success": "Support role set to {role}."
+                },
+                "close": {
+                    "name": "close",
+                    "description": "Closes the current ticket",
+                    "response_title": "Close Ticket",
+                    "not_a_ticket": "This channel is not a ticket.",
+                    "closing": "Closing ticket in 3 seconds...",
+                    "closed": "This ticket has been closed."
+                }
+            },
+            "panel": {
+                "title": "Support Tickets",
+                "description": "Select a category below to open a ticket. Our team will respond via DM.",
+                "select_placeholder": "Select a category..."
+            },
+            "select": {
+                "invalid_category": "Invalid category.",
+                "already_open": "You already have an open ticket. Please wait for it to be closed.",
+                "success": "Your ticket has been created! You will receive messages via DM.",
+                "dm_confirmation": "Your ticket has been opened on **{guild}** in category **{category}**. Reply here to send messages to the support team."
+            },
+            "channel": {
+                "close_button": "Close Ticket",
+                "category_label": "Category",
+                "user_label": "User",
+                "instructions": "Messages sent here will be forwarded to the user's DM."
+            },
+            "close_dm": "Your ticket has been closed. Thank you for contacting us!"
         }
     },
     "application_commands": {

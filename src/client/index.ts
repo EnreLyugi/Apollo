@@ -1,12 +1,18 @@
-import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 import * as clientEvents from './events/';
 
-const client = new Client({ intents: [
+const client = new Client({
+    intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildVoiceStates,
-        GatewayIntentBits.GuildMembers
-    ]
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.MessageContent,
+    ],
+    partials: [
+        Partials.Channel,
+    ],
 });
 
 // Initialize the invite cache: guildId -> (inviteCode -> uses)
@@ -17,7 +23,7 @@ const wait = require("timers/promises").setTimeout;
 
 //Client Events
 client
-.on('ready', async (client) => {
+.on('clientReady', async (client) => {
     clientEvents.onReady(client);
     
     // wait 1 second
@@ -66,7 +72,7 @@ client
         }
     }*/
 }) //When client is ready
-//.on('ready', clientEvents.onReady) //When client is ready
+//.on('clientReady', clientEvents.onReady) //When client is ready
 .on('interactionCreate', clientEvents.onInteractionCreate) //When a interaction is created
 .on('messageCreate', clientEvents.onMessageCreate) //When a new message is received
 .on('voiceStateUpdate', clientEvents.onVoiceStateUpdate) //When user's voice state changes

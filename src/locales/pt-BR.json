@@ -71,6 +71,24 @@
                     "placeholder": "URL da imagem que aparecerá na mensagem."
                 }
             }
+        },
+        "ticketPanelSettings": {
+            "title": "Configurações do Painel de Tickets",
+            "inputs": {
+                "channelid": {
+                    "title": "ID do Canal",
+                    "placeholder": "ID do canal (não altere)"
+                },
+                "title": {
+                    "title": "Título do Painel",
+                    "placeholder": "ex: Tickets de Suporte"
+                },
+                "description": {
+                    "title": "Descrição do Painel",
+                    "placeholder": "ex: Selecione uma categoria abaixo para abrir um ticket."
+                }
+            },
+            "invalid_channel": "Canal inválido."
         }
     },
     "commands": {
@@ -542,6 +560,87 @@
             "name": "users",
             "description": "Lista todos os membros do servidor",
             "usage": "/users"
+        },
+        "ticket": {
+            "name": "ticket",
+            "description": "Configuração do sistema de tickets",
+            "usage": "/ticket",
+            "subcommands": {
+                "panel": {
+                    "name": "painel",
+                    "description": "Define o canal do painel de tickets",
+                    "options": {
+                        "channel": {
+                            "name": "canal",
+                            "description": "Canal onde o painel de tickets será enviado"
+                        }
+                    },
+                    "response_title": "Painel de Tickets",
+                    "no_categories": "Você precisa criar pelo menos uma categoria de ticket primeiro. Use `/ticket category`.",
+                    "success": "Painel de tickets enviado com sucesso!"
+                },
+                "category": {
+                    "name": "categoria",
+                    "description": "Gerencia categorias de tickets",
+                    "options": {
+                        "action": {
+                            "name": "ação",
+                            "description": "Ação a ser realizada (adicionar/remover)"
+                        },
+                        "name": {
+                            "name": "nome",
+                            "description": "Nome da categoria"
+                        },
+                        "description": {
+                            "name": "descrição",
+                            "description": "Descrição da categoria (apenas para adicionar)"
+                        }
+                    },
+                    "response_title": "Categoria de Ticket",
+                    "already_exists": "Uma categoria com esse nome já existe.",
+                    "added": "Categoria **{name}** adicionada com sucesso!",
+                    "not_found": "Categoria não encontrada.",
+                    "removed": "Categoria **{name}** removida com sucesso!"
+                },
+                "role": {
+                    "name": "cargo",
+                    "description": "Define o cargo de suporte para tickets",
+                    "options": {
+                        "role": {
+                            "name": "cargo",
+                            "description": "Cargo de suporte que terá acesso aos tickets"
+                        }
+                    },
+                    "response_title": "Cargo de Ticket",
+                    "success": "Cargo de suporte definido para {role}."
+                },
+                "close": {
+                    "name": "fechar",
+                    "description": "Fecha o ticket atual",
+                    "response_title": "Fechar Ticket",
+                    "not_a_ticket": "Este canal não é um ticket.",
+                    "closing": "Fechando ticket em 3 segundos...",
+                    "closed": "Este ticket foi fechado."
+                }
+            },
+            "panel": {
+                "title": "Tickets de Suporte",
+                "description": "Selecione uma categoria abaixo para abrir um ticket. Nossa equipe responderá via DM.",
+                "select_placeholder": "Selecione uma categoria..."
+            },
+            "select": {
+                "invalid_category": "Categoria inválida.",
+                "already_open": "Você já possui um ticket aberto. Aguarde o fechamento.",
+                "success": "Seu ticket foi criado! Você receberá as mensagens via DM.",
+                "dm_confirmation": "Seu ticket foi aberto no servidor **{guild}** na categoria **{category}**. Responda aqui para enviar mensagens para a equipe de suporte."
+            },
+            "channel": {
+                "close_button": "Fechar Ticket",
+                "category_label": "Categoria",
+                "user_label": "Usuário",
+                "instructions": "Mensagens enviadas aqui serão encaminhadas para a DM do usuário."
+            },
+            "close_dm": "Seu ticket foi fechado. Obrigado por entrar em contato!"
         }
     },
     "application_commands": {

@@ -14,7 +14,7 @@ export const initDiscordClient = async () => {
             reject('Timeout waiting for bot to be ready');
         }, 10000); // 10 seconds timeout
 
-        client.once('ready', () => {
+        client.once('clientReady', () => {
             clearTimeout(timeout);
             resolve('Bot is ready');
         });
