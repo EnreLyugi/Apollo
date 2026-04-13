@@ -9,10 +9,10 @@ export const onGuildMemberAdd = async (member: GuildMember) => {
     const guild = member.guild;
     const welcomeSettings = await welcomeSettingsService.fetch(guild.id);
 
-    const hasBan = banService.getBan(member.id, guild.id);
+    const hasBan = await banService.getBan(member.user.id, guild.id);
 
-    if(hasBan != null) {
-        member.ban();
+    if(hasBan) {
+        return member.ban();
     }
 
     if(welcomeSettings) {
@@ -28,10 +28,13 @@ export const onGuildMemberAdd = async (member: GuildMember) => {
                 username: member.displayName,
                 servername: guild.name
             }))
-            .setImage({ url: welcomeSettings.image })
             .setFooter({ text: `${member.id}`, iconURL: member.displayAvatarURL() || 'https://i.imgur.com/qlJnaP7.png' })
             .setTimestamp(new Date())
             .build();
+
+        if(welcomeSettings.image && welcomeSettings.image !== '' && typeof welcomeSettings.image === 'string') {
+            embed.setImage(welcomeSettings.image);
+        }
 
         const welcomeChannel = guild.channels?.resolve(welcomeSettings.channel_id);
         if(!welcomeChannel || !welcomeChannel.isTextBased()) return;
