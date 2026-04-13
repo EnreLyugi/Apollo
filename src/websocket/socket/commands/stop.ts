@@ -1,17 +1,10 @@
 import { getPlayer } from "../../player";
 import { sockets } from "../../socket";
-import { HandleError } from "../../player/events/utils/updateEmbed";
-import { Message } from "discord.js";
+import { QueueData } from "../../player/events/types";
 
 interface StopData {
     guildId: string;
     interactionId?: string;
-}
-
-interface QueueMetadata {
-    currentMessage?: Message;
-    locale?: string;
-    [key: string]: any;
 }
 
 export const stop = async (data: StopData, wsId: string) => {
@@ -24,43 +17,23 @@ export const stop = async (data: StopData, wsId: string) => {
         if (!queue) {
             const ws = sockets.get(wsId);
             if (!ws) return;
-
-            const message = {
-                event: 'stop_error',
-                interactionId,
-                error: 'NO_QUEUE'
-            };
-
-            ws.send(JSON.stringify(message));
+            ws.send(JSON.stringify({ event: 'stop_error', interactionId, error: 'NO_QUEUE' }));
             return;
         }
 
-        const metadata = queue.metadata as QueueMetadata;
-        if (metadata?.currentMessage && queue.currentTrack) {
-            await HandleError(queue.currentTrack, null, metadata.locale, metadata);
+        const metadata = queue.metadata as QueueData;
+        if (metadata?.playerMessage) {
+            await metadata.playerMessage.setState('finished');
         }
 
         queue.delete();
 
         const ws = sockets.get(wsId);
         if (!ws) return;
-
-        const message = {
-            event: 'stop_success',
-            interactionId
-        };
-
-        ws.send(JSON.stringify(message));
-    } catch(e) {
+        ws.send(JSON.stringify({ event: 'stop_success', interactionId }));
+    } catch (e) {
         const ws = sockets.get(wsId);
         if (!ws) return;
-
-        const message = {
-            event: 'stop_error',
-            interactionId,
-            error: e
-        };
-
-        ws.send(JSON.stringify(message));
+        ws.send(JSON.stringify({ event: 'stop_error', interactionId, error: e }));
     }
-} 
+}

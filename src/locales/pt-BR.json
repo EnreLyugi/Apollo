@@ -25,7 +25,8 @@
             "client_disconnect": {
                 "title": "Desconectado",
                 "description": "Fui desconectado, fila finalizada"
-            }
+            },
+            "play_error": "Erro ao Reproduzir"
         },
         "states": {
             "playing_now": "Tocando Agora",
@@ -37,7 +38,8 @@
             "invite_me": "Me convide"
         },
         "errors": {
-            "not_conected": "Não estou conectado em nenhuma chamada"
+            "not_conected": "Não estou conectado em nenhuma chamada",
+            "no_results": "Nenhum resultado encontrado para essa busca."
         }
     },
     "logs": {

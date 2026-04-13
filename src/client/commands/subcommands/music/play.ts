@@ -15,7 +15,7 @@ interface MusicResponse {
     duration: string;
     thumbnail: string;
     length: number;
-    e: string;
+    e: string | { message?: string; [key: string]: any };
 }
 
 export const play = {
@@ -103,7 +103,10 @@ export const play = {
             const response = new Embed()
                 .setColor(`#${colors.default_color}`)
                 .setAuthor({ name: t(`player.events.${responseData.event}`, locale) })
-                .setThumbnail({ url: responseData.thumbnail })
+
+            if (responseData.thumbnail) {
+                response.setThumbnail({ url: responseData.thumbnail });
+            }
 
             if (responseData.event == 'song_added') {
                 response.setDescription(
@@ -118,7 +121,11 @@ export const play = {
                     );
             } else if (responseData.event == 'play_error') {
                 response.setColor(`#FF0000`)
-                response.setDescription(responseData.e)
+                const errName = typeof responseData.e === 'object' ? responseData.e?.name : '';
+                const errorMsg = errName === 'NoResultError'
+                    ? t('player.errors.no_results', locale)
+                    : t('misc.error_ocurred', locale);
+                response.setDescription(errorMsg)
             }
 
             await interaction.editReply({ embeds: [ response.build() ] });

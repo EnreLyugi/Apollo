@@ -1,31 +1,41 @@
-import { sockets } from "../../socket";
+import { GuildQueue } from "discord-player";
+import { QueueData } from "./types";
+import { t } from "../../../utils/localization";
+import { colors } from "../../../config";
+import {
+    ContainerBuilder,
+    MessageFlags,
+    TextDisplayBuilder,
+} from "discord.js";
 
-export const onPlayerError = async (queue: any, error: any) => {
-    const data = queue.metadata;
+export const onPlayerError = async (queue: GuildQueue, error: any) => {
+    const data = queue.metadata as QueueData;
+    if (!data) return;
+
+    if (data.playerMessage) {
+        await data.playerMessage.setState('finished');
+    }
+
     const { channelId, locale } = data;
-    const ws = sockets.get(data.wsId);
-    if(!ws) return;
-    
-    const message = {
-      event: 'player_error',
-      guildId: queue.guild.id,
-      channelId: data.channelId
-    };
-
-    ws.send(JSON.stringify(message));
-    console.error(error);
-
-    /*const guild = queue.guild;
-
+    const guild = queue.guild;
     const channel = guild.channels.resolve(channelId);
-    if(!channel) return;
-    if(!channel.isTextBased()) return;
-  
-    let response = new Embed()
-      .setColor(`#FF0000`)
-      .setAuthor({ name: t('misc.error_ocurred', locale) })
-      .setDescription(error);
-      
-    console.error(error);
-    //await channel.send({ embeds: [ response.build() ] });*/
-}
+    if (!channel || !channel.isTextBased()) return;
+
+    const errCode = error?.code ?? error?.name ?? '';
+    const msgKey = errCode === 'ERR_NO_RESULT'
+        ? 'player.errors.no_results'
+        : 'misc.error_ocurred';
+
+    const container = new ContainerBuilder()
+        .setAccentColor(0xFF0000)
+        .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+                `### ${t('misc.error_ocurred', locale)}\n${t(msgKey, locale)}`
+            )
+        );
+
+    await channel.send({
+        components: [container],
+        flags: MessageFlags.IsComponentsV2,
+    }).catch(() => {});
+};

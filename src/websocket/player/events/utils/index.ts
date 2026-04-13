@@ -1,3 +1,3 @@
-import { updateEmbed } from './updateEmbed'
+import { HandleError } from './updateEmbed'
 
-export { updateEmbed }
+export { HandleError }

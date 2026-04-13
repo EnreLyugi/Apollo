@@ -25,7 +25,8 @@
             "client_disconnect": {
                 "title": "Disconnected",
                 "description": "I got disconnected, queue ended"
-            }
+            },
+            "play_error": "Playback Error"
         },
         "states": {
             "playing_now": "Playing Now",
@@ -37,7 +38,8 @@
             "invite_me": "Invite me"
         },
         "errors": {
-            "not_conected": "I'm not connect in any call"
+            "not_conected": "I'm not connect in any call",
+            "no_results": "No results found for this search."
         }
     },
     "logs": {
