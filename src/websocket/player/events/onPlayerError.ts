@@ -7,6 +7,7 @@ import {
     MessageFlags,
     TextDisplayBuilder,
 } from "discord.js";
+import { syncMusicPresence } from "../utils/syncMusicPresence";
 
 export const onPlayerError = async (queue: GuildQueue, error: any) => {
     const data = queue.metadata as QueueData;
@@ -38,4 +39,6 @@ export const onPlayerError = async (queue: GuildQueue, error: any) => {
         components: [container],
         flags: MessageFlags.IsComponentsV2,
     }).catch(() => {});
+
+    syncMusicPresence();
 };

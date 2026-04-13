@@ -1,6 +1,7 @@
 import { QueueData } from "./types";
 import { PlayerMessage } from "../classes";
 import { GuildQueue } from "discord-player";
+import { syncMusicPresence } from "../utils/syncMusicPresence";
 
 export const onPlayerStart = async (queue: GuildQueue, track: any) => {
     const data = queue.metadata as QueueData;
@@ -19,4 +20,6 @@ export const onPlayerStart = async (queue: GuildQueue, track: any) => {
     queue.metadata = data;
 
     pm.startAutoUpdate(queue, track.url);
+
+    syncMusicPresence();
 }

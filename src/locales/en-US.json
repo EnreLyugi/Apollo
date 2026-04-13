@@ -218,6 +218,25 @@
                 }
             }
         },
+        "dm": {
+            "name": "dm",
+            "description": "Send a DM to a member without revealing who ran the command (only the bot appears as sender).",
+            "options": {
+                "user": {
+                    "name": "user",
+                    "description": "Member who will receive the DM"
+                },
+                "message": {
+                    "name": "message",
+                    "description": "Text to send (recipient does not see which moderator sent it)"
+                }
+            },
+            "response": {
+                "sent": "Message sent via DM.",
+                "error_bot": "Cannot send DMs to bots.",
+                "error_cannot_dm": "Could not send the DM (user privacy, bot blocked, or DMs closed)."
+            }
+        },
         "enablexp": {
             "name": "enablexp",
             "description": "Enable a channel from receiving XP",

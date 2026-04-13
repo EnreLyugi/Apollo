@@ -218,6 +218,25 @@
                 }
             }
         },
+        "dm": {
+            "name": "dm",
+            "description": "Envia uma mensagem por DM a um membro sem revelar quem enviou (só o bot aparece como remetente).",
+            "options": {
+                "user": {
+                    "name": "usuario",
+                    "description": "Membro que receberá a mensagem"
+                },
+                "message": {
+                    "name": "mensagem",
+                    "description": "Texto a enviar (o destinatário não vê quem usou o comando)"
+                }
+            },
+            "response": {
+                "sent": "Mensagem enviada por DM.",
+                "error_bot": "Não é possível enviar DM a bots.",
+                "error_cannot_dm": "Não foi possível enviar a DM (privacidade do utilizador, bloqueio ao bot ou DMs fechados)."
+            }
+        },
         "enablexp": {
             "name": "ativarxp",
             "description": "Habilita o recebimento de XP em um canal",

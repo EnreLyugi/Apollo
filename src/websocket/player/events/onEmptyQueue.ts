@@ -8,6 +8,7 @@ import {
     MessageFlags,
     TextDisplayBuilder,
 } from "discord.js";
+import { syncMusicPresence } from "../utils/syncMusicPresence";
 
 export const onEmptyQueue = async (queue: GuildQueue) => {
     const data = queue.metadata as QueueData;
@@ -37,4 +38,6 @@ export const onEmptyQueue = async (queue: GuildQueue) => {
         components: [container],
         flags: MessageFlags.IsComponentsV2,
     });
+
+    syncMusicPresence();
 }

@@ -1,4 +1,5 @@
 import { getPlayer } from "../../player";
+import { syncMusicPresence } from "../../player/utils/syncMusicPresence";
 import { sockets } from "../../socket";
 import { QueueData } from "../../player/events/types";
 
@@ -27,6 +28,7 @@ export const stop = async (data: StopData, wsId: string) => {
         }
 
         queue.delete();
+        syncMusicPresence();
 
         const ws = sockets.get(wsId);
         if (!ws) return;
