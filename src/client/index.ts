@@ -29,48 +29,15 @@ client
     // wait 1 second
     await wait(1000);
 
-    // for each guild, fetch the invites and set the invite cache
-    client.guilds.cache.forEach(async guild => {
-        const firstInvites = await guild.invites.fetch();
-        invites.set(guild.id, new Collection(firstInvites.map(invite => [invite.code, invite.uses])));
-    });
+    // for each guild, fetch the invites and sync deleted color roles
+    for (const guild of client.guilds.cache.values()) {
+        try {
+            const firstInvites = await guild.invites.fetch();
+            invites.set(guild.id, new Collection(firstInvites.map(invite => [invite.code, invite.uses])));
+        } catch {}
+        await clientEvents.syncDeletedColorRoles(guild);
+    }
 
-    // One-off: give a role to every member. Remove after running. Uses delays to avoid API rate limits (429).
-    /*const massRoleGuildId = '1304499241087143936';
-    const massRoleId = '1489701802583523490';
-    const guild = client.guilds.resolve(massRoleGuildId);
-    if (guild) {
-        const role = guild.roles.resolve(massRoleId);
-        if (role) {
-            const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
-            try {
-                await guild.members.fetch();
-                let added = 0;
-                let skipped = 0;
-                let failed = 0;
-                for (const member of guild.members.cache.values()) {
-                    if (member.roles.cache.has(role.id)) {
-                        skipped++;
-                        continue;
-                    }
-                    try {
-                        await member.roles.add(role);
-                        added++;
-                        console.log(`[mass-role] ${added}: ${member.user.username}`);
-                    } catch (err) {
-                        failed++;
-                        console.error(`[mass-role] falhou ${member.user.username}:`, err);
-                    }
-                    await delay(500);
-                }
-                console.log(
-                    `[mass-role] fim — adicionados: ${added}, já tinham: ${skipped}, falhas: ${failed}`,
-                );
-            } catch (e) {
-                console.error('[mass-role] erro ao buscar membros:', e);
-            }
-        }
-    }*/
 }) //When client is ready
 //.on('clientReady', clientEvents.onReady) //When client is ready
 .on('interactionCreate', clientEvents.onInteractionCreate) //When a interaction is created

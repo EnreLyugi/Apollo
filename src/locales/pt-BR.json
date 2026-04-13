@@ -506,17 +506,33 @@
         "shop": {
             "name": "loja",
             "description": "Algumas lojas para gastar suas moedas",
+            "empty": "Nenhum item disponível nesta loja.",
+            "type_select_title": "Loja",
+            "type_select_description": "Selecione uma categoria de loja abaixo.",
+            "type_select_placeholder": "Selecione uma categoria...",
+            "page_info": "Página {current}/{total}",
             "options": {
                 "type": {
                     "name": "tipo",
                     "description": "Qual tipo de loja será mostrado",
                     "choices": {
                         "roles": {
-                            "name": "cargo",
+                            "name": "cor",
                             "response": {
                                 "title": "Loja de Cores",
+                                "description": "Cada cor custa **{price} moedas**. Há **{count}** cores disponíveis.\nSeu saldo: **{balance} moedas**\n\nSelecione uma abaixo para comprar.",
                                 "footer": "digite /comprar cor <número> para comprar"
-                            }
+                            },
+                            "select_placeholder": "Selecione uma cor...",
+                            "select_invalid": "Cor inválida.",
+                            "select_already_owned": "Você já possui essa cor!",
+                            "select_success": "Você comprou a cor {role} (**{name}**) e ela foi equipada!",
+                            "select_equipped": "Você equipou a cor {role} (**{name}**)!",
+                            "owned_label": "✓ Já possui (clique para equipar)",
+                            "confirm_prompt": "Deseja comprar a cor {role} (**{name}**) por **{price} moedas**?\nSeu saldo: **{balance} moedas**",
+                            "confirm_button": "Confirmar Compra",
+                            "cancel_button": "Cancelar",
+                            "purchase_cancelled": "Compra cancelada."
                         }
                     }
                 }
