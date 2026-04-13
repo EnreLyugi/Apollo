@@ -11,7 +11,7 @@ import { CommandCategory } from "./help";
 const commandData =
     new SlashCommandBuilder()
         .setName('set')
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setNameLocalizations({
             "en-US": t('commands.set.name', 'en-US'),
             "pt-BR": t('commands.set.name', 'pt-BR')
