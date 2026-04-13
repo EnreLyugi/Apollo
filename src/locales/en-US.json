@@ -347,6 +347,14 @@
                 "role_setup": "Role **{role}** Added for color **{name}**."
             }
         },
+        "reseteconomy": {
+            "name": "reseteconomy",
+            "description": "Reset everyone's coins, remove color purchases, and strip equipped color roles (admin only).",
+            "response": {
+                "title": "Economy reset",
+                "body": "• **{purchases}** color purchase record(s) removed\n• Color roles removed from **{members_colors}** member(s) still in the server\n• **{members_coins}** member row(s) had coins set to zero"
+            }
+        },
         "removecolorrole": {
             "name": "removecolorrole",
             "description": "Remove color roles from the shop.",

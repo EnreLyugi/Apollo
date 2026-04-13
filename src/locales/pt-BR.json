@@ -347,6 +347,14 @@
                 "role_setup": "Cargo **{role}** Adicionado para a cor **{name}**."
             }
         },
+        "reseteconomy": {
+            "name": "redefinireconomia",
+            "description": "Zera moedas de todos, remove compras de cor e cargos equipados no servidor (admin).",
+            "response": {
+                "title": "Economia redefinida",
+                "body": "• **{purchases}** registo(s) de cores compradas removido(s)\n• Cargos de cor retirados de **{members_colors}** membro(s) ainda no servidor\n• **{members_coins}** linha(s) de membro com moedas zeradas"
+            }
+        },
         "removecolorrole": {
             "name": "removercargodecor",
             "description": "Remove os cargos de cor da Loja.",

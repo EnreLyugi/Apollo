@@ -26,6 +26,14 @@ class userColorService {
   public async removeByRole(role_id: string): Promise<number> {
     return await UserColor.destroy({ where: { role_id } });
   }
+
+  public async getAllForGuild(guild_id: string): Promise<UserColor[]> {
+    return await UserColor.findAll({ where: { guild_id } });
+  }
+
+  public async deleteAllForGuild(guild_id: string): Promise<number> {
+    return await UserColor.destroy({ where: { guild_id } });
+  }
 }
 
 export default new userColorService();

@@ -21,6 +21,12 @@ class MemberService {
       throw new Error('An Error Occurred on creating a new user!');
     }
   }
+
+  /** Zera moedas de todos os membros registados neste servidor. */
+  public async resetCoinsForGuild(guild_id: string): Promise<number> {
+    const [affected] = await Member.update({ coin: 0 }, { where: { guild_id } });
+    return affected;
+  }
 }
 
 export default new MemberService();
