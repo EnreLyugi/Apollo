@@ -30,6 +30,27 @@ const STATE_LABEL_KEY: Record<PlayerState, string> = {
 
 const V2_FLAGS = MessageFlags.IsComponentsV2;
 
+/** Evita `User#toString()` (`<@id>`), que em Components V2 notifica o utilizador. */
+function formatRequestedByLabel(track: { requestedBy?: unknown }): string {
+    const rb = track.requestedBy;
+    if (rb == null) return '?';
+    if (typeof rb === 'string') {
+        const m = rb.trim().match(/^<@!?(\d+)>$/);
+        if (m) return `\`${m[1]}\``;
+        return rb;
+    }
+    if (typeof rb === 'object') {
+        const u = rb as {
+            globalName?: string | null;
+            username?: string;
+            displayName?: string;
+        };
+        const name = u.globalName || u.displayName || u.username;
+        if (name) return name;
+    }
+    return '?';
+}
+
 export class PlayerMessage {
     public state: PlayerState = 'playing';
     public message: Message | null = null;
@@ -48,7 +69,7 @@ export class PlayerMessage {
         this.url = track.url;
         this.thumbnail = track.thumbnail;
         this.duration = track.duration;
-        this.requestedBy = String(track.requestedBy);
+        this.requestedBy = formatRequestedByLabel(track);
         this.locale = locale;
     }
 

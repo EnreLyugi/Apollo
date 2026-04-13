@@ -12,6 +12,7 @@ const client = new Client({
     ],
     partials: [
         Partials.Channel,
+        Partials.Message,
     ],
 });
 
@@ -41,6 +42,7 @@ client
 }) //When client is ready
 //.on('clientReady', clientEvents.onReady) //When client is ready
 .on('interactionCreate', clientEvents.onInteractionCreate) //When a interaction is created
+.on('interactionCreate', clientEvents.onPlayerButtonInteraction) //Player (música) — mesmo client que recebe DMs
 .on('messageCreate', clientEvents.onMessageCreate) //When a new message is received
 .on('voiceStateUpdate', clientEvents.onVoiceStateUpdate) //When user's voice state changes
 .on('guildMemberAdd', clientEvents.onGuildMemberAdd) //When a new member join's a server

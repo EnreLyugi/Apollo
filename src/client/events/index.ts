@@ -1,5 +1,6 @@
 import { onReady } from './onReady';
 import { onInteractionCreate } from './onInteractionCreate';
+import { onPlayerButtonInteraction } from './onPlayerButtonInteraction';
 import { onMessageCreate } from './onMessageCreate';
 import { onVoiceStateUpdate } from './onVoiceStateUpdate';
 import { onGuildMemberAdd } from './onGuildMemberAdd'
@@ -9,4 +10,4 @@ import { onInviteDelete } from './onInviteDelete';
 import { onGuildCreate } from './onGuildCreate';
 import { onGuildDelete } from './onGuildDelete';
 
-export { onReady, onInteractionCreate, onMessageCreate, onVoiceStateUpdate, onGuildMemberAdd, onRoleDelete, syncDeletedColorRoles, onInviteCreate, onInviteDelete, onGuildCreate, onGuildDelete};
+export { onReady, onInteractionCreate, onPlayerButtonInteraction, onMessageCreate, onVoiceStateUpdate, onGuildMemberAdd, onRoleDelete, syncDeletedColorRoles, onInviteCreate, onInviteDelete, onGuildCreate, onGuildDelete};
