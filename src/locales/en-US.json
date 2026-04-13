@@ -510,6 +510,36 @@
                         "title": "Skip Music",
                         "stopped": "Skipping Music"
                     }
+                },
+                "loop": {
+                    "name": "loop",
+                    "description": "Set repeat: off, current track, or whole queue.",
+                    "usage": "/music loop",
+                    "options": {
+                        "mode": {
+                            "name": "mode",
+                            "description": "Repeat mode",
+                            "choices": {
+                                "off": "Off",
+                                "track": "Current track",
+                                "queue": "Queue"
+                            }
+                        }
+                    },
+                    "response": {
+                        "off": "Repeat disabled.",
+                        "track": "Repeating the current track.",
+                        "queue": "Repeating the whole queue."
+                    }
+                },
+                "shuffle": {
+                    "name": "shuffle",
+                    "description": "Shuffles upcoming tracks in the queue.",
+                    "usage": "/music shuffle",
+                    "response": {
+                        "shuffled": "Queue shuffled.",
+                        "empty": "No tracks in the queue to shuffle."
+                    }
                 }
             }
         },

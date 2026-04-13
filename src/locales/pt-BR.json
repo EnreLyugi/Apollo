@@ -510,6 +510,36 @@
                         "title": "Pular Música",
                         "stopped": "Pulando Música"
                     }
+                },
+                "loop": {
+                    "name": "repetir",
+                    "description": "Define repetição: desligada, música atual ou fila inteira.",
+                    "usage": "/musica repetir",
+                    "options": {
+                        "mode": {
+                            "name": "modo",
+                            "description": "Tipo de repetição",
+                            "choices": {
+                                "off": "Desligado",
+                                "track": "Música atual",
+                                "queue": "Fila inteira"
+                            }
+                        }
+                    },
+                    "response": {
+                        "off": "Repetição desligada.",
+                        "track": "Repetindo a música atual.",
+                        "queue": "Repetindo a fila inteira."
+                    }
+                },
+                "shuffle": {
+                    "name": "embaralhar",
+                    "description": "Embaralha a ordem das músicas na fila (não a que está a tocar).",
+                    "usage": "/musica embaralhar",
+                    "response": {
+                        "shuffled": "Fila embaralhada.",
+                        "empty": "Não há músicas na fila para embaralhar."
+                    }
                 }
             }
         },

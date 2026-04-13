@@ -4,6 +4,8 @@ import { connectClient, disconnectClient, checkAvailability } from "../commands"
 import { play } from "../commands/play";
 import { stop } from "../commands/stop";
 import { skip } from "../commands/skip";
+import { loop } from "../commands/loop";
+import { shuffle } from "../commands/shuffle";
 import { t } from "../../../utils/localization";
 
 export const onMessage = async (message: WebSocket.Data, wsId: string) => {
@@ -28,6 +30,12 @@ export const onMessage = async (message: WebSocket.Data, wsId: string) => {
             break;
         case 'skip':
             skip(data, wsId);
+            break;
+        case 'loop':
+            loop(data, wsId);
+            break;
+        case 'shuffle':
+            shuffle(data, wsId);
             break;
         case 'check_availability':
             checkAvailability(data, ws);
