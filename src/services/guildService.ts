@@ -1,3 +1,4 @@
+import { UniqueConstraintError } from 'sequelize';
 import Guild from '../models/guild';
 import { normalizeInviteCode } from '../utils/inviteCode';
 
@@ -134,14 +135,20 @@ class GuildService {
   }
 
   public async createGuildIfNotExists(id: string): Promise<Guild> {
+    const existing = await this.getGuildById(id);
+    if (existing) {
+      return existing;
+    }
     try {
-      const guild = await this.getGuildById(id);
-      if(!guild) {
-        return await this.createGuild(id);
+      return await this.createGuild(id);
+    } catch (e) {
+      if (e instanceof UniqueConstraintError) {
+        const afterRace = await this.getGuildById(id);
+        if (afterRace) {
+          return afterRace;
+        }
       }
-      return guild;
-    } catch(e) {
-      throw new Error('An Error Ocurred on creating a new guild!');
+      throw e;
     }
   }
 }
