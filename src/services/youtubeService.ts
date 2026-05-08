@@ -6,6 +6,9 @@ const YOUTUBE_API_BASE = 'https://www.googleapis.com/youtube/v3';
 const PUBSUBHUBBUB_HUB = 'https://pubsubhubbub.appspot.com/subscribe';
 const YOUTUBE_TOPIC_BASE = 'https://www.youtube.com/xml/feeds/videos.xml?channel_id=';
 
+const notifiedVideos = new Set<string>();
+const MAX_CACHE_SIZE = 500;
+
 export async function getChannelByUsername(query: string): Promise<{ id: string; title: string; thumbnail: string } | null> {
     const apiKey = process.env.YOUTUBE_API_KEY!;
 
@@ -126,6 +129,15 @@ export async function getChannels(guildId: string): Promise<YouTubeChannel[]> {
 }
 
 export async function handleNewVideo(youtubeChannelId: string, videoId: string): Promise<void> {
+    const cacheKey = `${youtubeChannelId}:${videoId}`;
+    if (notifiedVideos.has(cacheKey)) return;
+
+    notifiedVideos.add(cacheKey);
+    if (notifiedVideos.size > MAX_CACHE_SIZE) {
+        const first = notifiedVideos.values().next().value;
+        if (first) notifiedVideos.delete(first);
+    }
+
     const entries = await YouTubeChannel.findAll({
         where: { youtube_channel_id: youtubeChannelId },
     });
@@ -136,6 +148,10 @@ export async function handleNewVideo(youtubeChannelId: string, videoId: string):
     if (!video) return;
 
     const snippet = video.snippet;
+    const publishedAt = new Date(snippet.publishedAt).getTime();
+    const fifteenMinutesAgo = Date.now() - 15 * 60 * 1000;
+    if (publishedAt < fifteenMinutesAgo) return;
+
     const isLive = snippet.liveBroadcastContent === 'live' || video.liveStreamingDetails;
     const client = (await import('../client')).default;
 
