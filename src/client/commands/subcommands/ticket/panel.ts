@@ -93,10 +93,22 @@ export const panel = {
             descriptionInput.setValue(guildData.ticket_panel_description);
         }
 
+        const imageInput = new TextInputBuilder()
+            .setCustomId('ticketPanelImage')
+            .setLabel(t('modals.ticketPanelSettings.inputs.image.title', locale))
+            .setStyle(TextInputStyle.Short)
+            .setPlaceholder(t('modals.ticketPanelSettings.inputs.image.placeholder', locale))
+            .setRequired(false);
+
+        if (guildData?.ticket_panel_image) {
+            imageInput.setValue(guildData.ticket_panel_image);
+        }
+
         modal.addComponents(
             new ActionRowBuilder<TextInputBuilder>().addComponents(channelIdInput),
             new ActionRowBuilder<TextInputBuilder>().addComponents(titleInput),
             new ActionRowBuilder<TextInputBuilder>().addComponents(descriptionInput),
+            new ActionRowBuilder<TextInputBuilder>().addComponents(imageInput),
         );
 
         return await interaction.showModal(modal);

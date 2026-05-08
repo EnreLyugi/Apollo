@@ -21,6 +21,15 @@ class TicketCategoryService {
   public async getCategoryById(id: number): Promise<TicketCategory | null> {
     return await TicketCategory.findByPk(id);
   }
+
+  public async editCategory(id: number, guildId: string, name: string, description: string | null): Promise<TicketCategory | null> {
+    const category = await TicketCategory.findOne({ where: { id, guild_id: guildId } });
+    if (!category) return null;
+    category.name = name;
+    category.description = description;
+    await category.save();
+    return category;
+  }
 }
 
 export default new TicketCategoryService();

@@ -19,6 +19,7 @@ interface GuildAttributes {
   ticket_role: string | null;
   ticket_panel_title: string | null;
   ticket_panel_description: string | null;
+  ticket_panel_image: string | null;
 }
 
 interface GuildCreationAttributes extends 
@@ -38,7 +39,8 @@ interface GuildCreationAttributes extends
     'ticket_channel' |
     'ticket_role' |
     'ticket_panel_title' |
-    'ticket_panel_description'>{}
+    'ticket_panel_description' |
+    'ticket_panel_image'>{}
 
 class Guild extends Model<GuildAttributes, GuildCreationAttributes> implements GuildAttributes {
   public id!: string;
@@ -58,6 +60,7 @@ class Guild extends Model<GuildAttributes, GuildCreationAttributes> implements G
   public ticket_role!: string | null;
   public ticket_panel_title!: string | null;
   public ticket_panel_description!: string | null;
+  public ticket_panel_image!: string | null;
 }
 
 Guild.init(
@@ -132,6 +135,10 @@ Guild.init(
     },
     ticket_panel_description: {
       type: DataTypes.TEXT,
+      defaultValue: null,
+    },
+    ticket_panel_image: {
+      type: DataTypes.STRING,
       defaultValue: null,
     },
   },

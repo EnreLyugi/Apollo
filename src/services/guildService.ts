@@ -123,13 +123,14 @@ class GuildService {
     }
   }
 
-  public async setTicketPanelText(guild_id: string, title: string, description: string): Promise<Guild> {
+  public async setTicketPanelText(guild_id: string, title: string, description: string, image?: string | null): Promise<Guild> {
     let guild = await this.getGuildById(guild_id);
     if (!guild) {
       guild = await this.createGuild(guild_id);
     }
     guild.ticket_panel_title = title;
     guild.ticket_panel_description = description;
+    guild.ticket_panel_image = image ?? null;
     await guild.save();
     return guild;
   }

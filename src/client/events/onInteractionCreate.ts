@@ -6,9 +6,12 @@ import {
     EmbedBuilder,
     Interaction,
     MessageFlags,
+    ModalBuilder,
     OverwriteType,
     PermissionFlagsBits,
     TextChannel,
+    TextInputBuilder,
+    TextInputStyle,
 } from "discord.js";
 import { commands } from '../commands';
 import { modals } from '../modals';
@@ -29,6 +32,33 @@ export const onInteractionCreate = async (interaction: Interaction) => {
 
     if (interaction.isModalSubmit()) {
         const modalName = interaction.customId;
+
+        if (modalName.startsWith('ticketCategoryEdit:')) {
+            const guild = interaction.guild;
+            if (!guild) return interaction.reply({ content: 'Erro!', flags: MessageFlags.Ephemeral });
+
+            const categoryId = parseInt(modalName.split(':')[1]);
+            const newName = interaction.fields.getTextInputValue('ticketCategoryEditName');
+            const newDescription = interaction.fields.getTextInputValue('ticketCategoryEditDescription') || null;
+
+            const category = await ticketCategoryService.getCategoryById(categoryId);
+            if (!category) {
+                return interaction.reply({ content: t('commands.ticket.subcommands.category.not_found', locale), flags: MessageFlags.Ephemeral });
+            }
+
+            const conflict = await ticketCategoryService.getCategoryByName(guild.id, newName);
+            if (conflict && conflict.id !== categoryId) {
+                return interaction.reply({ content: t('commands.ticket.subcommands.category.already_exists', locale), flags: MessageFlags.Ephemeral });
+            }
+
+            await ticketCategoryService.editCategory(categoryId, guild.id, newName, newDescription);
+
+            return interaction.reply({
+                content: format(t('commands.ticket.subcommands.category.edited', locale), { name: newName }),
+                flags: MessageFlags.Ephemeral,
+            });
+        }
+
         const modal = modalsMap.get(modalName);
 
         if (!modal) return console.log(`\x1b[32m%s\x1b[0m`, `Modal ${modalName} not found!`);
@@ -153,6 +183,44 @@ export const onInteractionCreate = async (interaction: Interaction) => {
         } catch {}
 
         await interaction.reply({ content: t('commands.ticket.subcommands.close.closed', locale) });
+    }
+
+    if (interaction.isStringSelectMenu() && interaction.customId === 'ticketCategoryEditSelect') {
+        const guild = interaction.guild;
+        if (!guild) return;
+
+        const categoryId = parseInt(interaction.values[0]);
+        const category = await ticketCategoryService.getCategoryById(categoryId);
+        if (!category) {
+            return interaction.reply({ content: t('commands.ticket.subcommands.category.not_found', locale), flags: MessageFlags.Ephemeral });
+        }
+
+        const modal = new ModalBuilder()
+            .setCustomId(`ticketCategoryEdit:${category.id}`)
+            .setTitle(t('modals.ticketCategoryEdit.title', locale));
+
+        const nameInput = new TextInputBuilder()
+            .setCustomId('ticketCategoryEditName')
+            .setLabel(t('modals.ticketCategoryEdit.inputs.name.title', locale))
+            .setStyle(TextInputStyle.Short)
+            .setPlaceholder(t('modals.ticketCategoryEdit.inputs.name.placeholder', locale))
+            .setValue(category.name)
+            .setRequired(true);
+
+        const descriptionInput = new TextInputBuilder()
+            .setCustomId('ticketCategoryEditDescription')
+            .setLabel(t('modals.ticketCategoryEdit.inputs.description.title', locale))
+            .setStyle(TextInputStyle.Short)
+            .setPlaceholder(t('modals.ticketCategoryEdit.inputs.description.placeholder', locale))
+            .setValue(category.description || '')
+            .setRequired(false);
+
+        modal.addComponents(
+            new ActionRowBuilder<TextInputBuilder>().addComponents(nameInput),
+            new ActionRowBuilder<TextInputBuilder>().addComponents(descriptionInput)
+        );
+
+        return interaction.showModal(modal);
     }
 
     if (interaction.isStringSelectMenu() && interaction.customId === 'shopTypeSelect') {

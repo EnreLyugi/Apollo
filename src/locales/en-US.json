@@ -88,9 +88,26 @@
                 "description": {
                     "title": "Panel Description",
                     "placeholder": "e.g. Select a category below to open a ticket."
+                },
+                "image": {
+                    "title": "Image URL (optional)",
+                    "placeholder": "e.g. https://i.imgur.com/example.png"
                 }
             },
             "invalid_channel": "Invalid channel."
+        },
+        "ticketCategoryEdit": {
+            "title": "Edit Category",
+            "inputs": {
+                "name": {
+                    "title": "Category name",
+                    "placeholder": "e.g. 🎮 General Support"
+                },
+                "description": {
+                    "title": "Category description (optional)",
+                    "placeholder": "e.g. 📋 Open a ticket for general support"
+                }
+            }
         }
     },
     "commands": {
@@ -660,7 +677,7 @@
                     "options": {
                         "action": {
                             "name": "action",
-                            "description": "Action to perform (add/remove)"
+                            "description": "Action to perform (add/remove/edit)"
                         },
                         "name": {
                             "name": "name",
@@ -675,7 +692,12 @@
                     "already_exists": "A category with this name already exists.",
                     "added": "Category **{name}** added successfully!",
                     "not_found": "Category not found.",
-                    "removed": "Category **{name}** removed successfully!"
+                    "removed": "Category **{name}** removed successfully!",
+                    "edited": "Category **{name}** edited successfully!",
+                    "edit_select_placeholder": "Select a category to edit",
+                    "edit_select_prompt": "Select the category you want to edit:",
+                    "name_required": "You must provide the category name.",
+                    "no_categories": "There are no categories registered."
                 },
                 "role": {
                     "name": "role",

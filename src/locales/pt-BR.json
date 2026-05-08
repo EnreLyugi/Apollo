@@ -88,9 +88,26 @@
                 "description": {
                     "title": "Descrição do Painel",
                     "placeholder": "ex: Selecione uma categoria abaixo para abrir um ticket."
+                },
+                "image": {
+                    "title": "URL da Imagem (opcional)",
+                    "placeholder": "ex: https://i.imgur.com/exemplo.png"
                 }
             },
             "invalid_channel": "Canal inválido."
+        },
+        "ticketCategoryEdit": {
+            "title": "Editar Categoria",
+            "inputs": {
+                "name": {
+                    "title": "Nome da categoria",
+                    "placeholder": "ex: 🎮 Suporte Geral"
+                },
+                "description": {
+                    "title": "Descrição da categoria (opcional)",
+                    "placeholder": "ex: 📋 Abra um ticket para suporte geral"
+                }
+            }
         }
     },
     "commands": {
@@ -660,7 +677,7 @@
                     "options": {
                         "action": {
                             "name": "ação",
-                            "description": "Ação a ser realizada (adicionar/remover)"
+                            "description": "Ação a ser realizada (adicionar/remover/editar)"
                         },
                         "name": {
                             "name": "nome",
@@ -675,7 +692,12 @@
                     "already_exists": "Uma categoria com esse nome já existe.",
                     "added": "Categoria **{name}** adicionada com sucesso!",
                     "not_found": "Categoria não encontrada.",
-                    "removed": "Categoria **{name}** removida com sucesso!"
+                    "removed": "Categoria **{name}** removida com sucesso!",
+                    "edited": "Categoria **{name}** editada com sucesso!",
+                    "edit_select_placeholder": "Selecione a categoria para editar",
+                    "edit_select_prompt": "Selecione a categoria que deseja editar:",
+                    "name_required": "Você deve fornecer o nome da categoria.",
+                    "no_categories": "Não há categorias cadastradas."
                 },
                 "role": {
                     "name": "cargo",
