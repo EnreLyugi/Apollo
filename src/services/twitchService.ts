@@ -185,7 +185,9 @@ async function handleStreamOnline(event: any): Promise<void> {
                 embed.setThumbnail(user.profile_image_url);
             }
 
-            const content = guildData.twitch_role ? `<@&${guildData.twitch_role}>` : undefined;
+            const content = guildData.twitch_role
+                ? (guildData.twitch_role === streamer.guild_id ? '@everyone' : `<@&${guildData.twitch_role}>`)
+                : undefined;
             await channel.send({ content, embeds: [embed] });
         } catch (err) {
             console.error(`Error sending Twitch notification to guild ${streamer.guild_id}:`, err);
