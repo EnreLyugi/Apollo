@@ -167,8 +167,6 @@ function activityLog(oldState: VoiceState, newState: VoiceState, logChannel: Gui
     } else {
         return;
     }
-    
 
-    
-
+    logChannel.send({ embeds: [ embed.build() ] });
 }
