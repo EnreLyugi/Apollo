@@ -1,30 +1,35 @@
-import { sockets } from "../../socket";
+import { GuildQueue } from "discord-player";
+import { QueueData } from "./types";
+import { t } from "../../../utils/localization";
+import {
+    ContainerBuilder,
+    MessageFlags,
+    TextDisplayBuilder,
+} from "discord.js";
 
-export const onPlayerSkip = async (queue: any, track: any) => {
-    const data = queue.metadata;
+export const onPlayerSkip = async (queue: GuildQueue, track: any) => {
+    const data = queue.metadata as QueueData;
+    if (!data) return;
+
+    if (data.playerMessage) {
+        await data.playerMessage.setState('finished');
+    }
+
     const { channelId, locale } = data;
-    const ws = sockets.get(data.wsId);
-    if(!ws) return;
-    
-    const message = {
-      event: 'player_error',
-      guildId: queue.guild.id,
-      channelId: data.channelId
-    };
-
-    ws.send(JSON.stringify(message));
-
-    /*const guild = queue.guild;
-
+    const guild = queue.guild;
     const channel = guild.channels.resolve(channelId);
-    if(!channel) return;
-    if(!channel.isTextBased()) return;
-  
-    let response = new Embed()
-      .setColor(`#FF0000`)
-      .setAuthor({ name: t('misc.error_ocurred', locale) })
-      .setDescription(error);
-      
-    console.error(error);
-    //await channel.send({ embeds: [ response.build() ] });*/
-}
+    if (!channel || !channel.isTextBased()) return;
+
+    const container = new ContainerBuilder()
+        .setAccentColor(0xFF0000)
+        .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+                `### ${t('player.errors.no_results', locale)}\n${track?.title ?? ''}`
+            )
+        );
+
+    await channel.send({
+        components: [container],
+        flags: MessageFlags.IsComponentsV2,
+    }).catch(() => {});
+};

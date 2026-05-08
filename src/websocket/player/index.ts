@@ -10,7 +10,11 @@ export const initializePlayer = async () => {
         return playerInstance;
     }
 
-    const player = new Player(client);
+    const player = new Player(client, {
+        connectionTimeout: 30_000,
+        skipFFmpeg: true,
+        lagMonitor: 1000,
+    });
     await player.extractors.loadMulti(DefaultExtractors);
 
     //Player Events

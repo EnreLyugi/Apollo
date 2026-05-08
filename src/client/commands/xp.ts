@@ -1,5 +1,6 @@
 import {
     ChatInputCommandInteraction,
+    MessageFlags,
     PermissionFlagsBits,
     SlashCommandBuilder,
     SlashCommandIntegerOption,
@@ -48,7 +49,7 @@ export const xp = {
 
         embed.setTimestamp(new Date());
 
-        await interaction.reply({ embeds: [ embed.build() ], ephemeral: true });
+        await interaction.reply({ embeds: [ embed.build() ], flags: MessageFlags.Ephemeral });
     },
 };
 
@@ -90,7 +91,7 @@ export const xpUser = {
 
             if(!topMembers) {
                 embed.setDescription(t('commands.xpuser.subcommands.rank.response.not_found', locale));
-                await interaction.reply({ embeds: [ embed.build(), ], ephemeral: true });
+                await interaction.reply({ embeds: [ embed.build(), ], flags: MessageFlags.Ephemeral });
                 return;
             }
 
@@ -107,7 +108,7 @@ export const xpUser = {
 
         embed.setTimestamp(new Date());
 
-        await interaction.reply({ embeds: [ embed.build() ], ephemeral: true });
+        await interaction.reply({ embeds: [ embed.build() ], flags: MessageFlags.Ephemeral });
     },
 }
 
@@ -272,7 +273,7 @@ export const xpAdmin = {
             }
         }
 
-        await interaction.reply({ embeds: [ embed.build(), ], ephemeral: true });
+        await interaction.reply({ embeds: [ embed.build(), ], flags: MessageFlags.Ephemeral });
         return;
     },
 }

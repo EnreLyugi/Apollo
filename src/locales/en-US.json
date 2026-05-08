@@ -25,7 +25,8 @@
             "client_disconnect": {
                 "title": "Disconnected",
                 "description": "I got disconnected, queue ended"
-            }
+            },
+            "play_error": "Playback Error"
         },
         "states": {
             "playing_now": "Playing Now",
@@ -37,7 +38,8 @@
             "invite_me": "Invite me"
         },
         "errors": {
-            "not_conected": "I'm not connect in any call"
+            "not_conected": "I'm not connect in any call",
+            "no_results": "No results found for this search."
         }
     },
     "logs": {
@@ -71,6 +73,24 @@
                     "placeholder": "Image URL."
                 }
             }
+        },
+        "ticketPanelSettings": {
+            "title": "Ticket Panel Settings",
+            "inputs": {
+                "channelid": {
+                    "title": "Channel ID",
+                    "placeholder": "Channel ID (do not change)"
+                },
+                "title": {
+                    "title": "Panel Title",
+                    "placeholder": "e.g. Support Tickets"
+                },
+                "description": {
+                    "title": "Panel Description",
+                    "placeholder": "e.g. Select a category below to open a ticket."
+                }
+            },
+            "invalid_channel": "Invalid channel."
         }
     },
     "commands": {
@@ -198,6 +218,25 @@
                 }
             }
         },
+        "dm": {
+            "name": "dm",
+            "description": "Send a DM to a member without revealing who ran the command (only the bot appears as sender).",
+            "options": {
+                "user": {
+                    "name": "user",
+                    "description": "Member who will receive the DM"
+                },
+                "message": {
+                    "name": "message",
+                    "description": "Text to send (recipient does not see which moderator sent it)"
+                }
+            },
+            "response": {
+                "sent": "Message sent via DM.",
+                "error_bot": "Cannot send DMs to bots.",
+                "error_cannot_dm": "Could not send the DM (user privacy, bot blocked, or DMs closed)."
+            }
+        },
         "enablexp": {
             "name": "enablexp",
             "description": "Enable a channel from receiving XP",
@@ -263,6 +302,51 @@
                 "role_setup": "Role **{role}** Added for level **{level}** (**{xp}xp**)."
             }
         },
+        "listxproles": {
+            "name": "listxproles",
+            "description": "Lists all XP reward roles configured on this server.",
+            "response": {
+                "title": "XP roles",
+                "empty": "No XP roles are configured. Use `/addxprole` to add one.",
+                "line": "• {role} — level **{level}** — **{xp}** XP",
+                "truncated": "(list truncated — too many roles)"
+            }
+        },
+        "editxprole": {
+            "name": "editxprole",
+            "description": "Changes the XP (and optionally the level) for an XP role in the database.",
+            "options": {
+                "xp": {
+                    "description": "New XP threshold required for this role."
+                },
+                "level": {
+                    "description": "New level label (optional; keeps current if omitted)."
+                }
+            },
+            "response": {
+                "title": "XP role updated",
+                "body": "{role}: level **{level}**, **{xp}** XP.",
+                "hint": "To apply Discord roles based on each member's XP, run **sync XP roles** (`/syncxproles`)."
+            },
+            "errors": {
+                "not_configured": "This role is not set as an XP role. Use `/addxprole` first.",
+                "save_failed": "Could not save the change. Check the logs."
+            }
+        },
+        "syncxproles": {
+            "name": "syncxproles",
+            "description": "Recalculates and applies XP roles to all members with bot records in this server.",
+            "response": {
+                "title": "XP role sync",
+                "started": "Processing **{pending}** members with bot records. This may take several minutes.\n\nYou'll get a **private** follow-up when it's done.",
+                "followup": "Sync finished: roles updated for **{synced}** members.",
+                "empty": "No one has XP records in this server — nothing to sync."
+            },
+            "errors": {
+                "sync_failed": "Something went wrong while syncing roles. Check the logs.",
+                "followup_expired": "Sync took too long to send the summary (Discord limit). Check the bot logs."
+            }
+        },
         "addcolorrole": {
             "name": "addcolorrole",
             "description": "Set the roles that will be listed on colors shop.",
@@ -280,6 +364,14 @@
                 "title": "Color Role",
                 "role_already_exists": "This role is already set as a Color role.",
                 "role_setup": "Role **{role}** Added for color **{name}**."
+            }
+        },
+        "reseteconomy": {
+            "name": "reseteconomy",
+            "description": "Reset everyone's coins, remove color purchases, and strip equipped color roles (admin only).",
+            "response": {
+                "title": "Economy reset",
+                "body": "• **{purchases}** color purchase record(s) removed\n• Color roles removed from **{members_colors}** member(s) still in the server\n• **{members_coins}** member row(s) had coins set to zero"
             }
         },
         "removecolorrole": {
@@ -379,6 +471,28 @@
                             "description": "Birthday date (MM-dd)"
                         }
                     }
+                },
+                "invite_role": {
+                    "name": "invite-role",
+                    "description": "Assign a role to members who join via a specific invite",
+                    "usage": "/set invite-role",
+                    "options": {
+                        "invite_code": {
+                            "name": "invite_code",
+                            "description": "Invite code or discord.gg/… link"
+                        },
+                        "role": {
+                            "name": "role",
+                            "description": "Role to assign; omit to remove this mapping"
+                        }
+                    },
+                    "response": {
+                        "set": "Invite **{code}** → role **{role}**. New members joining through that invite receive this role.",
+                        "removed": "Mapping removed for invite **{code}**."
+                    },
+                    "errors": {
+                        "invalid_code": "Invalid invite code."
+                    }
                 }
             }
         },
@@ -415,12 +529,47 @@
                         "title": "Skip Music",
                         "stopped": "Skipping Music"
                     }
+                },
+                "loop": {
+                    "name": "loop",
+                    "description": "Set repeat: off, current track, or whole queue.",
+                    "usage": "/music loop",
+                    "options": {
+                        "mode": {
+                            "name": "mode",
+                            "description": "Repeat mode",
+                            "choices": {
+                                "off": "Off",
+                                "track": "Current track",
+                                "queue": "Queue"
+                            }
+                        }
+                    },
+                    "response": {
+                        "off": "Repeat disabled.",
+                        "track": "Repeating the current track.",
+                        "queue": "Repeating the whole queue."
+                    }
+                },
+                "shuffle": {
+                    "name": "shuffle",
+                    "description": "Shuffles upcoming tracks in the queue.",
+                    "usage": "/music shuffle",
+                    "response": {
+                        "shuffled": "Queue shuffled.",
+                        "empty": "No tracks in the queue to shuffle."
+                    }
                 }
             }
         },
         "shop": {
             "name": "shop",
             "description": "Some shops to spend your coins",
+            "empty": "No items available in this shop.",
+            "type_select_title": "Shop",
+            "type_select_description": "Select a shop category below.",
+            "type_select_placeholder": "Select a category...",
+            "page_info": "Page {current}/{total}",
             "options": {
                 "type": {
                     "name": "type",
@@ -429,9 +578,20 @@
                         "roles": {
                             "name": "role",
                             "response": {
-                                "title": "Color Roles",
+                                "title": "Color Shop",
+                                "description": "Each color costs **{price} coins**. There are **{count}** colors available.\nYour balance: **{balance} coins**\n\nSelect one below to buy it.",
                                 "footer": "type /buy color <number> to buy"
-                            }
+                            },
+                            "select_placeholder": "Select a color...",
+                            "select_invalid": "Invalid color.",
+                            "select_already_owned": "You already have this color!",
+                            "select_success": "You bought the color {role} (**{name}**) and it has been equipped!",
+                            "select_equipped": "You equipped the color {role} (**{name}**)!",
+                            "owned_label": "✓ Owned (click to equip)",
+                            "confirm_prompt": "Do you want to buy the color {role} (**{name}**) for **{price} coins**?\nYour balance: **{balance} coins**",
+                            "confirm_button": "Confirm Purchase",
+                            "cancel_button": "Cancel",
+                            "purchase_cancelled": "Purchase cancelled."
                         }
                     }
                 }
@@ -470,6 +630,92 @@
                 "title": "🔮 Ship Result",
                 "description": "**{user1}** 💞 **{user2}**\nCompatibility: **{value}** {emoji}"
             }
+        },
+        "users": {
+            "name": "users",
+            "description": "Lists all server members",
+            "usage": "/users"
+        },
+        "ticket": {
+            "name": "ticket",
+            "description": "Ticket system configuration",
+            "usage": "/ticket",
+            "subcommands": {
+                "panel": {
+                    "name": "panel",
+                    "description": "Sets the ticket panel channel",
+                    "options": {
+                        "channel": {
+                            "name": "channel",
+                            "description": "Channel where the ticket panel will be sent"
+                        }
+                    },
+                    "response_title": "Ticket Panel",
+                    "no_categories": "You need to create at least one ticket category first. Use `/ticket category`.",
+                    "success": "Ticket panel sent successfully!"
+                },
+                "category": {
+                    "name": "category",
+                    "description": "Manages ticket categories",
+                    "options": {
+                        "action": {
+                            "name": "action",
+                            "description": "Action to perform (add/remove)"
+                        },
+                        "name": {
+                            "name": "name",
+                            "description": "Category name"
+                        },
+                        "description": {
+                            "name": "description",
+                            "description": "Category description (only for add)"
+                        }
+                    },
+                    "response_title": "Ticket Category",
+                    "already_exists": "A category with this name already exists.",
+                    "added": "Category **{name}** added successfully!",
+                    "not_found": "Category not found.",
+                    "removed": "Category **{name}** removed successfully!"
+                },
+                "role": {
+                    "name": "role",
+                    "description": "Sets the support role for tickets",
+                    "options": {
+                        "role": {
+                            "name": "role",
+                            "description": "Support role that will have access to tickets"
+                        }
+                    },
+                    "response_title": "Ticket Role",
+                    "success": "Support role set to {role}."
+                },
+                "close": {
+                    "name": "close",
+                    "description": "Closes the current ticket",
+                    "response_title": "Close Ticket",
+                    "not_a_ticket": "This channel is not a ticket.",
+                    "closing": "Closing ticket in 3 seconds...",
+                    "closed": "This ticket has been closed."
+                }
+            },
+            "panel": {
+                "title": "Support Tickets",
+                "description": "Select a category below to open a ticket. Our team will respond via DM.",
+                "select_placeholder": "Select a category..."
+            },
+            "select": {
+                "invalid_category": "Invalid category.",
+                "already_open": "You already have an open ticket. Please wait for it to be closed.",
+                "success": "Your ticket has been created! You will receive messages via DM.",
+                "dm_confirmation": "Your ticket has been opened on **{guild}** in category **{category}**. Reply here to send messages to the support team."
+            },
+            "channel": {
+                "close_button": "Close Ticket",
+                "category_label": "Category",
+                "user_label": "User",
+                "instructions": "Messages sent here will be forwarded to the user's DM."
+            },
+            "close_dm": "Your ticket has been closed. Thank you for contacting us!"
         }
     },
     "application_commands": {

@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandUserOption } from "discord.js";
+import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder, SlashCommandUserOption } from "discord.js";
 import { format, mapLocale, t } from "../../utils/localization";
 import { Embed } from "../../models";
 import { shipService } from "../../services";
@@ -58,7 +58,7 @@ export const ship = {
             .setDescription(t("commands.ship.same_user_error", locale))
             .build()
         ],
-        ephemeral: true
+        flags: MessageFlags.Ephemeral
       });
     }
 

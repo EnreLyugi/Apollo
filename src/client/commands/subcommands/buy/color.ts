@@ -1,5 +1,6 @@
 import { 
     ChatInputCommandInteraction,
+    MessageFlags,
     SlashCommandSubcommandBuilder,
     SlashCommandIntegerOption
 } from "discord.js";
@@ -86,6 +87,6 @@ export const color = {
         }
 
 
-        return interaction.reply({ embeds: [ embed.build() ], ephemeral: true });
+        return interaction.reply({ embeds: [ embed.build() ], flags: MessageFlags.Ephemeral });
     }
 };

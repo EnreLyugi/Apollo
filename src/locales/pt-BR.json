@@ -25,7 +25,8 @@
             "client_disconnect": {
                 "title": "Desconectado",
                 "description": "Fui desconectado, fila finalizada"
-            }
+            },
+            "play_error": "Erro ao Reproduzir"
         },
         "states": {
             "playing_now": "Tocando Agora",
@@ -37,7 +38,8 @@
             "invite_me": "Me convide"
         },
         "errors": {
-            "not_conected": "Não estou conectado em nenhuma chamada"
+            "not_conected": "Não estou conectado em nenhuma chamada",
+            "no_results": "Nenhum resultado encontrado para essa busca."
         }
     },
     "logs": {
@@ -71,6 +73,24 @@
                     "placeholder": "URL da imagem que aparecerá na mensagem."
                 }
             }
+        },
+        "ticketPanelSettings": {
+            "title": "Configurações do Painel de Tickets",
+            "inputs": {
+                "channelid": {
+                    "title": "ID do Canal",
+                    "placeholder": "ID do canal (não altere)"
+                },
+                "title": {
+                    "title": "Título do Painel",
+                    "placeholder": "ex: Tickets de Suporte"
+                },
+                "description": {
+                    "title": "Descrição do Painel",
+                    "placeholder": "ex: Selecione uma categoria abaixo para abrir um ticket."
+                }
+            },
+            "invalid_channel": "Canal inválido."
         }
     },
     "commands": {
@@ -198,6 +218,25 @@
                 }
             }
         },
+        "dm": {
+            "name": "dm",
+            "description": "Envia uma mensagem por DM a um membro sem revelar quem enviou (só o bot aparece como remetente).",
+            "options": {
+                "user": {
+                    "name": "usuario",
+                    "description": "Membro que receberá a mensagem"
+                },
+                "message": {
+                    "name": "mensagem",
+                    "description": "Texto a enviar (o destinatário não vê quem usou o comando)"
+                }
+            },
+            "response": {
+                "sent": "Mensagem enviada por DM.",
+                "error_bot": "Não é possível enviar DM a bots.",
+                "error_cannot_dm": "Não foi possível enviar a DM (privacidade do utilizador, bloqueio ao bot ou DMs fechados)."
+            }
+        },
         "enablexp": {
             "name": "ativarxp",
             "description": "Habilita o recebimento de XP em um canal",
@@ -263,6 +302,51 @@
                 "role_setup": "Cargo **{role}** Adicionado para o level **{level}** (**{xp}xp**)."
             }
         },
+        "listxproles": {
+            "name": "listarcargosxp",
+            "description": "Lista todos os cargos de recompensa por XP deste servidor.",
+            "response": {
+                "title": "Cargos de XP",
+                "empty": "Nenhum cargo de XP está configurado. Use `/adicionarcargodexp` para adicionar.",
+                "line": "• {role} — nível **{level}** — **{xp}** XP",
+                "truncated": "(lista cortada — muitos cargos)"
+            }
+        },
+        "editxprole": {
+            "name": "editarcargoxp",
+            "description": "Altera o XP (e opcionalmente o nível) de um cargo de XP na base de dados.",
+            "options": {
+                "xp": {
+                    "description": "Nova quantidade de XP necessária para este cargo."
+                },
+                "level": {
+                    "description": "Novo nível exibido (opcional; mantém o atual se omitido)."
+                }
+            },
+            "response": {
+                "title": "Cargo de XP atualizado",
+                "body": "Cargo {role}: nível **{level}**, **{xp}** XP.",
+                "hint": "Para aplicar os cargos no Discord conforme o XP de cada membro, usa o comando **sincronizar cargos de XP** (`/sincronizarcargosxp`)."
+            },
+            "errors": {
+                "not_configured": "Este cargo não está configurado como cargo de XP. Use `/adicionarcargodexp` primeiro.",
+                "save_failed": "Não foi possível guardar a alteração. Verifica os logs."
+            }
+        },
+        "syncxproles": {
+            "name": "sincronizarcargosxp",
+            "description": "Recalcula e aplica os cargos de XP a todos os membros com registo no bot neste servidor.",
+            "response": {
+                "title": "Sincronização de cargos de XP",
+                "started": "A processar **{pending}** membros com registo no bot. Isto pode demorar vários minutos.\n\nEnviarei outra mensagem **só para ti** quando terminar.",
+                "followup": "Sincronização concluída: cargos atualizados para **{synced}** membros.",
+                "empty": "Ninguém tem registo de XP neste servidor — não há nada para sincronizar."
+            },
+            "errors": {
+                "sync_failed": "Ocorreu um erro ao sincronizar cargos. Verifica os logs.",
+                "followup_expired": "A sincronização demorou demasiado e não foi possível enviar o resumo (limite do Discord). Verifica os logs do bot."
+            }
+        },
         "addcolorrole": {
             "name": "adicionarcargodecor",
             "description": "Configura os cargos disponíveis na loja de cores.",
@@ -280,6 +364,14 @@
                 "title": "Cargo de Cor",
                 "role_already_exists": "Esse cargo já está configurado como cargo de Cor.",
                 "role_setup": "Cargo **{role}** Adicionado para a cor **{name}**."
+            }
+        },
+        "reseteconomy": {
+            "name": "redefinireconomia",
+            "description": "Zera moedas de todos, remove compras de cor e cargos equipados no servidor (admin).",
+            "response": {
+                "title": "Economia redefinida",
+                "body": "• **{purchases}** registo(s) de cores compradas removido(s)\n• Cargos de cor retirados de **{members_colors}** membro(s) ainda no servidor\n• **{members_coins}** linha(s) de membro com moedas zeradas"
             }
         },
         "removecolorrole": {
@@ -379,6 +471,28 @@
                             "description": "Data de aniversário (dd/MM)"
                         }
                     }
+                },
+                "invite_role": {
+                    "name": "cargo-convite",
+                    "description": "Associa um cargo a quem entra por um convite específico",
+                    "usage": "/setar cargo-convite",
+                    "options": {
+                        "invite_code": {
+                            "name": "codigo_convite",
+                            "description": "Código do convite ou link (discord.gg/…)"
+                        },
+                        "role": {
+                            "name": "cargo",
+                            "description": "Cargo a atribuir; omita para remover o vínculo"
+                        }
+                    },
+                    "response": {
+                        "set": "Convite **{code}** → cargo **{role}**. Novos membros que entrarem por esse convite recebem esse cargo.",
+                        "removed": "Vínculo removido para o convite **{code}**."
+                    },
+                    "errors": {
+                        "invalid_code": "Código de convite inválido."
+                    }
                 }
             }
         },
@@ -415,23 +529,69 @@
                         "title": "Pular Música",
                         "stopped": "Pulando Música"
                     }
+                },
+                "loop": {
+                    "name": "repetir",
+                    "description": "Define repetição: desligada, música atual ou fila inteira.",
+                    "usage": "/musica repetir",
+                    "options": {
+                        "mode": {
+                            "name": "modo",
+                            "description": "Tipo de repetição",
+                            "choices": {
+                                "off": "Desligado",
+                                "track": "Música atual",
+                                "queue": "Fila inteira"
+                            }
+                        }
+                    },
+                    "response": {
+                        "off": "Repetição desligada.",
+                        "track": "Repetindo a música atual.",
+                        "queue": "Repetindo a fila inteira."
+                    }
+                },
+                "shuffle": {
+                    "name": "embaralhar",
+                    "description": "Embaralha a ordem das músicas na fila (não a que está a tocar).",
+                    "usage": "/musica embaralhar",
+                    "response": {
+                        "shuffled": "Fila embaralhada.",
+                        "empty": "Não há músicas na fila para embaralhar."
+                    }
                 }
             }
         },
         "shop": {
             "name": "loja",
             "description": "Algumas lojas para gastar suas moedas",
+            "empty": "Nenhum item disponível nesta loja.",
+            "type_select_title": "Loja",
+            "type_select_description": "Selecione uma categoria de loja abaixo.",
+            "type_select_placeholder": "Selecione uma categoria...",
+            "page_info": "Página {current}/{total}",
             "options": {
                 "type": {
                     "name": "tipo",
                     "description": "Qual tipo de loja será mostrado",
                     "choices": {
                         "roles": {
-                            "name": "cargo",
+                            "name": "cor",
                             "response": {
                                 "title": "Loja de Cores",
+                                "description": "Cada cor custa **{price} moedas**. Há **{count}** cores disponíveis.\nSeu saldo: **{balance} moedas**\n\nSelecione uma abaixo para comprar.",
                                 "footer": "digite /comprar cor <número> para comprar"
-                            }
+                            },
+                            "select_placeholder": "Selecione uma cor...",
+                            "select_invalid": "Cor inválida.",
+                            "select_already_owned": "Você já possui essa cor!",
+                            "select_success": "Você comprou a cor {role} (**{name}**) e ela foi equipada!",
+                            "select_equipped": "Você equipou a cor {role} (**{name}**)!",
+                            "owned_label": "✓ Já possui (clique para equipar)",
+                            "confirm_prompt": "Deseja comprar a cor {role} (**{name}**) por **{price} moedas**?\nSeu saldo: **{balance} moedas**",
+                            "confirm_button": "Confirmar Compra",
+                            "cancel_button": "Cancelar",
+                            "purchase_cancelled": "Compra cancelada."
                         }
                     }
                 }
@@ -470,6 +630,92 @@
                 "title": "🔮 Resultado do Ship",
                 "description": "**{user1}** 💞 **{user2}**\nCompatibilidade: **{value}** {emoji}"
             }
+        },
+        "users": {
+            "name": "users",
+            "description": "Lista todos os membros do servidor",
+            "usage": "/users"
+        },
+        "ticket": {
+            "name": "ticket",
+            "description": "Configuração do sistema de tickets",
+            "usage": "/ticket",
+            "subcommands": {
+                "panel": {
+                    "name": "painel",
+                    "description": "Define o canal do painel de tickets",
+                    "options": {
+                        "channel": {
+                            "name": "canal",
+                            "description": "Canal onde o painel de tickets será enviado"
+                        }
+                    },
+                    "response_title": "Painel de Tickets",
+                    "no_categories": "Você precisa criar pelo menos uma categoria de ticket primeiro. Use `/ticket category`.",
+                    "success": "Painel de tickets enviado com sucesso!"
+                },
+                "category": {
+                    "name": "categoria",
+                    "description": "Gerencia categorias de tickets",
+                    "options": {
+                        "action": {
+                            "name": "ação",
+                            "description": "Ação a ser realizada (adicionar/remover)"
+                        },
+                        "name": {
+                            "name": "nome",
+                            "description": "Nome da categoria"
+                        },
+                        "description": {
+                            "name": "descrição",
+                            "description": "Descrição da categoria (apenas para adicionar)"
+                        }
+                    },
+                    "response_title": "Categoria de Ticket",
+                    "already_exists": "Uma categoria com esse nome já existe.",
+                    "added": "Categoria **{name}** adicionada com sucesso!",
+                    "not_found": "Categoria não encontrada.",
+                    "removed": "Categoria **{name}** removida com sucesso!"
+                },
+                "role": {
+                    "name": "cargo",
+                    "description": "Define o cargo de suporte para tickets",
+                    "options": {
+                        "role": {
+                            "name": "cargo",
+                            "description": "Cargo de suporte que terá acesso aos tickets"
+                        }
+                    },
+                    "response_title": "Cargo de Ticket",
+                    "success": "Cargo de suporte definido para {role}."
+                },
+                "close": {
+                    "name": "fechar",
+                    "description": "Fecha o ticket atual",
+                    "response_title": "Fechar Ticket",
+                    "not_a_ticket": "Este canal não é um ticket.",
+                    "closing": "Fechando ticket em 3 segundos...",
+                    "closed": "Este ticket foi fechado."
+                }
+            },
+            "panel": {
+                "title": "Tickets de Suporte",
+                "description": "Selecione uma categoria abaixo para abrir um ticket. Nossa equipe responderá via DM.",
+                "select_placeholder": "Selecione uma categoria..."
+            },
+            "select": {
+                "invalid_category": "Categoria inválida.",
+                "already_open": "Você já possui um ticket aberto. Aguarde o fechamento.",
+                "success": "Seu ticket foi criado! Você receberá as mensagens via DM.",
+                "dm_confirmation": "Seu ticket foi aberto no servidor **{guild}** na categoria **{category}**. Responda aqui para enviar mensagens para a equipe de suporte."
+            },
+            "channel": {
+                "close_button": "Fechar Ticket",
+                "category_label": "Categoria",
+                "user_label": "Usuário",
+                "instructions": "Mensagens enviadas aqui serão encaminhadas para a DM do usuário."
+            },
+            "close_dm": "Seu ticket foi fechado. Obrigado por entrar em contato!"
         }
     },
     "application_commands": {

@@ -1,4 +1,5 @@
 import sequelize from '../config/database';
+import '../models';
 
 export const loadDatabase = async () => {
     await sequelize.authenticate()

@@ -9,7 +9,8 @@ console.log(`\x1b[32m%s\x1b[0m`, "Bot developed by: Enre Lyugi");
     await loadDatabase(); //Connects to Database
     await loadApplicationCommands(); //Setup slash commands
     await import('./client/'); //Constructs Discord Client
-    await require('./websocket'); //Starts the music player websocket
+    const { ready } = await import('./websocket');
+    await ready;
 })();
 
 process.on("SIGINT", ()  => {

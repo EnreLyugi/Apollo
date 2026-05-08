@@ -1,5 +1,6 @@
 import {
     ChatInputCommandInteraction,
+    MessageFlags,
     PermissionFlagsBits,
     SlashCommandBuilder
 } from "discord.js";
@@ -10,7 +11,7 @@ import { CommandCategory } from "./help";
 const commandData =
     new SlashCommandBuilder()
         .setName('set')
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
         .setNameLocalizations({
             "en-US": t('commands.set.name', 'en-US'),
             "pt-BR": t('commands.set.name', 'pt-BR')
@@ -40,7 +41,7 @@ export const set = {
             await subcommand.execute(interaction, subcommand);
         } catch (error) {
             console.error(`Error executing command ${subcommandName}:`, error);
-            await interaction.reply({ content: t(`client.error_on_command`, locale), ephemeral: true });
+            await interaction.reply({ content: t(`client.error_on_command`, locale), flags: MessageFlags.Ephemeral });
         }
     },
 };

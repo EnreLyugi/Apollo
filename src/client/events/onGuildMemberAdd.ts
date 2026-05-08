@@ -1,8 +1,9 @@
-import { GuildMember } from "discord.js";
+import { Collection, GuildMember } from "discord.js";
 import { Embed } from "../../models";
 import { colors } from "../../config";
 import { banService, guildService, welcomeSettingsService } from "../../services";
 import { format } from "../../utils/localization";
+import { invites } from "../";
 
 export const onGuildMemberAdd = async (member: GuildMember) => {
     if(member.user.bot) return;
@@ -49,4 +50,27 @@ export const onGuildMemberAdd = async (member: GuildMember) => {
         if(!role) return;
         member.roles.add(role);
     }
-}
+
+    const newInvites = await guild.invites.fetch();
+    const oldInvites = invites.get(guild.id);
+    const invite = newInvites.find(i => (i.uses ?? 0) > (oldInvites?.get(i.code) ?? 0));
+
+    invites.set(
+        guild.id,
+        new Collection(newInvites.map(i => [i.code, i.uses])),
+    );
+
+    if (!invite) return;
+
+    const guildRow = await guildService.getGuildById(guild.id);
+    const mappedRoleId = guildService.getInviteRoleForNormalizedCode(
+        guildRow,
+        invite.code,
+    );
+    if (mappedRoleId) {
+        const mappedRole = member.guild.roles.resolve(mappedRoleId);
+        if (mappedRole) {
+            await member.roles.add(mappedRole).catch(() => {});
+        }
+    }
+};
