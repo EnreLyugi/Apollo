@@ -268,40 +268,6 @@
                 }
             }
         },
-        "setchannel": {
-            "name": "setarcanal",
-            "description": "Configura um canal para mensagens automáticas",
-            "response_title": "Setar Canal",
-            "response_body": "{channelType} foi alterado com sucesso!",
-            "usage": "/setarcanal <tipo do canal> <canal>",
-            "options": {
-                "channeltype": {
-                    "name": "tipocanal",
-                    "description": "O tipo de canal que será configurado",
-                    "choices": {
-                        "welcome_channel": {
-                            "name": "Canal de Boas-Vindas"
-                        },
-                        "birthday_channel": {
-                            "name": "Canal de Notificação de Aniversáriantes"
-                        },
-                        "voice_activity_log_channel": {
-                            "name": "Canal de Logs de Call"
-                        },
-                        "twitch_channel": {
-                            "name": "Canal de Notificações da Twitch"
-                        },
-                        "youtube_channel": {
-                            "name": "Canal de Notificações do YouTube"
-                        }
-                    }
-                },
-                "channel": {
-                    "name": "canal",
-                    "description": "Canal que será configurado"
-                }
-            }
-        },
         "addxprole": {
             "name": "adicionarcargodexp",
             "description": "Configura os cargos dados ao alcançar certas quantidades de XP.",
@@ -432,6 +398,12 @@
                                 },
                                 "birthday_role": {
                                     "name": "Cargo de Aniversáriante"
+                                },
+                                "twitch_role": {
+                                    "name": "Cargo de Notificação Twitch"
+                                },
+                                "youtube_role": {
+                                    "name": "Cargo de Notificação YouTube"
                                 },
                                 "color": {
                                     "name": "Cargo de Cor"

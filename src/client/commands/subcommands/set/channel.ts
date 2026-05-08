@@ -62,6 +62,22 @@ export const channel = {
                         "pt-BR": t('commands.set.subcommands.channel.options.channeltype.choices.voice_activity_log_channel.name', 'pt-BR')
                     },
                     "value": "voice_activity_log_channel"
+                },
+                {
+                    "name": "twitch_channel",
+                    "name_localizations": {
+                        "en-US": t('commands.set.subcommands.channel.options.channeltype.choices.twitch_channel.name', 'en-US'),
+                        "pt-BR": t('commands.set.subcommands.channel.options.channeltype.choices.twitch_channel.name', 'pt-BR')
+                    },
+                    "value": "twitch_channel"
+                },
+                {
+                    "name": "youtube_channel",
+                    "name_localizations": {
+                        "en-US": t('commands.set.subcommands.channel.options.channeltype.choices.youtube_channel.name', 'en-US'),
+                        "pt-BR": t('commands.set.subcommands.channel.options.channeltype.choices.youtube_channel.name', 'pt-BR')
+                    },
+                    "value": "youtube_channel"
                 }
             ])
             .setRequired(true)

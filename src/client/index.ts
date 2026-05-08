@@ -1,5 +1,6 @@
 import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 import * as clientEvents from './events/';
+import { retry } from '../utils/retry';
 
 const client = new Client({
     intents: [
@@ -51,6 +52,12 @@ client
 .on('guildCreate', clientEvents.onGuildCreate) //When a guild is created
 .on('guildDelete', clientEvents.onGuildDelete); //When a guild is deleted
 
-client.login(process.env.DISCORD_TOKEN);
+retry(
+    () => client.login(process.env.DISCORD_TOKEN),
+    'ClientLogin',
+).catch(err => {
+    console.error('Failed to login after all retries:', err);
+    process.exit(1);
+});
 
 export default client;

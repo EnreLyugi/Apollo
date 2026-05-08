@@ -170,7 +170,8 @@ export async function handleNewVideo(youtubeChannelId: string, videoId: string):
                 embed.setImage(snippet.thumbnails.high.url);
             }
 
-            await channel.send({ embeds: [embed] });
+            const content = guildData.youtube_role ? `<@&${guildData.youtube_role}>` : undefined;
+            await channel.send({ content, embeds: [embed] });
         } catch (err) {
             console.error(`Error sending YouTube notification to guild ${entry.guild_id}:`, err);
         }

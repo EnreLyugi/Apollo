@@ -29,6 +29,12 @@ class GuildService {
         case 'ticket_role':
           guild.ticket_role = role_id;
           break;
+        case 'twitch_role':
+          guild.twitch_role = role_id;
+          break;
+        case 'youtube_role':
+          guild.youtube_role = role_id;
+          break;
         default:
           throw new Error('Invalid Role Type')
       }

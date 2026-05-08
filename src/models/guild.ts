@@ -21,7 +21,9 @@ interface GuildAttributes {
   ticket_panel_description: string | null;
   ticket_panel_image: string | null;
   twitch_channel: string | null;
+  twitch_role: string | null;
   youtube_channel: string | null;
+  youtube_role: string | null;
 }
 
 interface GuildCreationAttributes extends 
@@ -44,7 +46,9 @@ interface GuildCreationAttributes extends
     'ticket_panel_description' |
     'ticket_panel_image' |
     'twitch_channel' |
-    'youtube_channel'>{}
+    'twitch_role' |
+    'youtube_channel' |
+    'youtube_role'>{}
 
 class Guild extends Model<GuildAttributes, GuildCreationAttributes> implements GuildAttributes {
   public id!: string;
@@ -66,7 +70,9 @@ class Guild extends Model<GuildAttributes, GuildCreationAttributes> implements G
   public ticket_panel_description!: string | null;
   public ticket_panel_image!: string | null;
   public twitch_channel!: string | null;
+  public twitch_role!: string | null;
   public youtube_channel!: string | null;
+  public youtube_role!: string | null;
 }
 
 Guild.init(
@@ -151,7 +157,15 @@ Guild.init(
       type: DataTypes.STRING,
       defaultValue: null,
     },
+    twitch_role: {
+      type: DataTypes.STRING,
+      defaultValue: null,
+    },
     youtube_channel: {
+      type: DataTypes.STRING,
+      defaultValue: null,
+    },
+    youtube_role: {
       type: DataTypes.STRING,
       defaultValue: null,
     },

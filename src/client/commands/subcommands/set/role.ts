@@ -48,6 +48,22 @@ export const role = {
                     "pt-BR": t('commands.set.subcommands.role.options.roletype.choices.birthday_role.name', 'pt-BR')
                 },
                 "value": "birthday_role"
+            },
+            {
+                "name": "twitch_role",
+                "name_localizations": {
+                    "en-US": t('commands.set.subcommands.role.options.roletype.choices.twitch_role.name', 'en-US'),
+                    "pt-BR": t('commands.set.subcommands.role.options.roletype.choices.twitch_role.name', 'pt-BR')
+                },
+                "value": "twitch_role"
+            },
+            {
+                "name": "youtube_role",
+                "name_localizations": {
+                    "en-US": t('commands.set.subcommands.role.options.roletype.choices.youtube_role.name', 'en-US'),
+                    "pt-BR": t('commands.set.subcommands.role.options.roletype.choices.youtube_role.name', 'pt-BR')
+                },
+                "value": "youtube_role"
             }
         ])
         .setRequired(true)
@@ -77,7 +93,7 @@ export const role = {
 
         const embed = new Embed()
             .setColor(`#${colors.default_color}`)
-            .setTitle(t('commands.setchannel.response_title', locale))
+            .setTitle(t('commands.set.subcommands.channel.response_title', locale))
             .setTimestamp(new Date())
             .setDescription(format(t(`commands.set.subcommands.role.response_body`, locale), {
                 "roleType": t(`commands.set.subcommands.role.options.roletype.choices.${roleType}.name`, locale)

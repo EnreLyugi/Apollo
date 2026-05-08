@@ -1,8 +1,12 @@
 import { Client, GatewayIntentBits } from 'discord.js';
 import * as clientEvents from './events';
+import { retry } from '../../utils/retry';
 
 const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates],
+    rest: {
+        timeout: 60_000,
+    },
 });
 
 client.on('clientReady', () => {
@@ -14,8 +18,12 @@ client.on('clientReady', () => {
 
 client.on('interactionCreate', clientEvents.onInteractionCreate);
 
-client.login(process.env.DISCORD_TOKEN).catch((error) => {
-    console.error('Error logging in:', error);
+retry(
+    () => client.login(process.env.DISCORD_TOKEN),
+    'WebSocketClientLogin',
+).catch(err => {
+    console.error('Error logging in after all retries:', err);
+    process.exit(1);
 });
 
 export default client;

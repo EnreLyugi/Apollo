@@ -103,7 +103,7 @@ export const inviteRole = {
 
         const embed = new Embed()
             .setColor(`#${colors.default_color}`)
-            .setTitle(t("commands.setchannel.response_title", locale))
+            .setTitle(t("commands.set.subcommands.channel.response_title", locale))
             .setTimestamp(new Date());
 
         if (role) {

@@ -268,40 +268,6 @@
                 }
             }
         },
-        "setchannel": {
-            "name": "setchannel",
-            "description": "Setup a channel for automatic messages",
-            "response_title": "Set Channel",
-            "response_body": "{channelType} changed successfully!",
-            "usage": "/setchannel <channel type> <channel>",
-            "options": {
-                "channeltype": {
-                    "name": "channeltype",
-                    "description": "Type of the channel to be set",
-                    "choices": {
-                        "welcome_channel": {
-                            "name": "Welcome Channel"
-                        },
-                        "birthday_channel": {
-                            "name": "Birthday Notification Channel"
-                        },
-                        "voice_activity_log_channel": {
-                            "name": "Call logs Channel"
-                        },
-                        "twitch_channel": {
-                            "name": "Twitch Notifications Channel"
-                        },
-                        "youtube_channel": {
-                            "name": "YouTube Notifications Channel"
-                        }
-                    }
-                },
-                "channel": {
-                    "name": "channel",
-                    "description": "Channel to be set"
-                }
-            }
-        },
         "addxprole": {
             "name": "addxprole",
             "description": "Set the roles given on reaching certain amount of XP.",
@@ -432,6 +398,12 @@
                                 },
                                 "birthday_role": {
                                     "name": "Birthday role"
+                                },
+                                "twitch_role": {
+                                    "name": "Twitch Notification role"
+                                },
+                                "youtube_role": {
+                                    "name": "YouTube Notification role"
                                 },
                                 "color": {
                                     "name": "Color role"

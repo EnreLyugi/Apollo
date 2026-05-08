@@ -3,7 +3,6 @@ import { help } from './help';
 import { xp, xpAdmin, xpUser } from './xp';
 import { disablexp } from './disablexp';
 import { enablexp } from './enablexp';
-import { setChannel } from './setChannel';
 import { addXpRole } from './addXpRole';
 import { listXpRoles } from './listXpRoles';
 import { editXpRole } from './editXpRole';
@@ -22,4 +21,4 @@ import { dm } from './dm';
 import { twitch } from './twitch';
 import { youtube } from './youtube';
 
-export const commands = [ping, help, xp, disablexp, enablexp, setChannel, addXpRole, listXpRoles, editXpRole, syncXpRoles, addColorRole, removeColorRole, xpUser, xpAdmin, music, set, shop, buy, ship, users, ticket, resetEconomy, dm, twitch, youtube];
+export const commands = [ping, help, xp, disablexp, enablexp, addXpRole, listXpRoles, editXpRole, syncXpRoles, addColorRole, removeColorRole, xpUser, xpAdmin, music, set, shop, buy, ship, users, ticket, resetEconomy, dm, twitch, youtube];
