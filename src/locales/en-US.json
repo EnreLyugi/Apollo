@@ -388,6 +388,7 @@
                     "description": "Set a role",
                     "usage": "/set role",
                     "response_body": "{roleType} updated sucessfully!",
+                    "response_reset": "{roleType} has been disabled!",
                     "options": {
                         "roletype": {
                             "name": "roletype",
@@ -421,6 +422,7 @@
                     "description": "Setup a channel for automatic messages",
                     "response_title": "Set Channel",
                     "response_body": "{channelType} changed successfully!",
+                    "response_reset": "{channelType} has been disabled!",
                     "usage": "/set channel <channel type> <channel>",
                     "options": {
                         "channeltype": {

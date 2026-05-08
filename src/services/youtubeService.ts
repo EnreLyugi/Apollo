@@ -144,6 +144,14 @@ export async function handleNewVideo(youtubeChannelId: string, videoId: string):
 
     if (entries.length === 0) return;
 
+    const entriesWithChannel: typeof entries = [];
+    for (const entry of entries) {
+        const guildData = await guildService.getGuildById(entry.guild_id);
+        if (guildData?.youtube_channel) entriesWithChannel.push(entry);
+    }
+
+    if (entriesWithChannel.length === 0) return;
+
     const video = await getVideoDetails(videoId);
     if (!video) return;
 
@@ -155,7 +163,7 @@ export async function handleNewVideo(youtubeChannelId: string, videoId: string):
     const isLive = snippet.liveBroadcastContent === 'live' || video.liveStreamingDetails;
     const client = (await import('../client')).default;
 
-    for (const entry of entries) {
+    for (const entry of entriesWithChannel) {
         try {
             const guildData = await guildService.getGuildById(entry.guild_id);
             if (!guildData?.youtube_channel) continue;

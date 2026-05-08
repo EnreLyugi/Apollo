@@ -140,13 +140,21 @@ async function handleStreamOnline(event: any): Promise<void> {
 
     if (streamers.length === 0) return;
 
+    const guildsWithChannel: typeof streamers = [];
+    for (const streamer of streamers) {
+        const guildData = await guildService.getGuildById(streamer.guild_id);
+        if (guildData?.twitch_channel) guildsWithChannel.push(streamer);
+    }
+
+    if (guildsWithChannel.length === 0) return;
+
     const stream = await getStreamByUserId(broadcaster_user_id);
     const user = await getUserByUsername(broadcaster_user_login);
     const game = stream?.game_id ? await getGameById(stream.game_id) : null;
 
     const client = (await import('../client')).default;
 
-    for (const streamer of streamers) {
+    for (const streamer of guildsWithChannel) {
         try {
             const guildData = await guildService.getGuildById(streamer.guild_id);
             if (!guildData?.twitch_channel) continue;

@@ -79,7 +79,7 @@ export const role = {
             "en-US": t('commands.set.subcommands.role.options.role.description', 'en-US'),
             "pt-BR": t('commands.set.subcommands.role.options.role.description', 'pt-BR')
         })
-        .setRequired(true)
+        .setRequired(false)
     ),
     usage: '/set role',
     execute: async (interaction: ChatInputCommandInteraction) => {
@@ -87,19 +87,26 @@ export const role = {
         const roleType = interaction.options.getString('roletype');
         const role = interaction.options.getRole('role');
 
-        if(!guild || !role || !roleType) return;
+        if(!guild || !roleType) return;
 
         const locale = mapLocale(interaction.locale);
 
         const embed = new Embed()
             .setColor(`#${colors.default_color}`)
             .setTitle(t('commands.set.subcommands.channel.response_title', locale))
-            .setTimestamp(new Date())
-            .setDescription(format(t(`commands.set.subcommands.role.response_body`, locale), {
+            .setTimestamp(new Date());
+
+        if (!role) {
+            await guildService.resetRole(roleType, guild.id);
+            embed.setDescription(format(t(`commands.set.subcommands.role.response_reset`, locale), {
                 "roleType": t(`commands.set.subcommands.role.options.roletype.choices.${roleType}.name`, locale)
             }));
-
-        await guildService.setRole(roleType, guild.id, role.id);
+        } else {
+            await guildService.setRole(roleType, guild.id, role.id);
+            embed.setDescription(format(t(`commands.set.subcommands.role.response_body`, locale), {
+                "roleType": t(`commands.set.subcommands.role.options.roletype.choices.${roleType}.name`, locale)
+            }));
+        }
 
         return interaction.reply({ embeds: [ embed.build() ] });
     },

@@ -50,7 +50,8 @@ client
 .on('inviteCreate', clientEvents.onInviteCreate) //When a invite is created
 .on('inviteDelete', clientEvents.onInviteDelete) //When a invite is deleted
 .on('guildCreate', clientEvents.onGuildCreate) //When a guild is created
-.on('guildDelete', clientEvents.onGuildDelete); //When a guild is deleted
+.on('guildDelete', clientEvents.onGuildDelete) //When a guild is deleted
+.on('channelDelete', clientEvents.onChannelDelete); //When a channel is deleted
 
 retry(
     () => client.login(process.env.DISCORD_TOKEN),

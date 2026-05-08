@@ -11,6 +11,41 @@ class GuildService {
     return await Guild.findByPk(id);
   }
 
+  public async resetRole(roleType: string, guild_id: string): Promise<Guild> {
+    try {
+      var guild = await this.getGuildById(guild_id);
+
+      if(!guild) {
+        guild = await this.createGuild(guild_id);
+      }
+
+      switch (roleType) {
+        case 'welcome_role':
+          guild.welcome_role = null;
+          break;
+        case 'birthday_role':
+          guild.birthday_role = null;
+          break;
+        case 'ticket_role':
+          guild.ticket_role = null;
+          break;
+        case 'twitch_role':
+          guild.twitch_role = null;
+          break;
+        case 'youtube_role':
+          guild.youtube_role = null;
+          break;
+        default:
+          throw new Error('Invalid Role Type')
+      }
+
+      await guild.save();
+      return guild;
+    } catch(e) {
+      throw new Error('An Error Ocurred on resetting role!');
+    }
+  }
+
   public async setRole(roleType: string, guild_id: string, role_id: string): Promise<Guild> {
     try {
       var guild = await this.getGuildById(guild_id);
@@ -95,6 +130,44 @@ class GuildService {
     if (!guild?.invite_roles) return null;
     const code = normalizeInviteCode(inviteCode);
     return guild.invite_roles[code] ?? null;
+  }
+
+  public async resetChannel(channelType: string, guild_id: string): Promise<Guild> {
+    try {
+      var guild = await this.getGuildById(guild_id);
+
+      if(!guild) {
+        guild = await this.createGuild(guild_id);
+      }
+
+      switch (channelType) {
+        case 'welcome_channel':
+          guild.welcome_channel = null;
+          break;
+        case 'birthday_channel':
+          guild.birthday_channel = null;
+          break;
+        case 'voice_activity_log_channel':
+          guild.voice_activity_log_channel = null;
+          break;
+        case 'ticket_channel':
+          guild.ticket_channel = null;
+          break;
+        case 'twitch_channel':
+          guild.twitch_channel = null;
+          break;
+        case 'youtube_channel':
+          guild.youtube_channel = null;
+          break;
+        default:
+          throw new Error('Invalid Channel Type')
+      }
+
+      await guild.save();
+      return guild;
+    } catch(e) {
+      throw new Error('An Error Ocurred on resetting channel!');
+    }
   }
 
   public async setChannel(channelType: string, guild_id: string, channel_id: string): Promise<Guild> {

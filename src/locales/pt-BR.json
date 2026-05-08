@@ -388,6 +388,7 @@
                     "description": "Configura um cargo",
                     "usage": "/set cargo",
                     "response_body": "{roleType} foi alterado com sucesso!",
+                    "response_reset": "{roleType} foi desconfigurado com sucesso!",
                     "options": {
                         "roletype": {
                             "name": "tipocargo",
@@ -421,6 +422,7 @@
                     "description": "Configura um canal para mensagens automáticas",
                     "response_title": "Setar Canal",
                     "response_body": "{channelType} foi alterado com sucesso!",
+                    "response_reset": "{channelType} foi desconfigurado com sucesso!",
                     "usage": "/set canal <tipo do canal> <canal>",
                     "options": {
                         "channeltype": {

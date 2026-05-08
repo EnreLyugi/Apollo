@@ -94,21 +94,31 @@ export const channel = {
                 "en-US": t('commands.set.subcommands.channel.options.channel.description', 'en-US'),
                 "pt-BR": t('commands.set.subcommands.channel.options.channel.description', 'pt-BR')
             })
-            .setRequired(true)
+            .setRequired(false)
         ),
-    usage: '/set channel <channeltype> <channel>',
+    usage: '/set channel <channeltype> [channel]',
     execute: async (interaction: ChatInputCommandInteraction) => {
         const guild = interaction.guild;
         const channelType = interaction.options.getString('channeltype');
         const channel = interaction.options.getChannel('textchannel');
 
-        if(!guild || !channel || !channelType) return;
+        if(!guild || !channelType) return;
 
         const locale = mapLocale(interaction.locale);
         const embed = new Embed()
             .setColor(`#${colors.default_color}`)
             .setTitle(t('commands.set.subcommands.channel.response_title', locale))
             .setTimestamp(new Date());
+
+        if (!channel) {
+            await guildService.resetChannel(channelType, guild.id);
+
+            embed.setDescription(format(t(`commands.set.subcommands.channel.response_reset`, locale), {
+                "channelType": t(`commands.set.subcommands.channel.options.channeltype.choices.${channelType}.name`, locale)
+            }));
+
+            return interaction.reply({ embeds: [ embed.build() ] });
+        }
 
         switch (channelType) {
             case 'welcome_channel':

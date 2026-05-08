@@ -8,5 +8,6 @@ import { onInviteCreate } from './onInviteCreate';
 import { onInviteDelete } from './onInviteDelete';
 import { onGuildCreate } from './onGuildCreate';
 import { onGuildDelete } from './onGuildDelete';
+import { onChannelDelete } from './onChannelDelete';
 
-export { onReady, onInteractionCreate, onMessageCreate, onVoiceStateUpdate, onGuildMemberAdd, onRoleDelete, syncDeletedColorRoles, onInviteCreate, onInviteDelete, onGuildCreate, onGuildDelete};
+export { onReady, onInteractionCreate, onMessageCreate, onVoiceStateUpdate, onGuildMemberAdd, onRoleDelete, syncDeletedColorRoles, onInviteCreate, onInviteDelete, onGuildCreate, onGuildDelete, onChannelDelete};
