@@ -738,6 +738,54 @@
                 "instructions": "Mensagens enviadas aqui serão encaminhadas para a DM do usuário."
             },
             "close_dm": "Seu ticket foi fechado. Obrigado por entrar em contato!"
+        },
+        "twitch": {
+            "name": "twitch",
+            "description": "Configuração de notificações de live da Twitch",
+            "usage": "/twitch",
+            "subcommands": {
+                "channel": {
+                    "name": "canal",
+                    "description": "Define o canal de notificações da Twitch",
+                    "options": {
+                        "channel": {
+                            "name": "canal",
+                            "description": "Canal para notificações de live"
+                        }
+                    },
+                    "success": "Canal de notificações da Twitch definido para {channel}!"
+                },
+                "add": {
+                    "name": "adicionar",
+                    "description": "Adiciona um streamer da Twitch para monitorar",
+                    "options": {
+                        "username": {
+                            "name": "usuario",
+                            "description": "Nome de usuário na Twitch"
+                        }
+                    },
+                    "success": "Streamer **{username}** adicionado com sucesso! Você será notificado quando ficar ao vivo.",
+                    "not_found": "Usuário **{username}** não encontrado na Twitch."
+                },
+                "remove": {
+                    "name": "remover",
+                    "description": "Remove um streamer do monitoramento",
+                    "options": {
+                        "username": {
+                            "name": "usuario",
+                            "description": "Nome de usuário na Twitch para remover"
+                        }
+                    },
+                    "success": "Streamer **{username}** removido com sucesso!",
+                    "not_found": "Streamer **{username}** não está sendo monitorado."
+                },
+                "list": {
+                    "name": "listar",
+                    "description": "Lista os streamers monitorados",
+                    "title": "Streamers Monitorados",
+                    "empty": "Nenhum streamer está sendo monitorado neste servidor."
+                }
+            }
         }
     },
     "application_commands": {

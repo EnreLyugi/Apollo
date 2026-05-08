@@ -9,5 +9,6 @@ import Ship from "./ship";
 import Ban from "./ban";
 import TicketCategory from "./ticketCategory";
 import Ticket from "./ticket";
+import TwitchStreamer from "./twitchStreamer";
 
-export { User, Embed, WelcomeSettings, XpRole, ColorRole, UserColor, Birthday, Ship, Ban, TicketCategory, Ticket };
+export { User, Embed, WelcomeSettings, XpRole, ColorRole, UserColor, Birthday, Ship, Ban, TicketCategory, Ticket, TwitchStreamer };

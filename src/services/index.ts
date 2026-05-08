@@ -11,5 +11,6 @@ import shipService from "./shipService";
 import banService from "./banService";
 import ticketService from "./ticketService";
 import ticketCategoryService from "./ticketCategoryService";
+import * as twitchService from "./twitchService";
 
-export { guildService, userService, xpChannelService, memberService, welcomeSettingsService, xpRoleService, xpService, colorRoleService, userColorService, shipService, banService, ticketService, ticketCategoryService }
+export { guildService, userService, xpChannelService, memberService, welcomeSettingsService, xpRoleService, xpService, colorRoleService, userColorService, shipService, banService, ticketService, ticketCategoryService, twitchService }

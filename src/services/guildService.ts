@@ -112,6 +112,9 @@ class GuildService {
         case 'ticket_channel':
           guild.ticket_channel = channel_id;
           break;
+        case 'twitch_channel':
+          guild.twitch_channel = channel_id;
+          break;
         default:
           throw new Error('Invalid Channel Type')
       }

@@ -4,6 +4,10 @@ export const validateEnv = () => {
     'DATABASE_URL',
     'DISCORD_TOKEN',
     'DISCORD_CLIENT_ID',
+    'TWITCH_CLIENT_ID',
+    'TWITCH_CLIENT_SECRET',
+    'TWITCH_EVENTSUB_SECRET',
+    'BASE_URL',
   ];
 
   requiredEnvVars.forEach((envVar) => {

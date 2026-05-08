@@ -738,6 +738,54 @@
                 "instructions": "Messages sent here will be forwarded to the user's DM."
             },
             "close_dm": "Your ticket has been closed. Thank you for contacting us!"
+        },
+        "twitch": {
+            "name": "twitch",
+            "description": "Twitch live notification settings",
+            "usage": "/twitch",
+            "subcommands": {
+                "channel": {
+                    "name": "channel",
+                    "description": "Sets the Twitch notification channel",
+                    "options": {
+                        "channel": {
+                            "name": "channel",
+                            "description": "Channel for live notifications"
+                        }
+                    },
+                    "success": "Twitch notification channel set to {channel}!"
+                },
+                "add": {
+                    "name": "add",
+                    "description": "Adds a Twitch streamer to monitor",
+                    "options": {
+                        "username": {
+                            "name": "username",
+                            "description": "Twitch username"
+                        }
+                    },
+                    "success": "Streamer **{username}** added successfully! You will be notified when they go live.",
+                    "not_found": "User **{username}** not found on Twitch."
+                },
+                "remove": {
+                    "name": "remove",
+                    "description": "Removes a streamer from monitoring",
+                    "options": {
+                        "username": {
+                            "name": "username",
+                            "description": "Twitch username to remove"
+                        }
+                    },
+                    "success": "Streamer **{username}** removed successfully!",
+                    "not_found": "Streamer **{username}** is not being monitored."
+                },
+                "list": {
+                    "name": "list",
+                    "description": "Lists monitored Twitch streamers",
+                    "title": "Monitored Streamers",
+                    "empty": "No streamers are being monitored in this server."
+                }
+            }
         }
     },
     "application_commands": {

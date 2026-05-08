@@ -1,14 +1,16 @@
 import { validateEnv } from './utils/validateEnv';
 import { loadDatabase } from './utils/loadDatabase';
 import { loadApplicationCommands } from './utils/loadApplicationCommands';
+import { startWebhookServer } from './server';
 
 console.log(`\x1b[32m%s\x1b[0m`, "Bot developed by: Enre Lyugi");
 
 (async () => {
-    validateEnv(); //Validate if the required Environment variables are set
-    await loadDatabase(); //Connects to Database
-    await loadApplicationCommands(); //Setup slash commands
-    await import('./client/'); //Constructs Discord Client
+    validateEnv();
+    await loadDatabase();
+    startWebhookServer();
+    await loadApplicationCommands();
+    await import('./client/');
     const { ready } = await import('./websocket');
     await ready;
 })();
