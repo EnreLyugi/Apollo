@@ -287,6 +287,12 @@
                         },
                         "voice_activity_log_channel": {
                             "name": "Call logs Channel"
+                        },
+                        "twitch_channel": {
+                            "name": "Twitch Notifications Channel"
+                        },
+                        "youtube_channel": {
+                            "name": "YouTube Notifications Channel"
                         }
                     }
                 },
@@ -457,6 +463,12 @@
                                 },
                                 "voice_activity_log_channel": {
                                     "name": "Call logs Channel"
+                                },
+                                "twitch_channel": {
+                                    "name": "Twitch Notifications Channel"
+                                },
+                                "youtube_channel": {
+                                    "name": "YouTube Notifications Channel"
                                 }
                             }
                         },
@@ -744,17 +756,6 @@
             "description": "Twitch live notification settings",
             "usage": "/twitch",
             "subcommands": {
-                "channel": {
-                    "name": "channel",
-                    "description": "Sets the Twitch notification channel",
-                    "options": {
-                        "channel": {
-                            "name": "channel",
-                            "description": "Channel for live notifications"
-                        }
-                    },
-                    "success": "Twitch notification channel set to {channel}!"
-                },
                 "add": {
                     "name": "add",
                     "description": "Adds a Twitch streamer to monitor",
@@ -784,6 +785,43 @@
                     "description": "Lists monitored Twitch streamers",
                     "title": "Monitored Streamers",
                     "empty": "No streamers are being monitored in this server."
+                }
+            }
+        },
+        "youtube": {
+            "name": "youtube",
+            "description": "YouTube notification settings",
+            "usage": "/youtube",
+            "subcommands": {
+                "add": {
+                    "name": "add",
+                    "description": "Adds a YouTube channel to monitor",
+                    "options": {
+                        "channel": {
+                            "name": "channel",
+                            "description": "YouTube channel name, @handle or ID"
+                        }
+                    },
+                    "success": "Channel **{channel}** added successfully! You will be notified of new videos and lives.",
+                    "not_found": "Channel **{channel}** not found on YouTube."
+                },
+                "remove": {
+                    "name": "remove",
+                    "description": "Removes a YouTube channel from monitoring",
+                    "options": {
+                        "channel": {
+                            "name": "channel",
+                            "description": "YouTube channel name to remove"
+                        }
+                    },
+                    "success": "Channel **{channel}** removed successfully!",
+                    "not_found": "Channel **{channel}** is not being monitored."
+                },
+                "list": {
+                    "name": "list",
+                    "description": "Lists monitored YouTube channels",
+                    "title": "Monitored Channels",
+                    "empty": "No YouTube channels are being monitored in this server."
                 }
             }
         }

@@ -10,5 +10,6 @@ import Ban from "./ban";
 import TicketCategory from "./ticketCategory";
 import Ticket from "./ticket";
 import TwitchStreamer from "./twitchStreamer";
+import YouTubeChannel from "./youtubeChannel";
 
-export { User, Embed, WelcomeSettings, XpRole, ColorRole, UserColor, Birthday, Ship, Ban, TicketCategory, Ticket, TwitchStreamer };
+export { User, Embed, WelcomeSettings, XpRole, ColorRole, UserColor, Birthday, Ship, Ban, TicketCategory, Ticket, TwitchStreamer, YouTubeChannel };

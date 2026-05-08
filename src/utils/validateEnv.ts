@@ -8,6 +8,7 @@ export const validateEnv = () => {
     'TWITCH_CLIENT_SECRET',
     'TWITCH_EVENTSUB_SECRET',
     'BASE_URL',
+    'YOUTUBE_API_KEY',
   ];
 
   requiredEnvVars.forEach((envVar) => {

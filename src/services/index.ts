@@ -12,5 +12,6 @@ import banService from "./banService";
 import ticketService from "./ticketService";
 import ticketCategoryService from "./ticketCategoryService";
 import * as twitchService from "./twitchService";
+import * as youtubeService from "./youtubeService";
 
-export { guildService, userService, xpChannelService, memberService, welcomeSettingsService, xpRoleService, xpService, colorRoleService, userColorService, shipService, banService, ticketService, ticketCategoryService, twitchService }
+export { guildService, userService, xpChannelService, memberService, welcomeSettingsService, xpRoleService, xpService, colorRoleService, userColorService, shipService, banService, ticketService, ticketCategoryService, twitchService, youtubeService }

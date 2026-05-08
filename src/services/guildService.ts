@@ -115,6 +115,9 @@ class GuildService {
         case 'twitch_channel':
           guild.twitch_channel = channel_id;
           break;
+        case 'youtube_channel':
+          guild.youtube_channel = channel_id;
+          break;
         default:
           throw new Error('Invalid Channel Type')
       }

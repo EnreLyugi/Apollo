@@ -4,6 +4,7 @@ import crypto from 'crypto';
 const app = express();
 
 app.use('/webhooks/twitch', express.raw({ type: 'application/json' }));
+app.use('/webhooks/youtube', express.raw({ type: 'application/atom+xml' }));
 app.use(express.json());
 
 const TWITCH_MESSAGE_ID = 'twitch-eventsub-message-id';
@@ -67,8 +68,38 @@ app.post('/webhooks/twitch', async (req, res) => {
     res.status(204).send();
 });
 
+// YouTube PubSubHubbub verification
+app.get('/webhooks/youtube', (req, res) => {
+    const challenge = req.query['hub.challenge'] as string;
+    if (challenge) {
+        return res.status(200).type('text/plain').send(challenge);
+    }
+    res.status(400).send('Missing challenge');
+});
+
+// YouTube PubSubHubbub notification
+app.post('/webhooks/youtube', async (req, res) => {
+    res.status(204).send();
+
+    try {
+        const xml = (req.body as Buffer).toString();
+        const videoIdMatch = xml.match(/<yt:videoId>([^<]+)<\/yt:videoId>/);
+        const channelIdMatch = xml.match(/<yt:channelId>([^<]+)<\/yt:channelId>/);
+
+        if (videoIdMatch && channelIdMatch) {
+            const { handleNewVideo } = require('./services/youtubeService');
+            handleNewVideo(channelIdMatch[1], videoIdMatch[1]).catch((err: any) =>
+                console.error('Error handling YouTube notification:', err)
+            );
+        }
+    } catch (err) {
+        console.error('Error parsing YouTube webhook:', err);
+    }
+});
+
 export function startWebhookServer(): void {
     const { initTwitchWebhookHandler, syncTwitchSubscriptions } = require('./services/twitchService');
+    const { syncYouTubeSubscriptions } = require('./services/youtubeService');
     initTwitchWebhookHandler();
 
     const port = process.env.PORT || 3000;
@@ -76,6 +107,9 @@ export function startWebhookServer(): void {
         console.log(`\x1b[32m%s\x1b[0m`, `HTTP server listening on port ${port}`);
         syncTwitchSubscriptions().catch((err: any) =>
             console.error('Error syncing Twitch subscriptions:', err)
+        );
+        syncYouTubeSubscriptions().catch((err: any) =>
+            console.error('Error syncing YouTube subscriptions:', err)
         );
     });
 }
