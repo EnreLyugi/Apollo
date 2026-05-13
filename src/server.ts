@@ -98,18 +98,11 @@ app.post('/webhooks/youtube', async (req, res) => {
 });
 
 export function startWebhookServer(): void {
-    const { initTwitchWebhookHandler, syncTwitchSubscriptions } = require('./services/twitchService');
-    const { syncYouTubeSubscriptions } = require('./services/youtubeService');
+    const { initTwitchWebhookHandler } = require('./services/twitchService');
     initTwitchWebhookHandler();
 
     const port = process.env.PORT || 3000;
     app.listen(port, () => {
         console.log(`\x1b[32m%s\x1b[0m`, `HTTP server listening on port ${port}`);
-        syncTwitchSubscriptions().catch((err: any) =>
-            console.error('Error syncing Twitch subscriptions:', err)
-        );
-        syncYouTubeSubscriptions().catch((err: any) =>
-            console.error('Error syncing YouTube subscriptions:', err)
-        );
     });
 }

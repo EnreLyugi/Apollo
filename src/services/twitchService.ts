@@ -1,6 +1,8 @@
 import { EmbedBuilder, TextChannel } from 'discord.js';
+import { Op } from 'sequelize';
 import TwitchStreamer from '../models/twitchStreamer';
 import guildService from './guildService';
+import { getBotPresentGuildIds } from '../utils/botGuildContext';
 
 const TWITCH_API_BASE = 'https://api.twitch.tv/helix';
 const TWITCH_AUTH_URL = 'https://id.twitch.tv/oauth2/token';
@@ -90,6 +92,35 @@ export async function deleteEventSubSubscription(subscriptionId: string): Promis
     });
 }
 
+/** One Twitch EventSub per broadcaster; reuse sub id from rows in guilds where this bot is present. */
+async function ensureEventSubForBroadcaster(
+    twitchUserId: string,
+    activeGuildIds: Set<string> | null
+): Promise<string | null> {
+    if (activeGuildIds && activeGuildIds.size > 0) {
+        const rowWithSub = await TwitchStreamer.findOne({
+            where: {
+                twitch_user_id: twitchUserId,
+                guild_id: { [Op.in]: [...activeGuildIds] },
+                subscription_id: { [Op.ne]: null },
+            },
+            order: [['id', 'ASC']],
+        });
+        if (rowWithSub?.subscription_id) {
+            return rowWithSub.subscription_id;
+        }
+    } else {
+        const rowWithSub = await TwitchStreamer.findOne({
+            where: { twitch_user_id: twitchUserId, subscription_id: { [Op.ne]: null } },
+            order: [['id', 'ASC']],
+        });
+        if (rowWithSub?.subscription_id) {
+            return rowWithSub.subscription_id;
+        }
+    }
+    return await createEventSubSubscription(twitchUserId);
+}
+
 const EMBED_DESCRIPTION_MAX = 4096;
 
 function normalizeCustomDescription(text: string | null | undefined): string | null {
@@ -123,15 +154,45 @@ export async function addStreamer(
         return existing;
     }
 
-    const subscriptionId = await createEventSubSubscription(user.id);
-
-    return await TwitchStreamer.create({
+    const activeGuildIds = await getBotPresentGuildIds();
+    const subscriptionId = await ensureEventSubForBroadcaster(user.id, activeGuildIds);
+    const created = await TwitchStreamer.create({
         guild_id: guildId,
         twitch_username: user.login,
         twitch_user_id: user.id,
         subscription_id: subscriptionId,
         custom_description: normalized === undefined ? null : normalized,
     });
+
+    if (subscriptionId) {
+        if (activeGuildIds && activeGuildIds.size > 0) {
+            await TwitchStreamer.update(
+                { subscription_id: subscriptionId },
+                {
+                    where: {
+                        twitch_user_id: user.id,
+                        guild_id: { [Op.in]: [...activeGuildIds] },
+                    },
+                }
+            );
+            await TwitchStreamer.update(
+                { subscription_id: null },
+                {
+                    where: {
+                        twitch_user_id: user.id,
+                        guild_id: { [Op.notIn]: [...activeGuildIds] },
+                    },
+                }
+            );
+        } else {
+            await TwitchStreamer.update(
+                { subscription_id: subscriptionId },
+                { where: { twitch_user_id: user.id } }
+            );
+        }
+    }
+
+    return created;
 }
 
 export async function setTwitchStreamerDescription(
@@ -157,15 +218,33 @@ export async function removeStreamer(guildId: string, username: string): Promise
     });
     if (!streamer) return false;
 
-    if (streamer.subscription_id) {
+    const twitchUserId = streamer.twitch_user_id;
+    const subscriptionId = streamer.subscription_id;
+
+    await streamer.destroy();
+
+    const activeGuildIds = await getBotPresentGuildIds();
+    let remainingActive = 0;
+    if (activeGuildIds && activeGuildIds.size > 0) {
+        remainingActive = await TwitchStreamer.count({
+            where: {
+                twitch_user_id: twitchUserId,
+                guild_id: { [Op.in]: [...activeGuildIds] },
+            },
+        });
+    } else {
+        remainingActive = await TwitchStreamer.count({ where: { twitch_user_id: twitchUserId } });
+    }
+
+    if (remainingActive === 0 && subscriptionId) {
         try {
-            await deleteEventSubSubscription(streamer.subscription_id);
+            await deleteEventSubSubscription(subscriptionId);
         } catch (e) {
             console.error('Error deleting EventSub subscription:', e);
         }
+        await TwitchStreamer.update({ subscription_id: null }, { where: { twitch_user_id: twitchUserId } });
     }
 
-    await streamer.destroy();
     return true;
 }
 
@@ -176,9 +255,12 @@ export async function getStreamers(guildId: string): Promise<TwitchStreamer[]> {
 async function handleStreamOnline(event: any): Promise<void> {
     const { broadcaster_user_id, broadcaster_user_login, broadcaster_user_name } = event;
 
-    const streamers = await TwitchStreamer.findAll({
-        where: { twitch_user_id: broadcaster_user_id },
-    });
+    const client = (await import('../client')).default;
+    const streamers = (
+        await TwitchStreamer.findAll({
+            where: { twitch_user_id: broadcaster_user_id },
+        })
+    ).filter((s) => client.guilds.cache.has(s.guild_id));
 
     if (streamers.length === 0) return;
 
@@ -193,8 +275,6 @@ async function handleStreamOnline(event: any): Promise<void> {
     const stream = await getStreamByUserId(broadcaster_user_id);
     const user = await getUserByUsername(broadcaster_user_login);
     const game = stream?.game_id ? await getGameById(stream.game_id) : null;
-
-    const client = (await import('../client')).default;
 
     for (const streamer of guildsWithChannel) {
         try {
@@ -252,8 +332,35 @@ async function handleStreamOnline(event: any): Promise<void> {
 
 export async function syncTwitchSubscriptions(): Promise<void> {
     try {
+        const activeGuildIds = await getBotPresentGuildIds();
+        if (!activeGuildIds) {
+            console.warn('Twitch subscription sync skipped: Discord client is not ready yet.');
+            return;
+        }
+        if (activeGuildIds.size === 0) {
+            console.warn('Twitch subscription sync skipped: bot is not in any guild.');
+            return;
+        }
+
         const allStreamers = await TwitchStreamer.findAll();
         if (allStreamers.length === 0) return;
+
+        const activeStreamers = allStreamers.filter((s) => activeGuildIds.has(s.guild_id));
+        const activeBroadcasterIds = new Set(activeStreamers.map((s) => s.twitch_user_id));
+        const allBroadcasterIds = new Set(allStreamers.map((s) => s.twitch_user_id));
+
+        for (const bid of allBroadcasterIds) {
+            if (activeBroadcasterIds.has(bid)) continue;
+            const holder = allStreamers.find((s) => s.twitch_user_id === bid && s.subscription_id);
+            if (holder?.subscription_id) {
+                try {
+                    await deleteEventSubSubscription(holder.subscription_id);
+                } catch (e) {
+                    console.error(`Error deleting orphan Twitch EventSub for broadcaster ${bid}:`, e);
+                }
+            }
+            await TwitchStreamer.update({ subscription_id: null }, { where: { twitch_user_id: bid } });
+        }
 
         const token = await getAppAccessToken();
         const res = await fetch(`${TWITCH_API_BASE}/eventsub/subscriptions`, {
@@ -262,19 +369,62 @@ export async function syncTwitchSubscriptions(): Promise<void> {
                 'Authorization': `Bearer ${token}`,
             },
         });
-        const data = await res.json() as { data: { id: string; status: string; condition: { broadcaster_user_id: string } }[] };
-        const activeSubIds = new Set((data.data || []).filter(s => s.status === 'enabled').map(s => s.id));
+        const data = await res.json() as {
+            data: { id: string; status: string; type: string; condition: { broadcaster_user_id: string } }[];
+        };
 
-        for (const streamer of allStreamers) {
-            if (!streamer.subscription_id || !activeSubIds.has(streamer.subscription_id)) {
-                const newSubId = await createEventSubSubscription(streamer.twitch_user_id);
-                streamer.subscription_id = newSubId;
-                await streamer.save();
-                console.log(`Twitch subscription re-created for ${streamer.twitch_username}`);
+        const activeSubByBroadcaster = new Map<string, string>();
+        for (const s of data.data || []) {
+            if (s.status !== 'enabled' || s.type !== 'stream.online') continue;
+            const broadcasterId = s.condition?.broadcaster_user_id;
+            if (!broadcasterId || activeSubByBroadcaster.has(broadcasterId)) continue;
+            activeSubByBroadcaster.set(broadcasterId, s.id);
+        }
+
+        const uniqueBroadcasterIds = [...activeBroadcasterIds];
+
+        for (const twitchUserId of uniqueBroadcasterIds) {
+            let subId = activeSubByBroadcaster.get(twitchUserId) || null;
+            if (!subId) {
+                subId = await createEventSubSubscription(twitchUserId);
+                const sample = activeStreamers.find((s) => s.twitch_user_id === twitchUserId);
+                if (subId) {
+                    console.log(
+                        `Twitch EventSub created for broadcaster ${sample?.twitch_username ?? twitchUserId}`
+                    );
+                } else {
+                    console.warn(
+                        `Twitch EventSub create failed for broadcaster ${sample?.twitch_username ?? twitchUserId}`
+                    );
+                }
+            }
+
+            if (subId) {
+                await TwitchStreamer.update(
+                    { subscription_id: subId },
+                    {
+                        where: {
+                            twitch_user_id: twitchUserId,
+                            guild_id: { [Op.in]: [...activeGuildIds] },
+                        },
+                    }
+                );
+                await TwitchStreamer.update(
+                    { subscription_id: null },
+                    {
+                        where: {
+                            twitch_user_id: twitchUserId,
+                            guild_id: { [Op.notIn]: [...activeGuildIds] },
+                        },
+                    }
+                );
             }
         }
 
-        console.log(`\x1b[32m%s\x1b[0m`, `Twitch subscriptions synced (${allStreamers.length} streamers)`);
+        console.log(
+            `\x1b[32m%s\x1b[0m`,
+            `Twitch subscriptions synced (${activeStreamers.length} active guild rows, ${uniqueBroadcasterIds.length} broadcasters; ${allStreamers.length} total DB rows)`
+        );
     } catch (err) {
         console.error('Error syncing Twitch subscriptions:', err);
     }

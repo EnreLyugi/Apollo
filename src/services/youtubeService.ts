@@ -1,6 +1,8 @@
 import { EmbedBuilder, TextChannel } from 'discord.js';
+import { Op } from 'sequelize';
 import YouTubeChannel from '../models/youtubeChannel';
 import guildService from './guildService';
+import { getBotPresentGuildIds } from '../utils/botGuildContext';
 
 const YOUTUBE_API_BASE = 'https://www.googleapis.com/youtube/v3';
 const PUBSUBHUBBUB_HUB = 'https://pubsubhubbub.appspot.com/subscribe';
@@ -108,6 +110,29 @@ export async function unsubscribeFromPush(youtubeChannelId: string): Promise<boo
     return res.status === 202 || res.status === 204;
 }
 
+async function countActiveGuildRowsForYoutubeChannel(
+    youtubeChannelId: string,
+    activeGuildIds: Set<string> | null
+): Promise<number> {
+    if (activeGuildIds && activeGuildIds.size > 0) {
+        return await YouTubeChannel.count({
+            where: {
+                youtube_channel_id: youtubeChannelId,
+                guild_id: { [Op.in]: [...activeGuildIds] },
+            },
+        });
+    }
+    return await YouTubeChannel.count({ where: { youtube_channel_id: youtubeChannelId } });
+}
+
+async function maybeUnsubscribeYoutubeIfUnused(youtubeChannelId: string): Promise<void> {
+    const activeGuildIds = await getBotPresentGuildIds();
+    const n = await countActiveGuildRowsForYoutubeChannel(youtubeChannelId, activeGuildIds);
+    if (n === 0) {
+        await unsubscribeFromPush(youtubeChannelId);
+    }
+}
+
 export async function addChannel(
     guildId: string,
     query: string,
@@ -132,7 +157,11 @@ export async function addChannel(
         return existing;
     }
 
-    await subscribeToPush(channel.id);
+    const activeGuildIds = await getBotPresentGuildIds();
+    const activeRowsForTopic = await countActiveGuildRowsForYoutubeChannel(channel.id, activeGuildIds);
+    if (activeRowsForTopic === 0) {
+        await subscribeToPush(channel.id);
+    }
 
     return await YouTubeChannel.create({
         guild_id: guildId,
@@ -172,13 +201,15 @@ export async function removeChannel(guildId: string, channelName: string): Promi
             where: { guild_id: guildId, youtube_channel_id: channelName },
         });
         if (!byId) return false;
-        await unsubscribeFromPush(byId.youtube_channel_id);
+        const yid = byId.youtube_channel_id;
         await byId.destroy();
+        await maybeUnsubscribeYoutubeIfUnused(yid);
         return true;
     }
 
-    await unsubscribeFromPush(entry.youtube_channel_id);
+    const yid = entry.youtube_channel_id;
     await entry.destroy();
+    await maybeUnsubscribeYoutubeIfUnused(yid);
     return true;
 }
 
@@ -202,8 +233,13 @@ export async function handleNewVideo(youtubeChannelId: string, videoId: string):
 
     if (entries.length === 0) return;
 
+    const client = (await import('../client')).default;
+    const entriesInBotGuilds = entries.filter((e) => client.guilds.cache.has(e.guild_id));
+
+    if (entriesInBotGuilds.length === 0) return;
+
     const entriesWithChannel: typeof entries = [];
-    for (const entry of entries) {
+    for (const entry of entriesInBotGuilds) {
         const guildData = await guildService.getGuildById(entry.guild_id);
         if (guildData?.youtube_channel) entriesWithChannel.push(entry);
     }
@@ -219,7 +255,6 @@ export async function handleNewVideo(youtubeChannelId: string, videoId: string):
     if (publishedAt < fifteenMinutesAgo) return;
 
     const isLive = snippet.liveBroadcastContent === 'live' || video.liveStreamingDetails;
-    const client = (await import('../client')).default;
 
     for (const entry of entriesWithChannel) {
         try {
@@ -265,15 +300,36 @@ export async function handleNewVideo(youtubeChannelId: string, videoId: string):
 
 export async function syncYouTubeSubscriptions(): Promise<void> {
     try {
-        const allChannels = await YouTubeChannel.findAll();
-        const uniqueChannelIds = [...new Set(allChannels.map(c => c.youtube_channel_id))];
+        const activeGuildIds = await getBotPresentGuildIds();
+        if (!activeGuildIds) {
+            console.warn('YouTube subscription sync skipped: Discord client is not ready yet.');
+            return;
+        }
+        if (activeGuildIds.size === 0) {
+            console.warn('YouTube subscription sync skipped: bot is not in any guild.');
+            return;
+        }
 
-        for (const channelId of uniqueChannelIds) {
+        const allChannels = await YouTubeChannel.findAll();
+        const activeRows = allChannels.filter((c) => activeGuildIds.has(c.guild_id));
+        const uniqueActiveIds = [...new Set(activeRows.map((c) => c.youtube_channel_id))];
+        const uniqueAllIds = [...new Set(allChannels.map((c) => c.youtube_channel_id))];
+
+        for (const channelId of uniqueAllIds) {
+            if (!uniqueActiveIds.includes(channelId)) {
+                await unsubscribeFromPush(channelId);
+            }
+        }
+
+        for (const channelId of uniqueActiveIds) {
             await subscribeToPush(channelId);
         }
 
-        if (uniqueChannelIds.length > 0) {
-            console.log(`\x1b[32m%s\x1b[0m`, `YouTube subscriptions renewed (${uniqueChannelIds.length} channels)`);
+        if (uniqueActiveIds.length > 0) {
+            console.log(
+                `\x1b[32m%s\x1b[0m`,
+                `YouTube subscriptions renewed (${uniqueActiveIds.length} channels in ${activeRows.length} active guild rows; ${allChannels.length} total DB rows)`
+            );
         }
     } catch (err) {
         console.error('Error syncing YouTube subscriptions:', err);

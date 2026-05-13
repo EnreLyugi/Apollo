@@ -1,6 +1,8 @@
 import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 import * as clientEvents from './events/';
 import { retry } from '../utils/retry';
+import { syncTwitchSubscriptions } from '../services/twitchService';
+import { syncYouTubeSubscriptions } from '../services/youtubeService';
 
 const client = new Client({
     intents: [
@@ -40,6 +42,12 @@ client
         await clientEvents.syncDeletedColorRoles(guild);
     }
 
+    syncTwitchSubscriptions().catch((err: unknown) =>
+        console.error('Error syncing Twitch subscriptions:', err)
+    );
+    syncYouTubeSubscriptions().catch((err: unknown) =>
+        console.error('Error syncing YouTube subscriptions:', err)
+    );
 }) //When client is ready
 //.on('clientReady', clientEvents.onReady) //When client is ready
 .on('interactionCreate', clientEvents.onInteractionCreate) //When a interaction is created
