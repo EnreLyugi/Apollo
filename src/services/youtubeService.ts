@@ -9,6 +9,27 @@ const YOUTUBE_TOPIC_BASE = 'https://www.youtube.com/xml/feeds/videos.xml?channel
 const notifiedVideos = new Set<string>();
 const MAX_CACHE_SIZE = 500;
 
+const EMBED_DESCRIPTION_MAX = 4096;
+
+function normalizeCustomDescription(text: string | null | undefined): string | null {
+    if (text === null || text === undefined) return null;
+    const trimmed = text.trim();
+    if (trimmed.length === 0) return null;
+    return trimmed.slice(0, EMBED_DESCRIPTION_MAX);
+}
+
+function buildYoutubeNotificationDescription(
+    custom: string | null | undefined,
+    isLive: boolean
+): string | undefined {
+    const parts: string[] = [];
+    const customTrim = custom?.trim();
+    if (customTrim) parts.push(customTrim.slice(0, EMBED_DESCRIPTION_MAX));
+    if (isLive) parts.push('🔴 Ao vivo agora!');
+    if (parts.length === 0) return undefined;
+    return parts.join('\n\n').slice(0, EMBED_DESCRIPTION_MAX);
+}
+
 export async function getChannelByUsername(query: string): Promise<{ id: string; title: string; thumbnail: string } | null> {
     const apiKey = process.env.YOUTUBE_API_KEY!;
 
@@ -87,14 +108,29 @@ export async function unsubscribeFromPush(youtubeChannelId: string): Promise<boo
     return res.status === 202 || res.status === 204;
 }
 
-export async function addChannel(guildId: string, query: string): Promise<YouTubeChannel | null> {
+export async function addChannel(
+    guildId: string,
+    query: string,
+    customText?: string | null
+): Promise<YouTubeChannel | null> {
     const channel = await getChannelByUsername(query);
     if (!channel) return null;
+
+    const normalized =
+        customText === null || customText === undefined
+            ? undefined
+            : normalizeCustomDescription(customText);
 
     const existing = await YouTubeChannel.findOne({
         where: { guild_id: guildId, youtube_channel_id: channel.id },
     });
-    if (existing) return existing;
+    if (existing) {
+        if (normalized !== undefined) {
+            existing.custom_description = normalized;
+            await existing.save();
+        }
+        return existing;
+    }
 
     await subscribeToPush(channel.id);
 
@@ -102,7 +138,29 @@ export async function addChannel(guildId: string, query: string): Promise<YouTub
         guild_id: guildId,
         youtube_channel_id: channel.id,
         channel_name: channel.title,
+        custom_description: normalized === undefined ? null : normalized,
     });
+}
+
+export async function setYoutubeChannelDescription(
+    guildId: string,
+    channelQuery: string,
+    customText: string | null
+): Promise<YouTubeChannel | null> {
+    const entry =
+        (await YouTubeChannel.findOne({
+            where: { guild_id: guildId, channel_name: channelQuery },
+        })) ||
+        (await YouTubeChannel.findOne({
+            where: { guild_id: guildId, youtube_channel_id: channelQuery },
+        }));
+    if (!entry) return null;
+    entry.custom_description =
+        customText === null || customText === undefined
+            ? null
+            : normalizeCustomDescription(customText);
+    await entry.save();
+    return entry;
 }
 
 export async function removeChannel(guildId: string, channelName: string): Promise<boolean> {
@@ -184,8 +242,9 @@ export async function handleNewVideo(youtubeChannelId: string, videoId: string):
                 .setURL(`https://www.youtube.com/watch?v=${videoId}`)
                 .setTimestamp(new Date(snippet.publishedAt));
 
-            if (isLive) {
-                embed.setDescription('🔴 Ao vivo agora!');
+            const desc = buildYoutubeNotificationDescription(entry.custom_description, isLive);
+            if (desc) {
+                embed.setDescription(desc);
             }
 
             if (snippet.thumbnails?.maxres?.url) {

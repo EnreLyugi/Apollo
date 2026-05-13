@@ -127,10 +127,18 @@ export const help: Command = {
                     commandUsage: t(`commands.${command.data.name}.usage`, locale)
                 }));
 
-            // Check if there are subcommands in the directory
+            // Check if there are subcommands in the directory (notifications uses custom help text)
             const subcommandsPath = path.join(__dirname, 'subcommands', commandName);
-            if (fs.existsSync(subcommandsPath)) {
-                let subcommandsText = '\n\n' + t('commands.help.specific_command.subcommands_title', locale) + '\n';
+            let subcommandsText = '';
+            if (commandName === 'notifications') {
+                subcommandsText = '\n\n' + t('commands.help.specific_command.subcommands_title', locale) + '\n';
+                subcommandsText += t('commands.notifications.help.twitch', locale) + '\n';
+                subcommandsText += t('commands.notifications.help.youtube', locale) + '\n\n';
+                subcommandsText += t('commands.notifications.help.action', locale);
+                const currentEmbed = commandInfo.build();
+                commandInfo.setDescription((currentEmbed.data.description || '') + subcommandsText);
+            } else if (fs.existsSync(subcommandsPath)) {
+                subcommandsText = '\n\n' + t('commands.help.specific_command.subcommands_title', locale) + '\n';
                 
                 const subcommandFiles = fs.readdirSync(subcommandsPath)
                     .filter(file => file.endsWith('.ts') && !file.startsWith('index'));

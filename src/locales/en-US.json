@@ -725,10 +725,50 @@
             },
             "close_dm": "Your ticket has been closed. Thank you for contacting us!"
         },
+        "notifications": {
+            "name": "notifications",
+            "description": "Twitch live and YouTube upload notifications",
+            "usage": "/notifications twitch | /notifications youtube — **action** (add / remove / list / set-description), optional **custom-text**",
+            "subcommands": {
+                "twitch": {
+                    "name": "twitch",
+                    "description": "Twitch live notification settings"
+                },
+                "youtube": {
+                    "name": "youtube",
+                    "description": "YouTube upload notification settings"
+                }
+            },
+            "options": {
+                "action": {
+                    "name": "action",
+                    "description": "What to do"
+                },
+                "username": {
+                    "description": "Twitch username (for add, remove, and set-description)"
+                },
+                "channel": {
+                    "description": "YouTube channel name, @handle or ID (for add, remove, and set-description)"
+                },
+                "custom_text": {
+                    "name": "custom-text",
+                    "description": "Optional embed text; omit with set-description to clear"
+                }
+            },
+            "errors": {
+                "username_required": "Enter **username** when action is add, remove, or set-description.",
+                "channel_required": "Enter **channel** when action is add, remove, or set-description."
+            },
+            "help": {
+                "twitch": "`twitch` — **action** (add / remove / list / set-description), **username**, optional **custom-text** for embed text.",
+                "youtube": "`youtube` — same pattern with **channel** instead of username.",
+                "action": "**action** is a dropdown (add, remove, list, set-description), same pattern as `/set channel` or `/music loop` (mode)."
+            }
+        },
         "twitch": {
             "name": "twitch",
             "description": "Twitch live notification settings",
-            "usage": "/twitch",
+            "usage": "/notifications twitch",
             "subcommands": {
                 "add": {
                     "name": "add",
@@ -737,6 +777,10 @@
                         "username": {
                             "name": "username",
                             "description": "Twitch username"
+                        },
+                        "custom_text": {
+                            "name": "custom-text",
+                            "description": "Optional text inside live notification embeds for this streamer"
                         }
                     },
                     "success": "Streamer **{username}** added successfully! You will be notified when they go live.",
@@ -758,14 +802,22 @@
                     "name": "list",
                     "description": "Lists monitored Twitch streamers",
                     "title": "Monitored Streamers",
-                    "empty": "No streamers are being monitored in this server."
+                    "empty": "No streamers are being monitored in this server.",
+                    "custom_text_badge": "custom embed text"
+                },
+                "set_description": {
+                    "name": "set-description",
+                    "description": "Set or clear custom text inside live notification embeds",
+                    "success": "Custom embed text updated for **{username}**.",
+                    "cleared": "Custom embed text removed for **{username}**.",
+                    "not_found": "Streamer **{username}** is not being monitored."
                 }
             }
         },
         "youtube": {
             "name": "youtube",
             "description": "YouTube notification settings",
-            "usage": "/youtube",
+            "usage": "/notifications youtube",
             "subcommands": {
                 "add": {
                     "name": "add",
@@ -774,6 +826,10 @@
                         "channel": {
                             "name": "channel",
                             "description": "YouTube channel name, @handle or ID"
+                        },
+                        "custom_text": {
+                            "name": "custom-text",
+                            "description": "Optional text inside notification embeds for this channel"
                         }
                     },
                     "success": "Channel **{channel}** added successfully! You will be notified of new videos and lives.",
@@ -795,7 +851,15 @@
                     "name": "list",
                     "description": "Lists monitored YouTube channels",
                     "title": "Monitored Channels",
-                    "empty": "No YouTube channels are being monitored in this server."
+                    "empty": "No YouTube channels are being monitored in this server.",
+                    "custom_text_badge": "custom embed text"
+                },
+                "set_description": {
+                    "name": "set-description",
+                    "description": "Set or clear custom text inside video/live notification embeds",
+                    "success": "Custom embed text updated for **{channel}**.",
+                    "cleared": "Custom embed text removed for **{channel}**.",
+                    "not_found": "Channel **{channel}** is not being monitored."
                 }
             }
         }

@@ -6,15 +6,17 @@ interface YouTubeChannelAttributes {
   guild_id: string;
   youtube_channel_id: string;
   channel_name: string;
+  custom_description: string | null;
 }
 
-interface YouTubeChannelCreationAttributes extends Optional<YouTubeChannelAttributes, 'id'> {}
+interface YouTubeChannelCreationAttributes extends Optional<YouTubeChannelAttributes, 'id' | 'custom_description'> {}
 
 class YouTubeChannel extends Model<YouTubeChannelAttributes, YouTubeChannelCreationAttributes> implements YouTubeChannelAttributes {
   public id!: number;
   public guild_id!: string;
   public youtube_channel_id!: string;
   public channel_name!: string;
+  public custom_description!: string | null;
 }
 
 YouTubeChannel.init(
@@ -35,6 +37,11 @@ YouTubeChannel.init(
     channel_name: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    custom_description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      defaultValue: null,
     },
   },
   {

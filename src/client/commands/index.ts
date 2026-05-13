@@ -18,7 +18,6 @@ import { users } from './users';
 import { ticket } from './ticket';
 import { resetEconomy } from './resetEconomy';
 import { dm } from './dm';
-import { twitch } from './twitch';
-import { youtube } from './youtube';
+import { notifications } from './notifications';
 
-export const commands = [ping, help, xp, disablexp, enablexp, addXpRole, listXpRoles, editXpRole, syncXpRoles, addColorRole, removeColorRole, xpUser, xpAdmin, music, set, shop, buy, ship, users, ticket, resetEconomy, dm, twitch, youtube];
+export const commands = [ping, help, xp, disablexp, enablexp, addXpRole, listXpRoles, editXpRole, syncXpRoles, addColorRole, removeColorRole, xpUser, xpAdmin, music, set, shop, buy, ship, users, ticket, resetEconomy, dm, notifications];

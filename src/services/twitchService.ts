@@ -90,14 +90,38 @@ export async function deleteEventSubSubscription(subscriptionId: string): Promis
     });
 }
 
-export async function addStreamer(guildId: string, username: string): Promise<TwitchStreamer | null> {
+const EMBED_DESCRIPTION_MAX = 4096;
+
+function normalizeCustomDescription(text: string | null | undefined): string | null {
+    if (text === null || text === undefined) return null;
+    const trimmed = text.trim();
+    if (trimmed.length === 0) return null;
+    return trimmed.slice(0, EMBED_DESCRIPTION_MAX);
+}
+
+export async function addStreamer(
+    guildId: string,
+    username: string,
+    customText?: string | null
+): Promise<TwitchStreamer | null> {
     const user = await getUserByUsername(username);
     if (!user) return null;
+
+    const normalized =
+        customText === null || customText === undefined
+            ? undefined
+            : normalizeCustomDescription(customText);
 
     const existing = await TwitchStreamer.findOne({
         where: { guild_id: guildId, twitch_user_id: user.id },
     });
-    if (existing) return existing;
+    if (existing) {
+        if (normalized !== undefined) {
+            existing.custom_description = normalized;
+            await existing.save();
+        }
+        return existing;
+    }
 
     const subscriptionId = await createEventSubSubscription(user.id);
 
@@ -106,7 +130,25 @@ export async function addStreamer(guildId: string, username: string): Promise<Tw
         twitch_username: user.login,
         twitch_user_id: user.id,
         subscription_id: subscriptionId,
+        custom_description: normalized === undefined ? null : normalized,
     });
+}
+
+export async function setTwitchStreamerDescription(
+    guildId: string,
+    username: string,
+    customText: string | null
+): Promise<TwitchStreamer | null> {
+    const streamer = await TwitchStreamer.findOne({
+        where: { guild_id: guildId, twitch_username: username.toLowerCase() },
+    });
+    if (!streamer) return null;
+    streamer.custom_description =
+        customText === null || customText === undefined
+            ? null
+            : normalizeCustomDescription(customText);
+    await streamer.save();
+    return streamer;
 }
 
 export async function removeStreamer(guildId: string, username: string): Promise<boolean> {
@@ -191,6 +233,11 @@ async function handleStreamOnline(event: any): Promise<void> {
 
             if (user?.profile_image_url) {
                 embed.setThumbnail(user.profile_image_url);
+            }
+
+            const customDesc = streamer.custom_description?.trim();
+            if (customDesc) {
+                embed.setDescription(customDesc.slice(0, EMBED_DESCRIPTION_MAX));
             }
 
             const content = guildData.twitch_role

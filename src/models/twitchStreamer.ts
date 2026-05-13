@@ -7,9 +7,10 @@ interface TwitchStreamerAttributes {
   twitch_username: string;
   twitch_user_id: string;
   subscription_id: string | null;
+  custom_description: string | null;
 }
 
-interface TwitchStreamerCreationAttributes extends Optional<TwitchStreamerAttributes, 'id' | 'subscription_id'> {}
+interface TwitchStreamerCreationAttributes extends Optional<TwitchStreamerAttributes, 'id' | 'subscription_id' | 'custom_description'> {}
 
 class TwitchStreamer extends Model<TwitchStreamerAttributes, TwitchStreamerCreationAttributes> implements TwitchStreamerAttributes {
   public id!: number;
@@ -17,6 +18,7 @@ class TwitchStreamer extends Model<TwitchStreamerAttributes, TwitchStreamerCreat
   public twitch_username!: string;
   public twitch_user_id!: string;
   public subscription_id!: string | null;
+  public custom_description!: string | null;
 }
 
 TwitchStreamer.init(
@@ -40,6 +42,11 @@ TwitchStreamer.init(
     },
     subscription_id: {
       type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
+    },
+    custom_description: {
+      type: DataTypes.TEXT,
       allowNull: true,
       defaultValue: null,
     },

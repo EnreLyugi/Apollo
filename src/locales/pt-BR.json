@@ -725,10 +725,50 @@
             },
             "close_dm": "Seu ticket foi fechado. Obrigado por entrar em contato!"
         },
+        "notifications": {
+            "name": "notificações",
+            "description": "Notificações de live na Twitch e de novos vídeos no YouTube",
+            "usage": "/notifications twitch | /notifications youtube — **ação** (adicionar, remover, listar, definir-descrição), **texto-personalizado** opcional",
+            "subcommands": {
+                "twitch": {
+                    "name": "twitch",
+                    "description": "Notificações de live na Twitch"
+                },
+                "youtube": {
+                    "name": "youtube",
+                    "description": "Notificações de canais no YouTube"
+                }
+            },
+            "options": {
+                "action": {
+                    "name": "ação",
+                    "description": "O que fazer"
+                },
+                "username": {
+                    "description": "Utilizador Twitch (para adicionar, remover ou definir descrição)"
+                },
+                "channel": {
+                    "description": "Canal do YouTube, @handle ou ID (para adicionar, remover ou definir descrição)"
+                },
+                "custom_text": {
+                    "name": "texto-personalizado",
+                    "description": "Texto opcional no embed; em definir-descrição, vazio = limpar"
+                }
+            },
+            "errors": {
+                "username_required": "Informe o **usuario** quando a ação for adicionar, remover ou definir descrição.",
+                "channel_required": "Informe o **canal** quando a ação for adicionar, remover ou definir descrição."
+            },
+            "help": {
+                "twitch": "`twitch` — **ação** (adicionar / remover / listar / definir-descrição), **usuario**, **texto-personalizado** opcional no embed.",
+                "youtube": "`youtube` — o mesmo com **canal** em vez do utilizador.",
+                "action": "**Ação** é uma lista (adicionar, remover, listar, definir-descrição), no estilo de `/set channel` ou `/music loop` (modo)."
+            }
+        },
         "twitch": {
             "name": "twitch",
             "description": "Configuração de notificações de live da Twitch",
-            "usage": "/twitch",
+            "usage": "/notifications twitch",
             "subcommands": {
                 "add": {
                     "name": "adicionar",
@@ -737,6 +777,10 @@
                         "username": {
                             "name": "usuario",
                             "description": "Nome de usuário na Twitch"
+                        },
+                        "custom_text": {
+                            "name": "texto-personalizado",
+                            "description": "Texto opcional dentro do embed de notificação deste streamer"
                         }
                     },
                     "success": "Streamer **{username}** adicionado com sucesso! Você será notificado quando ficar ao vivo.",
@@ -758,14 +802,22 @@
                     "name": "listar",
                     "description": "Lista os streamers monitorados",
                     "title": "Streamers Monitorados",
-                    "empty": "Nenhum streamer está sendo monitorado neste servidor."
+                    "empty": "Nenhum streamer está sendo monitorado neste servidor.",
+                    "custom_text_badge": "texto personalizado no embed"
+                },
+                "set_description": {
+                    "name": "definir-descrição",
+                    "description": "Define ou remove o texto personalizado nos embeds de live",
+                    "success": "Texto personalizado do embed atualizado para **{username}**.",
+                    "cleared": "Texto personalizado do embed removido para **{username}**.",
+                    "not_found": "Streamer **{username}** não está sendo monitorado."
                 }
             }
         },
         "youtube": {
             "name": "youtube",
             "description": "Configuração de notificações do YouTube",
-            "usage": "/youtube",
+            "usage": "/notifications youtube",
             "subcommands": {
                 "add": {
                     "name": "adicionar",
@@ -774,6 +826,10 @@
                         "channel": {
                             "name": "canal",
                             "description": "Nome do canal, @handle ou ID do YouTube"
+                        },
+                        "custom_text": {
+                            "name": "texto-personalizado",
+                            "description": "Texto opcional dentro do embed de notificação deste canal"
                         }
                     },
                     "success": "Canal **{channel}** adicionado com sucesso! Você será notificado de novos vídeos e lives.",
@@ -795,7 +851,15 @@
                     "name": "listar",
                     "description": "Lista os canais do YouTube monitorados",
                     "title": "Canais Monitorados",
-                    "empty": "Nenhum canal do YouTube está sendo monitorado neste servidor."
+                    "empty": "Nenhum canal do YouTube está sendo monitorado neste servidor.",
+                    "custom_text_badge": "texto personalizado no embed"
+                },
+                "set_description": {
+                    "name": "definir-descrição",
+                    "description": "Define ou remove o texto personalizado nos embeds de vídeo/live",
+                    "success": "Texto personalizado do embed atualizado para **{channel}**.",
+                    "cleared": "Texto personalizado do embed removido para **{channel}**.",
+                    "not_found": "Canal **{channel}** não está sendo monitorado."
                 }
             }
         }

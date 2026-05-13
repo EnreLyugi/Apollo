@@ -1,5 +1,3 @@
-import { add } from "./add";
-import { remove } from "./remove";
-import { list } from "./list";
+import { manage } from "./manage";
 
-export const subcommands = [add, remove, list];
+export const subcommands = [manage];
